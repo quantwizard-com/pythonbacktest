@@ -1,4 +1,4 @@
-from pythonbacktest.backtestengine import AbstractTradingStrategy
+from pythonbacktest.strategy import AbstractTradingStrategy
 
 
 class BasicSMAStrategy(AbstractTradingStrategy):

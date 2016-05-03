@@ -2,18 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8ab827a-7982-4e40-86ae-3aade989418b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/backtestengine/abstractbacktestengine.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/broker/abstractbroker.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/datafeed/abstractdatafeed.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templateprojects/README" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/strategy/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/strategy/strategyimporter.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/pythonbacktest/backtestengine/abstracttradingstrategy.py" afterPath="$PROJECT_DIR$/pythonbacktest/strategy/abstracttradingstrategy.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py" afterPath="$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py" afterPath="$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/broker/__init__.py" afterPath="$PROJECT_DIR$/pythonbacktest/broker/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/datafeed/__init__.py" afterPath="$PROJECT_DIR$/pythonbacktest/datafeed/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/datafeed/csvdatafeed.py" afterPath="$PROJECT_DIR$/pythonbacktest/datafeed/csvdatafeed.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py" afterPath="$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" afterPath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py" afterPath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py" />
     </list>
     <ignored path="pythonbacktest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,18 +32,81 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="basicsmastrategy.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="basicsmastrategy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="28" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="3" />
+              <folding>
+                <element signature="e#65#123#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="basic backtest.ipynb" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb">
+          <provider selected="true" editor-type-id="ipnb-editor">
+            <state>
+              <selected id="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="basicbacktestengine.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="56" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding>
+                <element signature="e#65#125#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="backtestbroker.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="21" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strategyimporter.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/strategyimporter.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="abstracttradingstrategy.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/abstracttradingstrategy.py">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/abstracttradingstrategy.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
               <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="39" />
@@ -61,6 +121,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -81,14 +142,17 @@
         <option value="$PROJECT_DIR$/pythonbacktest/datafeed/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/datafeed/abstractdatafeed.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/datafeed/csvdatafeed.py" />
-        <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" />
         <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/broker/abstractbroker.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/broker/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/abstractbacktestengine.py" />
-        <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py" />
         <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic_sma_strategy.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/strategy/__init__.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/strategy/strategyimporter.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py" />
         <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py" />
+        <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" />
       </list>
     </option>
   </component>
@@ -229,6 +293,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="strategy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="datafeed" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -283,6 +365,11 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pythonbacktest/strategy" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -929,16 +1016,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1462220079379</updated>
-      <workItem from="1462220080717" duration="9674000" />
+      <workItem from="1462220080717" duration="12106000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9674000" />
+    <option name="totallyTimeSpent" value="12106000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="825" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -948,7 +1035,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1042,31 +1129,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb">
-      <provider selected="true" editor-type-id="ipnb-editor">
-        <state>
-          <selected id="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="60" selection-start-line="7" selection-start-column="60" selection-end-line="7" selection-end-column="60" />
-          <folding>
-            <element signature="e#65#123#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pythonbacktest/broker/abstractbroker.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1103,15 +1165,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/abstracttradingstrategy.py">
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/abstracttradingstrategy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="39" />
@@ -1119,11 +1173,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py">
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="3" />
+          <folding>
+            <element signature="e#65#123#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="12" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding>
+            <element signature="e#65#125#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/strategyimporter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="21" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="56" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="28" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="2" />
         </state>
       </provider>
     </entry>

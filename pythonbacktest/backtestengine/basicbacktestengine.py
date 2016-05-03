@@ -1,10 +1,10 @@
-from pythonbacktest import backtestengine
+from . import *
 
 
-class BasicBackTestEngine(backtestengine.AbstractBackTestEngine):
+class BasicBackTestEngine(AbstractBackTestEngine):
 
     def __init__(self, data_feed, strategy):
-        backtestengine.AbstractBackTestEngine.__init__(self, data_feed, strategy)
+        AbstractBackTestEngine.__init__(self, data_feed, strategy)
 
     def start(self):
 

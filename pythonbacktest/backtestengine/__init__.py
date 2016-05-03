@@ -5,4 +5,3 @@
 from .abstractbacktestengine import AbstractBackTestEngine
 from .basicbacktestengine import BasicBackTestEngine
 
-from .abstracttradingstrategy import AbstractTradingStrategy

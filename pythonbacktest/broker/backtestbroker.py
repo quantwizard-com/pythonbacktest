@@ -1,7 +1,7 @@
-from pythonbacktest import broker
+from . import *
 
 
-class BackTestBroker(broker.AbstractBroker):
+class BackTestBroker(AbstractBroker):
 
     def __init__(self, budget):
         self.__budget = budget

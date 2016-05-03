@@ -2,13 +2,13 @@ import os
 import csv
 
 from os import path
-from pythonbacktest import datafeed
 from datetime import datetime
+from . import abstractdatafeed as adf, pricebar as pb, tradingdaydata as tdd
 
 
-class CSVDataFeed(datafeed.DataFeed):
+class CSVDataFeed(adf.AbstractDataFeed):
     def __init__(self):
-        datafeed.DataFeed.__init__(self)
+        adf.AbstractDataFeed.__init__(self)
 
     def load_data(self, source_location):
 
@@ -34,7 +34,7 @@ class CSVDataFeed(datafeed.DataFeed):
         price_bars = []
         current_date = None
 
-        with open(source_file, 'rb') as csvfile:
+        with open(source_file, 'rb') as source_file:
             data_reader = csv.reader(source_file, delimiter=',')
 
             first_row = True
@@ -42,7 +42,7 @@ class CSVDataFeed(datafeed.DataFeed):
             for row in data_reader:
 
                 if not first_row:
-                    single_bar = datafeed.PriceBar()
+                    single_bar = pb.PriceBar()
                     single_bar.timestamp = datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
                     single_bar.open = float(row[1])
                     single_bar.close = float(row[2])
@@ -58,7 +58,7 @@ class CSVDataFeed(datafeed.DataFeed):
                 first_row = False
 
         # now: add downloaded bars to the storage
-        if current_date not in self.__data:
-            self.__data[current_date] = datafeed.TradingData(price_bars, current_date)
+        if current_date not in self.data:
+            self.data[current_date] = tdd.TradingDayData(price_bars, current_date)
         else:
             raise "There's already data for given date: " + current_date

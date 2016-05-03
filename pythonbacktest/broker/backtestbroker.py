@@ -44,6 +44,8 @@ class BackTestBroker(AbstractBroker):
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.__current_price
 
+    # get amount of free money on the account
+    # that may also include a debt
     def get_free_cash(self):
         return self.__budget
 
@@ -57,6 +59,7 @@ class BackTestBroker(AbstractBroker):
     def set_current_price(self, current_price):
         self.__current_price = current_price
 
+    # check if current price is set
     def __check_current_price(self):
         if self.current_price is None:
             raise "The current price has not been set!"

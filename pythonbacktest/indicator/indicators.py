@@ -14,9 +14,9 @@ class Indicators(object):
     # name - indicator name
     # input name - name of the indicator, which should be an input for the given indicator
     # implementation - implementation of the indicator
-    def init_indicators(self, indicators):
+    def set_indicators(self, indicator_records):
 
-        for name, input_name, implementation in indicators:
+        for name, input_name, implementation in indicator_records:
 
             if name in self.__all_indicators:
                 raise ValueError("Indicator with name '%s' is already declared" % name)

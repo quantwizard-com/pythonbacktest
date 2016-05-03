@@ -1,5 +1,7 @@
 from . import *
 
+from pythonbacktest.indicator import Indicators
+
 
 class BasicBackTestEngine(AbstractBackTestEngine):
 
@@ -23,7 +25,15 @@ class BasicBackTestEngine(AbstractBackTestEngine):
 
     # backtest single date (as: single day) with give intraday price bars
     def __backtest_single_day(self, date, price_bars):
+
+        indicators = Indicators()
+
+        # allow strategy to set indicators from scratch for a new day
+        self.strategy.init_indicators(indicators)
+
         for price_bar in price_bars:
-            self.strategy(price_bar)
+
+            self.broker.set_current_price(price_bar.close)
+            self.strategy.new_price_bar(price_bar, indicators)
 
 

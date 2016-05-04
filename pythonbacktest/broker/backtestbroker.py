@@ -14,20 +14,20 @@ class BackTestBroker(AbstractBroker):
         self.__position = 0
 
         # what's the current price per share?
-        self.__current_price = None
+        self.__current_price_bar = None
 
         self.__trade_log = trade_log
 
     # set current price of the security
-    def set_current_price(self, current_price):
-        self.__current_price = current_price
+    def set_current_price_bar(self, current_price_bar):
+        self.__current_price_bar = current_price_bar
 
     # buy certain number of shares
     def go_long(self, number_of_shares):
         self.__check_current_price()
 
         self.__position += number_of_shares
-        self.__budget -= number_of_shares * self.__current_price
+        self.__budget -= number_of_shares * self.current_price
 
         self.__log_trade("BUY", number_of_shares)
 
@@ -42,7 +42,7 @@ class BackTestBroker(AbstractBroker):
         number_of_shares_to_sale = number_of_shares if number_of_shares <= self.__position else self.__position
 
         self.__position -= number_of_shares_to_sale
-        self.__budget += number_of_shares_to_sale * self.__current_price
+        self.__budget += number_of_shares_to_sale * self.current_price
 
         self.__log_trade("SELL", number_of_shares)
 
@@ -55,7 +55,7 @@ class BackTestBroker(AbstractBroker):
         number_of_shares_to_sale = number_of_shares
 
         self.__position -= number_of_shares_to_sale
-        self.__budget += number_of_shares_to_sale * self.__current_price
+        self.__budget += number_of_shares_to_sale * self.current_price
 
         self.__log_trade("SHORT", number_of_shares)
 
@@ -67,7 +67,7 @@ class BackTestBroker(AbstractBroker):
 
     @property
     def current_price(self):
-        return self.__current_price
+        return self.__current_price_bar.close
 
     # get amount of free money on the account
     # that may also include a debt
@@ -80,7 +80,7 @@ class BackTestBroker(AbstractBroker):
     def current_value(self):
         self.__check_current_price()
 
-        return self.__budget + self.__current_price * self.__position
+        return self.__budget + self.current_price * self.__position
 
     @property
     def current_position(self):

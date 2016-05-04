@@ -27,9 +27,9 @@ class AbstractBroker(object):
     def cover_position(self):
         raise NotImplementedError()
 
-    # set current price of the security
+    # set current price bar of the security
     @abc.abstractmethod
-    def set_current_price(self, current_price):
+    def set_current_price_bar(self, current_price_bar):
         raise NotImplementedError()
 
     # current price of the security

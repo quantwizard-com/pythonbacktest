@@ -34,7 +34,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
 
         for price_bar in price_bars:
             indicators.new_price_bar(price_bar)
-            self.broker.set_current_price(price_bar.close)
+            self.broker.set_current_price_bar(price_bar)
             self.strategy.new_price_bar(price_bar, indicators, self.broker)
 
 

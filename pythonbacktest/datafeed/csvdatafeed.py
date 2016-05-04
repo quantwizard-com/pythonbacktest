@@ -58,7 +58,7 @@ class CSVDataFeed(adf.AbstractDataFeed):
                 first_row = False
 
         # now: add downloaded bars to the storage
-        if current_date not in self.data:
-            self.data[current_date] = tdd.TradingDayData(price_bars, current_date)
+        if current_date not in self.all_data:
+            self.all_data[current_date] = tdd.TradingDayData(price_bars, current_date)
         else:
             raise "There's already data for given date: " + current_date

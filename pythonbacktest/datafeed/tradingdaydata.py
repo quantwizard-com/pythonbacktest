@@ -4,5 +4,6 @@ class TradingDayData:
         self.__pricebars = pricebars
         self.__tradingday = tradingday
 
-    def get_price_bars(self):
+    @property
+    def price_bars(self):
         return self.__pricebars

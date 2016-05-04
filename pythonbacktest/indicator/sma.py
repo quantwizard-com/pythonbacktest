@@ -15,9 +15,11 @@ class SMA(AbstractIndicator):
         self.__all_sma = []
         self.__sum_of_elements = 0
 
+    @property
     def result(self):
         return self.__latest_result
 
+    @property
     def all_result(self):
         return self.__all_sma
 

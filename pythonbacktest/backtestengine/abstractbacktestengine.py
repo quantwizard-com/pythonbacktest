@@ -5,10 +5,10 @@ from pythonbacktest import broker
 
 class AbstractBackTestEngine(object):
 
-    def __init__(self, data_feed, strategy):
+    def __init__(self, data_feed, strategy, broker):
         self.__data_feed = data_feed
         self.__strategy = strategy
-        self.__broker = broker.BackTestBroker()
+        self.__broker = broker
 
     @property
     def data_feed(self):

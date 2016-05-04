@@ -6,9 +6,11 @@ class StaticValue(AbstractIndicator):
         self.__current_value = None
         self.__all_values = None
 
+    @property
     def result(self):
         return self.__current_value
 
+    @property
     def all_result(self):
         return self.__all_values
 

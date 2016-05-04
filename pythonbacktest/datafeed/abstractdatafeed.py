@@ -8,7 +8,7 @@ class AbstractDataFeed(object):
         self.__data = {}
 
     @property
-    def data(self):
+    def all_data(self):
         return self.__data
 
     # get data for single day only

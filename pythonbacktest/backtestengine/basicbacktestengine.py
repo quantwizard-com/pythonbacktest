@@ -5,13 +5,13 @@ from pythonbacktest.indicator import Indicators
 
 class BasicBackTestEngine(AbstractBackTestEngine):
 
-    def __init__(self, data_feed, strategy):
-        AbstractBackTestEngine.__init__(self, data_feed, strategy)
+    def __init__(self, data_feed, strategy, broker):
+        AbstractBackTestEngine.__init__(self, data_feed, strategy, broker)
 
     def start(self):
 
-        for date, price_bars in self.data_feed.get_prices_bars_for_day():
-            self.__backtest_single_day(date, price_bars)
+        for date, trading_day_data in self.data_feed.all_data.iteritems():
+            self.__backtest_single_day(date, trading_day_data.price_bars)
 
     # run backtest on single day only
     def start_single_date(self, date):
@@ -32,7 +32,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
         self.strategy.init_indicators(indicators)
 
         for price_bar in price_bars:
-
+            indicators.new_price_bar(price_bar)
             self.broker.set_current_price(price_bar.close)
             self.strategy.new_price_bar(price_bar, indicators)
 

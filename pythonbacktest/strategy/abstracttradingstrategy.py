@@ -11,5 +11,5 @@ class AbstractTradingStrategy(object):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def new_price_bar(self, price_bar, indicators):
+    def new_price_bar(self, price_bar, indicators, broker):
         raise NotImplementedError()

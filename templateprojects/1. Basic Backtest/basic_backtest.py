@@ -25,3 +25,6 @@ strategy = strategy_module.BasicSMAStrategy()
 back_test_engine = BasicBackTestEngine(csv_data_feed, strategy, broker)
 back_test_engine.start()
 
+# testing done - let's display the final budget
+print "Free cash: %s" % broker.free_cash
+

@@ -3,6 +3,9 @@ import abc
 
 class AbstractBroker(object):
 
+    def __init__(self):
+        pass
+
     # buy certain number of shares
     @abc.abstractmethod
     def go_long(self, number_of_shares):
@@ -22,6 +25,11 @@ class AbstractBroker(object):
     # buy all shorted shares or sell those in portfolio
     @abc.abstractmethod
     def cover_position(self):
+        raise NotImplementedError()
+
+    # set current price of the security
+    @abc.abstractmethod
+    def set_current_price(self, current_price):
         raise NotImplementedError()
 
     # current price of the security
@@ -45,7 +53,6 @@ class AbstractBroker(object):
     def current_position(self):
         raise NotImplementedError()
 
-    # set current price of the security
-    @abc.abstractmethod
-    def set_current_price(self, current_price):
-        raise NotImplementedError()
+
+
+

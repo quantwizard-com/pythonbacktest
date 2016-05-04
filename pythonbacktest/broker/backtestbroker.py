@@ -3,7 +3,9 @@ from . import *
 
 class BackTestBroker(AbstractBroker):
 
-    def __init__(self, budget):
+    def __init__(self, budget, trade_log=None):
+        AbstractBroker.__init__(self)
+
         self.__budget = budget
 
         # number of shares kept, where
@@ -13,6 +15,8 @@ class BackTestBroker(AbstractBroker):
 
         # what's the current price per share?
         self.__current_price = None
+
+        self.__trade_log = trade_log
 
     # set current price of the security
     def set_current_price(self, current_price):
@@ -24,6 +28,8 @@ class BackTestBroker(AbstractBroker):
 
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.__current_price
+
+        self.__log_trade("BUY", number_of_shares)
 
     # sell exact number of shares from portfolio
     # if number of shares to sale is more than in portfolio,
@@ -38,6 +44,8 @@ class BackTestBroker(AbstractBroker):
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.__current_price
 
+        self.__log_trade("SELL", number_of_shares)
+
     # self exact number of shares in portfolio
     # but go short (below 0) if there's not enough shares to sale
     def go_short(self, number_of_shares):
@@ -48,6 +56,8 @@ class BackTestBroker(AbstractBroker):
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.__current_price
+
+        self.__log_trade("SHORT", number_of_shares)
 
     def cover_position(self):
         if self.__position < 0:
@@ -80,3 +90,9 @@ class BackTestBroker(AbstractBroker):
     def __check_current_price(self):
         if self.current_price is None:
             raise Exception("The current price has not been set!")
+
+    def __log_trade(self, transaction_type, shares_amount):
+        if self.__trade_log is not None:
+            self.__trade_log.log_transaction(None, transaction_type, shares_amount,
+                                        self.current_price, shares_amount * self.current_price,
+                                        self.free_cash, self.current_position)

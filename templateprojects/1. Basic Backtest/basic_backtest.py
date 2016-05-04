@@ -5,6 +5,7 @@ from pythonbacktest.datafeed import CSVDataFeed
 from pythonbacktest.backtestengine import BasicBackTestEngine
 from pythonbacktest.strategy import import_strategy
 from pythonbacktest.broker import BackTestBroker
+from pythonbacktest.tradelog import MemoryTradeLog
 
 sys.path.append(os.path.abspath("../.."))
 
@@ -14,7 +15,9 @@ INITIAL_BUDGET = 100000
 csv_data_feed = CSVDataFeed()
 csv_data_feed.load_data(TEST_DATA_PATH)
 
-broker = BackTestBroker(INITIAL_BUDGET)
+trade_log = MemoryTradeLog()
+
+broker = BackTestBroker(INITIAL_BUDGET, trade_log)
 
 strategy_module = import_strategy(
     "basicSMAstrategy",
@@ -27,4 +30,6 @@ back_test_engine.start()
 
 # testing done - let's display the final budget
 print "Free cash: %s" % broker.free_cash
+
+print len(trade_log.all_transactions)
 

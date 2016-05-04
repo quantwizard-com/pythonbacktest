@@ -93,6 +93,11 @@ class BackTestBroker(AbstractBroker):
 
     def __log_trade(self, transaction_type, shares_amount):
         if self.__trade_log is not None:
-            self.__trade_log.log_transaction(None, transaction_type, shares_amount,
-                                        self.current_price, shares_amount * self.current_price,
-                                        self.free_cash, self.current_position)
+            self.__trade_log.log_transaction(
+                price_bar_time_stamp=self.__current_price_bar.timestamp,
+                transaction_type=transaction_type,
+                shares_amount=shares_amount,
+                transaction_price_per_share=self.current_price,
+                cash_spent=shares_amount * self.current_price,
+                cash_after=self.free_cash,
+                position_after=self.current_position)

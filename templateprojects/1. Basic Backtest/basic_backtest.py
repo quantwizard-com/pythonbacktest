@@ -31,5 +31,8 @@ back_test_engine.start()
 # testing done - let's display the final budget
 print "Free cash: %s" % broker.free_cash
 
-print len(trade_log.all_transactions)
+for transaction in trade_log.all_transactions:
+    print "[%s] - %s@%s, remaining cash: %s" % \
+          (transaction.timestamp, transaction.transaction_type,
+           transaction.transaction_price_per_share, transaction.cash_after)
 

@@ -27,3 +27,6 @@ class BasicSMAStrategy(AbstractTradingStrategy):
             if current_position > 0:
                 if current_SMA50 < current_SMA200:
                     broker.go_sell(100)
+
+    def day_end(self, final_price_bar, indicators, broker):
+        broker.cover_position()

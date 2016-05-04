@@ -17,7 +17,7 @@ csv_data_feed.load_data(TEST_DATA_PATH)
 
 trade_log = MemoryTradeLog()
 
-broker = BackTestBroker(INITIAL_BUDGET, trade_log)
+broker = BackTestBroker(INITIAL_BUDGET, trade_log=trade_log, commision=1.0)
 
 strategy_module = import_strategy(
     "basicSMAstrategy",

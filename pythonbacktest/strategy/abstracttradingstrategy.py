@@ -13,3 +13,8 @@ class AbstractTradingStrategy(object):
     @abc.abstractmethod
     def new_price_bar(self, price_bar, indicators, broker):
         raise NotImplementedError()
+
+    # event fired when we hit the last price bar
+    @abc.abstractmethod
+    def day_end(self, final_price_bar, indicators, broker):
+        raise NotImplementedError()

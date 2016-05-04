@@ -3,10 +3,11 @@ from . import *
 
 class BackTestBroker(AbstractBroker):
 
-    def __init__(self, budget, trade_log=None):
+    def __init__(self, budget, trade_log=None, commision=0.0):
         AbstractBroker.__init__(self)
 
         self.__budget = budget
+        self.__commision = commision
 
         # number of shares kept, where
         # >0 - overall portfolio is long
@@ -28,6 +29,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.current_price
+        self.__charge_commision()
 
         self.__log_trade("BUY", number_of_shares)
 
@@ -43,6 +45,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.current_price
+        self.__charge_commision()
 
         self.__log_trade("SELL", number_of_shares)
 
@@ -56,6 +59,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.current_price
+        self.__charge_commision()
 
         self.__log_trade("SHORT", number_of_shares)
 
@@ -90,6 +94,9 @@ class BackTestBroker(AbstractBroker):
     def __check_current_price(self):
         if self.current_price is None:
             raise Exception("The current price has not been set!")
+
+    def __charge_commision(self):
+        self.__budget -= self.__commision
 
     def __log_trade(self, transaction_type, shares_amount):
         if self.__trade_log is not None:

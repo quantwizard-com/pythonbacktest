@@ -13,7 +13,7 @@ class BokehChartRenderer(AbstractChartRendered):
     def __init__(self, width=900, height=500):
         AbstractChartRendered.__init__(self, width, height)
 
-    def render_indicators(self, indicators, *name_collections):
+    def render_indicators(self, indicators, markers, *name_collections):
 
         all_charts = []
         first_chart = None
@@ -30,6 +30,8 @@ class BokehChartRenderer(AbstractChartRendered):
             for indicator_name, color in name_collection:
                 indicator_data = indicators.get_all_values_for_indicator(indicator_name)
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
+
+            self.__add_markers_to_chart(new_chart, indicators, markers)
 
         if len(all_charts) == 1:
             show(first_chart)
@@ -59,15 +61,29 @@ class BokehChartRenderer(AbstractChartRendered):
 
     def __add_data_to_chart(self, target_chart, data, chartparams):
 
+        x_data, y_data = self.__pack_data_with_index(data)
+
+        # unpack data for x and y
+        target_chart.line(x_data, y_data, **chartparams)
+
+    def __add_markers_to_chart(self, target_chart, indicators, markers):
+
+        if markers is not None:
+            for single_marker in markers:
+                indicator_data = indicators.get_all_values_for_indicator(single_marker)
+                x_data, y_data = self.__pack_data_with_index(indicator_data)
+
+                # render markers
+                target_chart.circle(x_data, y_data, size=15, fill_color='white', line_color='green', line_width=3)
+
+    def __pack_data_with_index(self, data):
+
         # add 0-based indexes to the data
         chart_data = zip([t for t in range(0, len(data))], data)
 
         # filter out all tuples, where there's at least one None
         chart_data = [(x, y) for (x, y) in chart_data if y is not None]
 
-        # unpack data for x and y
-        target_chart.line(
-            [x for (x, y) in chart_data],
-            [y for (x, y) in chart_data],
-            **chartparams)
+        return [x for (x, y) in chart_data], [y for (x, y) in chart_data]
+
 

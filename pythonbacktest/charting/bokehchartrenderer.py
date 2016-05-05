@@ -9,6 +9,9 @@ from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
 class BokehChartRenderer(AbstractChartRendered):
 
     CHART_TOOLBAR_LOCATION = 'left'
+    CHART_MARKER_SIZE = 10
+
+    TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
 
     def __init__(self, width=900, height=500):
         AbstractChartRendered.__init__(self, width, height)
@@ -74,7 +77,9 @@ class BokehChartRenderer(AbstractChartRendered):
                 x_data, y_data = self.__pack_data_with_index(indicator_data)
 
                 # render markers
-                target_chart.circle(x_data, y_data, size=15, fill_color='white', line_color='green', line_width=3)
+                target_chart.circle(x_data, y_data, size=self.CHART_MARKER_SIZE,
+                                    fill_color='white', line_color=self.TRADE_MARKER_COLORS[single_marker],
+                                    line_width=3)
 
     def __pack_data_with_index(self, data):
 

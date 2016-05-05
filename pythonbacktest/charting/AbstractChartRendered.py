@@ -9,13 +9,15 @@ class AbstractChartRendered(object):
 
     # render indicators as a chart
     # indicators - indicators object, which could be addresses by names (implementation of Indicators)
+    # markers - name of the indicators, which should act as markets on *all charts*
     # name_collections - collection(s) of tuples: (name of indicator, color);
     #                    if more than 1 collection is provided: multiple charts will be generated
     #                    with common x axis
     # sample usage:
-    #  render_indicators(indicators, [('open', 'blue'), ('SMA100', 'green')], [('SMA10', 'yellow'), ('SMA20', 'red')])
+    #  render_indicators(indicators, ['trade_sell', 'trade_buy'],
+    #                   [('open', 'blue'), ('SMA100', 'green')], [('SMA10', 'yellow'), ('SMA20', 'red')])
     @abc.abstractmethod
-    def render_indicators(self, indicators, *name_collections):
+    def render_indicators(self, indicators, markers, *name_collections):
         raise NotImplementedError()
 
     # render trades: buy, sell and short positions

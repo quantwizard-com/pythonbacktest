@@ -19,9 +19,15 @@ class BackTestBroker(AbstractBroker):
 
         self.__trade_log = trade_log
 
+        self.__indicators = None
+
     # set current price of the security
     def set_current_price_bar(self, current_price_bar):
         self.__current_price_bar = current_price_bar
+
+    # set Indicators object, which will be used to collect trade markets
+    def set_indicators(self, indicators):
+        self.__indicators = indicators
 
     # buy certain number of shares
     def go_long(self, number_of_shares):
@@ -29,7 +35,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.current_price
-        self.__charge_commision()
+        self.__charge_commission()
 
         self.__log_trade("BUY", number_of_shares)
 
@@ -45,7 +51,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.current_price
-        self.__charge_commision()
+        self.__charge_commission()
 
         self.__log_trade("SELL", number_of_shares)
 
@@ -59,7 +65,7 @@ class BackTestBroker(AbstractBroker):
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.current_price
-        self.__charge_commision()
+        self.__charge_commission()
 
         self.__log_trade("SHORT", number_of_shares)
 
@@ -95,10 +101,14 @@ class BackTestBroker(AbstractBroker):
         if self.current_price is None:
             raise Exception("The current price has not been set!")
 
-    def __charge_commision(self):
+    # deduct the trade commission
+    def __charge_commission(self):
         self.__budget -= self.__commision
 
     def __log_trade(self, transaction_type, shares_amount):
+        if self.__indicators is not None:
+            self.__indicators.mark_transaction(transaction_type, self.current_price)
+
         if self.__trade_log is not None:
             self.__trade_log.log_transaction(
                 price_bar_time_stamp=self.__current_price_bar.timestamp,

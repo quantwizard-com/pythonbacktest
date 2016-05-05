@@ -3,14 +3,18 @@ from .staticvalue import StaticValue
 
 class Indicators(object):
 
+    ALL_STATIC_FIELDS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
+    TRANSACTION_TO_FIELD_NAME = {"BUY": "trade_buy", "SELL": "trade_sell", "SHORT": "trade_short"}
+
     def __init__(self):
         self.__all_indicators = {}
 
         # set static values for price bar values
-        for price_bar_field in ["open", "close", "high", "low", "volume"]:
+        for price_bar_field in self.ALL_STATIC_FIELDS:
             self.__all_indicators[price_bar_field] = (None, StaticValue())
 
-    # indicators - collection of tuples with following fields:
+    # indicators - define collection of indicators, which should be collected during trading;
+    #   collection of tuples with following fields:
     # - name - indicator name
     # - source name - name of the indicator, which should be an input for the given indicator
     # - implementation - implementation of the indicator
@@ -45,12 +49,12 @@ class Indicators(object):
 
                 indicator.on_new_upstream_value(current_value_at_source)
 
-
     # update values related to static fields, mainly: price bar fields
     def __update_static_values(self, price_bar):
         field_values = {"open": price_bar.open, "close": price_bar.close,
                         "high": price_bar.high, "low": price_bar.low,
-                        "volume": price_bar.volume }
+                        "volume": price_bar.volume,
+                        "trade_buy": None, "trade_sell": None, "trade_short": None}
 
         for key, value in field_values.iteritems():
             # these are all static values, so the only impact here is recording new values
@@ -62,6 +66,14 @@ class Indicators(object):
         source_name, indicator = self.__all_indicators[indicator_name]
 
         return indicator.all_result
+
+    # mark one of the transaction indicator (buy, sell or short) with the given value
+    # (which in most cases will be current price)
+    def mark_transaction(self, transaction_name, mark_value):
+        transaction_indicator_name = self.TRANSACTION_TO_FIELD_NAME[transaction_name]
+
+        source_indicator, indicator = self.__all_indicators[transaction_indicator_name]
+        indicator.on_new_upstream_value(mark_value)
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):

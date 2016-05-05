@@ -73,7 +73,13 @@ class Indicators(object):
         transaction_indicator_name = self.TRANSACTION_TO_FIELD_NAME[transaction_name]
 
         source_indicator, indicator = self.__all_indicators[transaction_indicator_name]
-        indicator.on_new_upstream_value(mark_value)
+
+        # update existing static value indicator, but check if it's actually not-set
+        # if it's set with some value already, we have some issue with the logic
+        if indicator.all_result[-1] is not None:
+            raise Exception('There''s some value, but None is expected!!!')
+
+        indicator.all_result[-1] = mark_value
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):

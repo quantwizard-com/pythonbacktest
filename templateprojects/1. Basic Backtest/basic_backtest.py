@@ -1,13 +1,14 @@
 import sys
 import os
 
+sys.path.append(os.path.abspath("../.."))
+
 from pythonbacktest.datafeed import CSVDataFeed
 from pythonbacktest.backtestengine import BasicBackTestEngine
 from pythonbacktest.strategy import import_strategy
 from pythonbacktest.broker import BackTestBroker
 from pythonbacktest.tradelog import MemoryTradeLog
 
-sys.path.append(os.path.abspath("../.."))
 
 TEST_DATA_PATH = os.path.abspath("../testdata/ACME")
 INITIAL_BUDGET = 100000

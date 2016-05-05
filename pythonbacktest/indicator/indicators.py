@@ -4,15 +4,6 @@ from .staticvalue import StaticValue
 class Indicators(object):
 
     def __init__(self):
-        # type: () -> object
-        # type: () -> object
-        # format:
-        # key - name of the indicator
-        # value - tuple: (name of the input indicator, implementation of the indicator)
-        """
-
-        :rtype: object
-        """
         self.__all_indicators = {}
 
         # set static values for price bar values
@@ -65,6 +56,12 @@ class Indicators(object):
             # these are all static values, so the only impact here is recording new values
             source_name, indicator = self.__all_indicators[key]
             indicator.on_new_upstream_value(value)
+
+    # get all values for the given indicator
+    def get_all_values_for_indicator(self, indicator_name):
+        source_name, indicator = self.__all_indicators[indicator_name]
+
+        return indicator.all_result
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):

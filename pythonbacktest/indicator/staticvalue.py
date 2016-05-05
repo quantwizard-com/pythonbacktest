@@ -4,7 +4,7 @@ class StaticValue(AbstractIndicator):
 
     def __init__(self):
         self.__current_value = None
-        self.__all_values = None
+        self.__all_values = []
 
     @property
     def result(self):
@@ -16,3 +16,4 @@ class StaticValue(AbstractIndicator):
 
     def on_new_upstream_value(self, new_value):
         self.__current_value = new_value
+        self.all_result.append(new_value)

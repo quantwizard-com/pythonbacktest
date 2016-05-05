@@ -1,0 +1,32 @@
+import abc
+
+
+class AbstractChartRendered(object):
+
+    def __init__(self, width=900, height=500):
+        self.__chart_width = width
+        self.__chart_height = height
+
+    # render indicators as a chart
+    # indicators - indicators object, which could be addresses by names (implementation of Indicators)
+    # name_collections - collection(s) of tuples: (name of indicator, color);
+    #                    if more than 1 collection is provided: multiple charts will be generated
+    #                    with common x axis
+    # sample usage:
+    #  render_indicators(indicators, [('open', 'blue'), ('SMA100', 'green')], [('SMA10', 'yellow'), ('SMA20', 'red')])
+    @abc.abstractmethod
+    def render_indicators(self, indicators, *name_collections):
+        raise NotImplementedError()
+
+    # render trades: buy, sell and short positions
+    @abc.abstractmethod
+    def render_trades(self, trade_log):
+        raise NotImplementedError()
+
+    @property
+    def chart_width(self):
+        return self.__chart_width
+
+    @property
+    def chart_height(self):
+        return self.__chart_height

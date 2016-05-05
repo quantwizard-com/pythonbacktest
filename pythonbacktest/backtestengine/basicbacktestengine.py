@@ -28,6 +28,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
 
         # create fresh set of indicators for each day
         indicators = Indicators()
+        self.all_indicators_per_day[date] = indicators
 
         # allow strategy to set indicators from scratch for a new day
         self.strategy.init_indicators(indicators)

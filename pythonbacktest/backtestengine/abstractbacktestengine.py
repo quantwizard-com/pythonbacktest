@@ -10,6 +10,12 @@ class AbstractBackTestEngine(object):
         self.__strategy = strategy
         self.__broker = broker
 
+        # list of indicators collected per day for the current security
+        # format:
+        # key - date (day)
+        # value - indicators
+        self.__all_indicators_per_day = {}
+
     @property
     def data_feed(self):
         return self.__data_feed
@@ -30,3 +36,7 @@ class AbstractBackTestEngine(object):
     @abc.abstractmethod
     def start_single_date(self, date):
         raise NotImplemented()
+
+    @property
+    def all_indicators_per_day(self):
+        return self.__all_indicators_per_day

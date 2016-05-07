@@ -1,17 +1,25 @@
 from .staticvalue import StaticValue
-
+import copy
 
 class Indicators(object):
 
     ALL_STATIC_FIELDS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
     TRANSACTION_TO_FIELD_NAME = {"BUY": "trade_buy", "SELL": "trade_sell", "SHORT": "trade_short"}
 
-    def __init__(self):
+    def __init__(self, indicators_to_copy=None):
+        """
+        Constructor with copying funcionality
+        :type indicators_to_copy: Indicators
+        """
         self.__all_indicators = {}
 
-        # set static values for price bar values
-        for price_bar_field in self.ALL_STATIC_FIELDS:
-            self.__all_indicators[price_bar_field] = (None, StaticValue())
+        if indicators_to_copy is None:
+            # set static values for price bar values
+            for price_bar_field in self.ALL_STATIC_FIELDS:
+                self.__all_indicators[price_bar_field] = (None, StaticValue())
+        else:
+            # indicators is not None, so we have to copy its content without changing anything
+            self.__all_indicators = copy.deepcopy(indicators_to_copy.__all_indicators)
 
     # indicators - define collection of indicators, which should be collected during trading;
     #   collection of tuples with following fields:

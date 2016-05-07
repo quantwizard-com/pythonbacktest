@@ -35,8 +35,15 @@ class BasicBackTestEngine(AbstractBackTestEngine):
         self.strategy.init_indicators(indicators)
 
         for price_bar in price_bars:
+
             indicators.new_price_bar(price_bar)
             self.broker.set_current_price_bar(price_bar)
+
+            # once everything's set, call the strategy to do the voodoo magic
             self.strategy.new_price_bar(price_bar, indicators, self.broker)
+
+            # finally: preserve state of indicators in history (if needed)
+            if self.indicator_history:
+                self.indicator_history.record_state_of_indicators(price_bar.timestamp, indicators)
 
 

@@ -9,12 +9,20 @@ class AbstractBackTestEngine(object):
         self.__data_feed = data_feed
         self.__strategy = strategy
         self.__broker = broker
+        self.__indicator_history = None
 
         # list of indicators collected per day for the current security
         # format:
         # key - date (day)
         # value - indicators
         self.__all_indicators_per_day = {}
+
+    def set_indicator_history(self, indicator_history):
+        self.__indicator_history = indicator_history
+
+    @property
+    def indicator_history(self):
+        return self.__indicator_history
 
     @property
     def data_feed(self):

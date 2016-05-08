@@ -1,4 +1,6 @@
 from indicators import Indicators
+from indicatorsnapshot import IndicatorsSnapshot
+import collections
 
 
 # collection of indicators for given moment in day and time
@@ -32,6 +34,15 @@ class IndicatorHistory(object):
         elif timestamp in self.__indicators_storage[date]:
             raise ValueError("Duplicated indicators for timestamp: " + str(timestamp))
 
-        # ok, ready to insert indicators
-        copy_of_indicators = Indicators(indicators)
-        self.__indicators_storage[date][timestamp] = copy_of_indicators
+        # ok, time to copy indicators into a snapshot
+        indicators_snapshot = IndicatorsSnapshot(timestamp, indicators)
+        self.__indicators_storage[date][timestamp] = indicators_snapshot
+
+    # return sorted list of tuples (sorted by datetime)
+    # value 1: date time of when the indicator has been recorded
+    # value 2: actual snapshot of the Indicators object
+    # e.g.: [(2016-01-02 14:30.00, Indicators),(2016-01-02 14:30.05, Indicators)]
+    def get_indicator_history_for_day(self, day_date):
+        data_per_day = self.__indicators_storage[day_date]
+
+        return collections.OrderedDict(sorted(data_per_day.items()))

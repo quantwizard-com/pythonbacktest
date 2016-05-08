@@ -1,6 +1,7 @@
 from .staticvalue import StaticValue
 import copy
 
+
 class Indicators(object):
 
     ALL_STATIC_FIELDS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
@@ -74,6 +75,11 @@ class Indicators(object):
         source_name, indicator = self.__all_indicators[indicator_name]
 
         return indicator.all_result
+
+    @property
+    def indicator_names(self):
+        # return names of all collected indicators
+        return self.__all_indicators.keys()
 
     # mark one of the transaction indicator (buy, sell or short) with the given value
     # (which in most cases will be current price)

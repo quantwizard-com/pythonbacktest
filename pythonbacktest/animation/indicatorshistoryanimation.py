@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 class IndicatorsHistoryAnimation(IPythonAnimation):
 
-    def __init__(self, indicators_history, date, interval=20):
+    def __init__(self, indicators_history, date, interval=20, indicators=[]):
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
@@ -18,7 +18,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         IPythonAnimation.__init__(self, number_of_frames, interval)
 
         # on the create canvas - create all charts
-        self.__create_all_charts(indicators_history)
+        self.__create_all_charts(indicators_history, indicators)
 
     def _init_animation(self):
         # init all chart plots
@@ -44,21 +44,26 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             single_chart_plot.set_data(x_data, snapshot_data_per_indicator)
             yield single_chart_plot
 
-    def __create_all_charts(self, indicators_history):
+    #
+    # HELP SET-UP METHODS
+    #
+
+    def __create_all_charts(self, indicators_history, indicators):
         indicator_names = indicators_history.all_indicator_names
 
-        x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot)
+        x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators)
 
         ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
 
         for single_indicator_name in indicator_names:
-            single_chart_plot, = ax.plot([], [], lw=2)
-            self.__all_chart_plots[single_indicator_name] = single_chart_plot
+            if single_indicator_name in indicators or not indicators:
+                single_chart_plot, = ax.plot([], [], lw=2)
+                self.__all_chart_plots[single_indicator_name] = single_chart_plot
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)
     # - output: tuple - (x_min, x_max, y_min, y_max)
-    def __find_chart_boundaries(self, indicator_snapshots):
+    def __find_chart_boundaries(self, indicator_snapshots, indicators):
         # we need only check the last record - as it contains all values for all indicators
         all_y_max_values = []
         all_y_min_values = []
@@ -70,16 +75,17 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         x_min = 0
         x_max = -1
 
-        for snapshot_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
+        for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
             if x_max == -1:
                 x_max = len(snapshot_all_values) - 1
 
-            values_filtered_none = [t for t in snapshot_all_values if t is not None]
-            if len(values_filtered_none) > 0:
-                all_y_max_values.append(max(values_filtered_none))
-                all_y_min_values.append(min(values_filtered_none))
+            if indicator_name in indicators or not indicators:
+                values_filtered_none = [t for t in snapshot_all_values if t is not None]
+                if len(values_filtered_none) > 0:
+                    all_y_max_values.append(max(values_filtered_none))
+                    all_y_min_values.append(min(values_filtered_none))
 
-            y_min = min(all_y_min_values)
+        y_min = min(all_y_min_values)
         y_max = max(all_y_max_values)
 
         return x_min, x_max, y_min, y_max

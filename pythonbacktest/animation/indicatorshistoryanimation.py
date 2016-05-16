@@ -18,7 +18,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         IPythonAnimation.__init__(self, number_of_frames, interval)
 
         # on the create canvas - create all charts
-        self.__create_all_charts(indicators_history, indicators)
+        self.__create_all_charts(indicators)
 
     def _init_animation(self):
         # init all chart plots
@@ -48,22 +48,19 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
     # HELP SET-UP METHODS
     #
 
-    def __create_all_charts(self, indicators_history, indicators):
-        indicator_names = indicators_history.all_indicator_names
-
-        x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators)
+    def __create_all_charts(self, indicators_with_colors):
+        x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
 
         ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
 
-        for single_indicator_name in indicator_names:
-            if single_indicator_name in indicators or not indicators:
-                single_chart_plot, = ax.plot([], [], lw=2)
-                self.__all_chart_plots[single_indicator_name] = single_chart_plot
+        for indicator_name, indicator_color in indicators_with_colors:
+            single_chart_plot, = ax.plot([], [],color=indicator_color, lw=2)
+            self.__all_chart_plots[indicator_name] = single_chart_plot
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)
     # - output: tuple - (x_min, x_max, y_min, y_max)
-    def __find_chart_boundaries(self, indicator_snapshots, indicators):
+    def __find_chart_boundaries(self, indicator_snapshots, indicators_with_colors):
         # we need only check the last record - as it contains all values for all indicators
         all_y_max_values = []
         all_y_min_values = []
@@ -74,6 +71,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # the assumption: all data for all indicators will have the same length
         x_min = 0
         x_max = -1
+
+        indicators = [t[0] for t in indicators_with_colors]
 
         for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
             if x_max == -1:

@@ -1,4 +1,4 @@
-from IPython.display import HTML
+from IPython.display import HTML, display
 from tempfile import NamedTemporaryFile
 from matplotlib import pyplot as plt
 from matplotlib import animation
@@ -46,7 +46,7 @@ class IPythonAnimation(object):
         animation_handle = animation.FuncAnimation(self.target_canvas, self._animate_callback,
                                                    init_func=self._init_animation,
                                                    frames=self.__number_of_frames, interval=self.__interval, blit=True)
-        self.__display_animation(animation_handle)
+        return display(self.__display_animation(animation_handle))
 
     @property
     def target_canvas(self):

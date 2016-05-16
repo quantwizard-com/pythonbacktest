@@ -20,20 +20,22 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # init all chart plots
         for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
             single_chart_plot.set_data([], [])
+            yield single_chart_plot
 
     def _animate_callback(self, animation_frame_index):
         single_snapshot = self.__indicator_snapshot[animation_frame_index]
 
-        snapshot_data = single_snapshot[animation_frame_index]
+        snapshot_data = single_snapshot[1].snapshot_data
 
         # for now: all x-data will come as a data index
         x_data = [t for t in range(0, self.__number_of_frames)]
 
         # fill individual charts with data from the snapshot
-        for indicator_name, single_chart_plot in self.__all_chart_plots:
+        for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
             snapshot_data_per_indicator = snapshot_data[indicator_name]
 
             single_chart_plot.set_data(x_data, snapshot_data_per_indicator)
+            yield single_chart_plot
 
     def __create_all_charts(self, indicators_history):
         indicator_names = indicators_history.all_indicator_names

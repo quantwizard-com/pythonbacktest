@@ -9,12 +9,16 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # all chart plots; dictionary, where:
         # - key: name of the indicator
         # - value: chart plot
+
         self.__all_chart_plots = {}
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
-        self.__create_all_charts(indicators_history)
-        self.__number_of_frames = len(self.__indicator_snapshot)
+        number_of_frames = len(self.__indicator_snapshot)
 
-        IPythonAnimation.__init__(self, self.__number_of_frames, interval)
+        # we need to create the target canvas (figure)
+        IPythonAnimation.__init__(self, number_of_frames, interval)
+
+        # on the create canvas - create all charts
+        self.__create_all_charts(indicators_history)
 
     def _init_animation(self):
         # init all chart plots
@@ -28,11 +32,14 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         snapshot_data = single_snapshot[1].snapshot_data
 
         # for now: all x-data will come as a data index
-        x_data = [t for t in range(0, self.__number_of_frames)]
+        x_data = None
 
         # fill individual charts with data from the snapshot
         for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
             snapshot_data_per_indicator = snapshot_data[indicator_name]
+
+            if x_data is None:
+                x_data = [t for t in range(0, len(snapshot_data_per_indicator))]
 
             single_chart_plot.set_data(x_data, snapshot_data_per_indicator)
             yield single_chart_plot

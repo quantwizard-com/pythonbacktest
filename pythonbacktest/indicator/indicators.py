@@ -9,7 +9,7 @@ class Indicators(object):
 
     def __init__(self, indicators_to_copy=None):
         """
-        Constructor with copying funcionality
+        Constructor with copying functionality
         :type indicators_to_copy: Indicators
         """
         self.__all_indicators = {}

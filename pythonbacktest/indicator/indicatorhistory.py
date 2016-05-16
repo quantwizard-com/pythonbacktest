@@ -1,4 +1,3 @@
-from indicators import Indicators
 from indicatorsnapshot import IndicatorsSnapshot
 import collections
 
@@ -17,8 +16,11 @@ class IndicatorHistory(object):
         # - key - date of trade
         # - value - dictionary: indicators for all data points during that day
         # -- key - date and time of indicators
-        # -- value - Indicators object with all collected indicators
+        # -- value - IndicatorsSnapshot object with all collected indicators
         self.__indicators_storage = {}
+
+        # names of all indicators stored in the history
+        self.__indicator_names = []
 
     def record_state_of_indicators(self, timestamp, indicators):
         """
@@ -38,11 +40,23 @@ class IndicatorHistory(object):
         indicators_snapshot = IndicatorsSnapshot(timestamp, indicators)
         self.__indicators_storage[date][timestamp] = indicators_snapshot
 
+        # store name of all indicators
+        if not self.__indicator_names:
+            self.__indicator_names = indicators.indicator_names;
+
     # return sorted list of tuples (sorted by datetime)
     # value 1: date time of when the indicator has been recorded
     # value 2: actual snapshot of the Indicators object
-    # e.g.: [(2016-01-02 14:30.00, Indicators),(2016-01-02 14:30.05, Indicators)]
+    # e.g.: [(2016-01-02 14:30.00, IndicatorsSnapshot),(2016-01-02 14:30.05, IndicatorsSnapshot)]
     def get_indicator_history_for_day(self, day_date):
         data_per_day = self.__indicators_storage[day_date]
 
-        return collections.OrderedDict(sorted(data_per_day.items()))
+        return collections.OrderedDict(sorted(data_per_day.items())).items()
+
+    @property
+    def all_indicator_names(self):
+        """
+        Return names of all stored indicators
+        """
+        return self.__indicator_names
+

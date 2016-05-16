@@ -1,15 +1,13 @@
 import abc
 
-from pythonbacktest import broker
-
 
 class AbstractBackTestEngine(object):
 
-    def __init__(self, data_feed, strategy, broker):
+    def __init__(self, data_feed, strategy, broker, indicator_history):
         self.__data_feed = data_feed
         self.__strategy = strategy
         self.__broker = broker
-        self.__indicator_history = None
+        self.__indicator_history = indicator_history
 
         # list of indicators collected per day for the current security
         # format:

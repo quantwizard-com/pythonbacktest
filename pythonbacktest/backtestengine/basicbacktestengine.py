@@ -5,8 +5,8 @@ from pythonbacktest.indicator import Indicators
 
 class BasicBackTestEngine(AbstractBackTestEngine):
 
-    def __init__(self, data_feed, strategy, broker):
-        AbstractBackTestEngine.__init__(self, data_feed, strategy, broker)
+    def __init__(self, data_feed, strategy, broker, indicator_history=None):
+        AbstractBackTestEngine.__init__(self, data_feed, strategy, broker, indicator_history)
 
     def start(self):
 

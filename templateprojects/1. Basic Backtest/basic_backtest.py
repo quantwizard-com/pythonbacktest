@@ -8,10 +8,15 @@ from pythonbacktest.backtestengine import BasicBackTestEngine
 from pythonbacktest.strategy import import_strategy
 from pythonbacktest.broker import BackTestBroker
 from pythonbacktest.tradelog import MemoryTradeLog
+from pythonbacktest.indicator import IndicatorHistory
+from pythonbacktest.animation import IndicatorsHistoryAnimation
+
+from datetime import date
 
 
 TEST_DATA_PATH = os.path.abspath("../testdata/ACME")
 INITIAL_BUDGET = 100000
+DATE_TO_ANALYSIS = date(2016,1,2)
 
 csv_data_feed = CSVDataFeed()
 csv_data_feed.load_data(TEST_DATA_PATH)
@@ -26,7 +31,9 @@ strategy_module = import_strategy(
 
 strategy = strategy_module.BasicSMAStrategy()
 
-back_test_engine = BasicBackTestEngine(csv_data_feed, strategy, broker)
+indicator_history = IndicatorHistory()
+
+back_test_engine = BasicBackTestEngine(csv_data_feed, strategy, broker, indicator_history)
 back_test_engine.start()
 
 # testing done - let's display the final budget
@@ -37,3 +44,5 @@ for transaction in trade_log.all_transactions:
           (transaction.timestamp, transaction.transaction_type,
            transaction.transaction_price_per_share, transaction.cash_after)
 
+indicators_animation = IndicatorsHistoryAnimation(indicator_history, DATE_TO_ANALYSIS)
+indicators_animation.start_animation()

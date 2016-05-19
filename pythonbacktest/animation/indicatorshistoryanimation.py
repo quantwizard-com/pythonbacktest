@@ -4,21 +4,25 @@ from matplotlib import pyplot as plt
 
 class IndicatorsHistoryAnimation(IPythonAnimation):
 
-    def __init__(self, indicators_history, date, interval=20, indicators=[]):
+    TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
+
+    def __init__(self, indicators_history, date, interval=20, indicators=[], markers=[]):
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
         # - value: chart plot
 
         self.__all_chart_plots = {}
+        self.__all_marker_plots = {}
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
+        self.__markets = markers
         number_of_frames = len(self.__indicator_snapshot)
 
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval)
 
         # on the create canvas - create all charts
-        self.__create_all_charts(indicators)
+        self.__create_all_charts(indicators, markers)
 
     def _init_animation(self):
         # init all chart plots
@@ -31,31 +35,34 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         snapshot_data = single_snapshot[1].snapshot_data
 
-        # for now: all x-data will come as a data index
-        x_data = None
-
         # fill individual charts with data from the snapshot
-        for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
+        for indicator_name, single_chart_plot in dict(self.__all_chart_plots, **self.__all_marker_plots).iteritems():
             snapshot_data_per_indicator = snapshot_data[indicator_name]
 
-            if x_data is None:
-                x_data = [t for t in range(0, len(snapshot_data_per_indicator))]
+            x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
 
-            single_chart_plot.set_data(x_data, snapshot_data_per_indicator)
+            single_chart_plot.set_data(x_data, y_data)
             yield single_chart_plot
 
     #
     # HELP SET-UP METHODS
     #
 
-    def __create_all_charts(self, indicators_with_colors):
+    def __create_all_charts(self, indicators_with_colors, marker_names):
         x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
 
         ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
 
         for indicator_name, indicator_color in indicators_with_colors:
-            single_chart_plot, = ax.plot([], [],color=indicator_color, lw=2)
+            single_chart_plot, = ax.plot([], [], color=indicator_color, lw=2)
             self.__all_chart_plots[indicator_name] = single_chart_plot
+
+        for marker_name in marker_names:
+            single_marker_plot, = ax.plot(
+                [], [],
+                marker='D', markersize=5,
+                color=self.TRADE_MARKER_COLORS[marker_name], lw=0)
+            self.__all_marker_plots[marker_name] = single_marker_plot
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)
@@ -88,3 +95,14 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         y_max = max(all_y_max_values)
 
         return x_min, x_max, y_min, y_max
+
+    def __pack_data_with_index(self, data):
+
+        # add 0-based indexes to the data
+        chart_data = zip([t for t in range(0, len(data))], data)
+
+        # filter out all tuples, where there's at least one None
+        chart_data = [(x, y) for (x, y) in chart_data if y is not None]
+
+        return [x for (x, y) in chart_data], [y for (x, y) in chart_data]
+

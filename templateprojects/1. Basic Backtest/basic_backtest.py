@@ -44,5 +44,5 @@ for transaction in trade_log.all_transactions:
           (transaction.timestamp, transaction.transaction_type,
            transaction.transaction_price_per_share, transaction.cash_after)
 
-indicators_animation = IndicatorsHistoryAnimation(indicator_history, DATE_TO_ANALYSIS)
+indicators_animation = IndicatorsHistoryAnimation(indicator_history, DATE_TO_ANALYSIS, indicators=[], markers=['trade_buy', 'trade_sell'])
 indicators_animation.start_animation()

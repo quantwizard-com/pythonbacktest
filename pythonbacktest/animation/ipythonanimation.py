@@ -16,8 +16,9 @@ class IPythonAnimation(object):
                  Your browser does not support the video tag.
                 </video>"""
 
-    def __init__(self, frames=100, interval=20):
-        self.__target_canvas = plt.figure()
+    def __init__(self, frames=100, interval=20, canvassize=None):
+
+        self.__target_canvas = plt.figure(figsize=canvassize)
         self.__number_of_frames = frames
         self.__interval = interval
 

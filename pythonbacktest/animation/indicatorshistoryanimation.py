@@ -6,7 +6,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
 
-    def __init__(self, indicators_history, date, interval=20, indicators=[], markers=[]):
+    def __init__(self, indicators_history, date, interval=20, indicators=[], markers=[], canvassize=None):
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
@@ -19,7 +19,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         number_of_frames = len(self.__indicator_snapshot)
 
         # we need to create the target canvas (figure)
-        IPythonAnimation.__init__(self, number_of_frames, interval)
+        IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
 
         # on the create canvas - create all charts
         self.__create_all_charts(indicators, markers)
@@ -54,7 +54,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
 
         for indicator_name, indicator_color in indicators_with_colors:
-            single_chart_plot, = ax.plot([], [], color=indicator_color, lw=2)
+            single_chart_plot, = ax.plot([], [], color=indicator_color, lw=1)
             self.__all_chart_plots[indicator_name] = single_chart_plot
 
         for marker_name in marker_names:

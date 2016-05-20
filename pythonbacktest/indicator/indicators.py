@@ -17,19 +17,27 @@ class Indicators(object):
         if indicators_to_copy is None:
             # set static values for price bar values
             for price_bar_field in self.ALL_STATIC_FIELDS:
-                self.__all_indicators[price_bar_field] = (None, StaticValue())
+                self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(), 'datacount': None}
         else:
             # indicators is not None, so we have to copy its content without changing anything
             self.__all_indicators = copy.deepcopy(indicators_to_copy.__all_indicators)
 
     # indicators - define collection of indicators, which should be collected during trading;
-    #   collection of tuples with following fields:
+    #   collection of dictionaries with following fields:
     # - name - indicator name
     # - source name - name of the indicator, which should be an input for the given indicator
     # - implementation - implementation of the indicator
+    # - datacount - if specified, source data will be extracted from 'source name' from all_result;
+    #               it will extract 'datacount' last records
     def set_indicators(self, indicator_records):
 
-        for indicator_name, source_name, implementation in indicator_records:
+        for record in indicator_records:
+
+            indicator_name = record['name']
+            source_name = record['source']
+            implementation = record['implementation']
+            if 'datacount' not in record:
+                record['datacount'] = None
 
             if indicator_name in self.__all_indicators.iteritems():
                 raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
@@ -37,7 +45,7 @@ class Indicators(object):
             if source_name is None or implementation is None:
                 raise ValueError("Either input_name or implementation is null")
 
-            self.__all_indicators[indicator_name] = (source_name, implementation)
+            self.__all_indicators[indicator_name] = record
 
     # a new price bar has arrived
     # that will trigger operatotion of moving through all the indicators
@@ -52,11 +60,16 @@ class Indicators(object):
         # move through all listed indicators and calculate all of those
         for indicator_name, indicator_record in self.__all_indicators.iteritems():
 
-            source_name, indicator = indicator_record
+            implementation = indicator_record['implementation']
+            datacount = indicator_record['datacount']
+            source_name = indicator_record['source']
             if source_name is not None:
-                current_value_at_source = self[source_name]
-
-                indicator.on_new_upstream_value(current_value_at_source)
+                if datacount is None:
+                    current_value_at_source = self[source_name]
+                    implementation.on_new_upstream_value(current_value_at_source)
+                else:
+                    last_data_records = self.__get_last_n_data(source_name, datacount)
+                    implementation.on_new_upstream_value(last_data_records)
 
     # update values related to static fields, mainly: price bar fields
     def __update_static_values(self, price_bar):
@@ -67,14 +80,14 @@ class Indicators(object):
 
         for key, value in field_values.iteritems():
             # these are all static values, so the only impact here is recording new values
-            source_name, indicator = self.__all_indicators[key]
-            indicator.on_new_upstream_value(value)
+            implementation = self.__all_indicators[key]['implementation']
+            implementation.on_new_upstream_value(value)
 
     # get all values for the given indicator
     def get_all_values_for_indicator(self, indicator_name):
-        source_name, indicator = self.__all_indicators[indicator_name]
+        implementation = self.__all_indicators[indicator_name]['implementation']
 
-        return indicator.all_result
+        return implementation.all_result
 
     @property
     def indicator_names(self):
@@ -86,17 +99,25 @@ class Indicators(object):
     def mark_transaction(self, transaction_name, mark_value):
         transaction_indicator_name = self.TRANSACTION_TO_FIELD_NAME[transaction_name]
 
-        source_indicator, indicator = self.__all_indicators[transaction_indicator_name]
+        implementation = self.__all_indicators[transaction_indicator_name]['implementation']
 
         # update existing static value indicator, but check if it's actually not-set
         # if it's set with some value already, we have some issue with the logic
-        if indicator.all_result[-1] is not None:
+        if implementation.all_result[-1] is not None:
             raise Exception('There''s some value, but None is expected!!!')
 
-        indicator.all_result[-1] = mark_value
+        implementation.all_result[-1] = mark_value
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):
-        source_name, indicator = self.__all_indicators[indicator_name]
+        implementation = self.__all_indicators[indicator_name]['implementation']
 
-        return indicator.result
+        return implementation.result
+
+    def __get_last_n_data(self, indicator_name, last_records_count):
+        source_name, implementation, datacount = self.__all_indicators[indicator_name]
+
+        all_results = implementation.all_result()
+
+        # return 'None' if there's not enough data to extract
+        return all_results[-last_records_count:-1] if len(all_results) >= last_records_count else None

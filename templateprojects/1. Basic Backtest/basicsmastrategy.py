@@ -10,8 +10,8 @@ class BasicSMAStrategy(AbstractTradingStrategy):
     def init_indicators(self, indicators):
         indicators.set_indicators(
             [
-                ('SMA200', 'close', SMA(200)),
-                ('SMA50', 'close', SMA(50))
+                {'name': 'SMA200', 'source': 'close', 'implementation': SMA(200)},
+                {'name': 'SMA50', 'source': 'close', 'implementation': SMA(50)}
             ])
 
     def new_price_bar(self, price_bar, indicators, broker):

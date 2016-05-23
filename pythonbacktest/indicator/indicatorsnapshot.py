@@ -14,7 +14,8 @@ class IndicatorsSnapshot(object):
         indicator_names = indicators.indicator_names
 
         for name in indicator_names:
-            self.__snapshot_data[name] = copy.copy(indicators.get_all_values_for_indicator(name))
+            all_values_for_indicator = indicators.get_all_values_for_indicator(name)
+            self.__snapshot_data[name] = copy.copy(all_values_for_indicator)
 
         # when the snapshot was taken
         self.__snapshot_timestamp = timestamp

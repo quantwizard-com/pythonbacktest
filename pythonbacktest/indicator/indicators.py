@@ -115,9 +115,15 @@ class Indicators(object):
         return implementation.result
 
     def __get_last_n_data(self, indicator_name, last_records_count):
-        source_name, implementation, datacount = self.__all_indicators[indicator_name]
+        implementation = self.__all_indicators[indicator_name]['implementation']
 
-        all_results = implementation.all_result()
+        all_results = implementation.all_result
 
         # return 'None' if there's not enough data to extract
-        return all_results[-last_records_count:-1] if len(all_results) >= last_records_count else None
+        # return All available data if last_records_count is set to <=0
+        if last_records_count <= 0:
+            return all_results
+        elif len(all_results) >= last_records_count:
+            return all_results[-last_records_count:-1]
+        else:
+            return None

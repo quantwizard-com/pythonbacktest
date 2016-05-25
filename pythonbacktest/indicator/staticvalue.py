@@ -15,5 +15,9 @@ class StaticValue(AbstractIndicator):
         return self.__all_values
 
     def on_new_upstream_value(self, new_value):
+
+        if type(new_value) is list:
+            raise ValueError("StaticValue doesn't handle lists")
+
         self.__current_value = new_value
         self.all_result.append(new_value)

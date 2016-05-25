@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e8ab827a-7982-4e40-86ae-3aade989418b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/indicators.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/indicators.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py" />
     </list>
     <ignored path="pythonbacktest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,8 +65,8 @@
       <file leaf-file-name="staticvalue.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+            <state relative-caret-position="240">
+              <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -113,7 +115,6 @@
         <option value="$PROJECT_DIR$/pythonbacktest/charting/AbstractChartRendered.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/charting/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/datafeed/csvdatafeed.py" />
-        <option value="$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/charting/abstractchartrendered.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/broker/backtestbroker.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/sma.py" />
@@ -132,6 +133,7 @@
         <option value="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
         <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basicsmastrategy.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/indicators.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py" />
       </list>
     </option>
   </component>
@@ -960,12 +962,12 @@
       <workItem from="1463388144240" duration="12537000" />
       <workItem from="1463669249976" duration="4573000" />
       <workItem from="1463729196115" duration="10163000" />
-      <workItem from="1463949097285" duration="6383000" />
+      <workItem from="1463949097285" duration="7707000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="110610000" />
+    <option name="totallyTimeSpent" value="111934000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1458,8 +1460,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/staticvalue.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+        <state relative-caret-position="240">
+          <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
           <folding />
         </state>
       </provider>

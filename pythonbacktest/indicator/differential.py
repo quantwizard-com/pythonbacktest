@@ -7,15 +7,17 @@ class Differential(AbstractIndicator):
     def __init__(self):
         AbstractIndicator.__init__(self)
 
-        self.__latest_result = None
         self.__last_value = None
 
         # entire SMA data for all input which came
         self.__all_differential = []
 
+        # all values passed to this indicator
+        self.__all_values = []
+
     @property
     def result(self):
-        return self.__latest_result
+        return self.__all_differential[-1]
 
     @property
     def all_result(self):
@@ -23,11 +25,39 @@ class Differential(AbstractIndicator):
 
     def on_new_upstream_value(self, new_value):
 
-        difference = None
+        # we expect None or array of numbers, which has exactly 'window_size' elements
+        if new_value is None:
+            self.__all_values.append(None)
+        else:
+            if type(new_value) is list:
+                del self.__all_values[:(len(new_value) - 1)]
+                self.__all_values.extend(new_value)
 
-        if self.__last_value is not None:
-            difference = new_value - self.__latest_result
+                # ... and recalculate entire differential
+                self.__recalculate_all_diff()
+            else:
+                if self.__last_value is not None:
+                    difference = new_value - self.__last_value
+                    self.__all_differential.append(difference)
 
-        self.__all_differential.append(difference)
-        self.__latest_result = difference
-        self.__last_value = new_value
+                self.__last_value = new_value
+
+    def __recalculate_all_diff(self):
+        self.__all_differential = []
+
+        last_value = None
+        diff = None
+        for value in self.__all_values:
+
+            if last_value is not None:
+                diff = value - last_value
+
+            self.__all_differential.append(diff)
+            last_value = value
+
+        self.__last_value = last_value
+
+
+
+
+

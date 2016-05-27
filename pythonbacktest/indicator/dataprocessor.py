@@ -1,6 +1,5 @@
 from .abstractindicator import AbstractIndicator
 
-
 class DataProcessor(AbstractIndicator):
 
     def __init__(self, processing_proc):
@@ -36,6 +35,8 @@ class DataProcessor(AbstractIndicator):
             self.__process_all_values()
 
     def __process_all_values(self):
+        self.__all_results = []
+
         for value in self.__all_values:
-            single_result = self._processing_proc(value)
+            single_result = self.__processing_proc(value)
             self.__all_results.append(single_result)

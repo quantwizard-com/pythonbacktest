@@ -30,17 +30,14 @@ class Differential(AbstractIndicator):
             self.__all_values.append(None)
         else:
             if type(new_value) is list:
-                del self.__all_values[:(len(new_value) - 1)]
+                del self.__all_values[:len(new_value)]
                 self.__all_values.extend(new_value)
 
                 # ... and recalculate entire differential
                 self.__recalculate_all_diff()
             else:
-                if self.__last_value is not None:
-                    difference = new_value - self.__last_value
-                    self.__all_differential.append(difference)
-
-                self.__last_value = new_value
+                self.__all_values.append(new_value)
+                self.__recalculate_all_diff()
 
     def __recalculate_all_diff(self):
         self.__all_differential = []

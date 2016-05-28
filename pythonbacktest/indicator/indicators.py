@@ -14,6 +14,11 @@ class Indicators(object):
         """
         self.__all_indicators = {}
 
+        # counter which checks how many price bars in total have been processed at the indicators
+        # number of processed bars should be consistent with number of results per each indicator
+        # so this counter is used primarily to check on how individual indicators behave
+        self.__price_bars_counter = 0
+
         if indicators_to_copy is None:
             # set static values for price bar values
             for price_bar_field in self.ALL_STATIC_FIELDS:
@@ -55,6 +60,8 @@ class Indicators(object):
         if price_bar is None:
             raise ValueError("price_bar is null")
 
+        self.__price_bars_counter += 1
+
         self.__update_static_values(price_bar)
 
         # move through all listed indicators and calculate all of those
@@ -64,12 +71,20 @@ class Indicators(object):
             datacount = indicator_record['datacount']
             source_name = indicator_record['source']
             if source_name is not None:
+                # if datacount is not set, take just single result and pass it downstream
+                # if datacount is set, take n latest results and pass them downstream
                 if datacount is None:
                     current_value_at_source = self[source_name]
                     implementation.on_new_upstream_value(current_value_at_source)
                 else:
                     last_data_records = self.__get_last_n_data(source_name, datacount)
                     implementation.on_new_upstream_value(last_data_records)
+
+                # once indicator is updated, number of results
+                all_results_count = len(implementation.all_result)
+                if all_results_count != self.__price_bars_counter:
+                    raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
+                                     % (indicator_name, self.__price_bars_counter, all_results_count, last_data_records))
 
     # update values related to static fields, mainly: price bar fields
     def __update_static_values(self, price_bar):
@@ -124,6 +139,6 @@ class Indicators(object):
         if last_records_count <= 0:
             return all_results
         elif len(all_results) >= last_records_count:
-            return all_results[-last_records_count:-1]
+            return all_results[-last_records_count:]
         else:
             return None

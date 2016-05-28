@@ -26,7 +26,7 @@ class DataProcessor(AbstractIndicator):
             self.__all_values.append(None)
         else:
             if type(new_value) is list:
-                del self.__all_values[:(len(new_value) - 1)]
+                del self.__all_values[:(len(new_value))]
                 self.__all_values.extend(new_value)
             else:
                 self.__all_values.append(new_value)

@@ -16,5 +16,20 @@ class DataProcessorTests(unittest.TestCase):
 
         self.assertEqual(expected_result, indicator.all_result)
 
+    def test_sample_filter_remove_negative_values_list_entry(self):
+
+        test_data = [t for t in range(-5, 5)]
+        expected_result = [0 if t < 0 else t for t in test_data]
+        processor_function = lambda x: 0 if x < 0 else x
+
+        indicator = DataProcessor(processor_function)
+
+        indicator.on_new_upstream_value(test_data)
+        self.assertEqual(expected_result, indicator.all_result)
+
+        # let's try again... result should be the same
+        indicator.on_new_upstream_value(test_data)
+        self.assertEqual(expected_result, indicator.all_result)
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,5 @@
 from .staticvalue import StaticValue
+from collections import OrderedDict
 import copy
 
 
@@ -12,7 +13,7 @@ class Indicators(object):
         Constructor with copying functionality
         :type indicators_to_copy: Indicators
         """
-        self.__all_indicators = {}
+        self.__all_indicators = OrderedDict()
 
         # counter which checks how many price bars in total have been processed at the indicators
         # number of processed bars should be consistent with number of results per each indicator
@@ -22,7 +23,8 @@ class Indicators(object):
         if indicators_to_copy is None:
             # set static values for price bar values
             for price_bar_field in self.ALL_STATIC_FIELDS:
-                self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(), 'datacount': None}
+                self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(),
+                                                          'passalldata': False}
         else:
             # indicators is not None, so we have to copy its content without changing anything
             self.__all_indicators = copy.deepcopy(indicators_to_copy.__all_indicators)
@@ -41,8 +43,8 @@ class Indicators(object):
             indicator_name = record['name']
             source_name = record['source']
             implementation = record['implementation']
-            if 'datacount' not in record:
-                record['datacount'] = None
+            if 'passalldata' not in record:
+                record['passalldata'] = False
 
             if indicator_name in self.__all_indicators.iteritems():
                 raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
@@ -68,23 +70,26 @@ class Indicators(object):
         for indicator_name, indicator_record in self.__all_indicators.iteritems():
 
             implementation = indicator_record['implementation']
-            datacount = indicator_record['datacount']
+            passalldata = indicator_record['passalldata']
             source_name = indicator_record['source']
             if source_name is not None:
-                # if datacount is not set, take just single result and pass it downstream
-                # if datacount is set, take n latest results and pass them downstream
-                if datacount is None:
+
+                passed_data = None
+
+                if passalldata:
+                    all_results_from_source = self.__get_all_results(source_name)
+                    implementation.on_new_upstream_value(all_results_from_source)
+                    passed_data = all_results_from_source
+                else:
                     current_value_at_source = self[source_name]
                     implementation.on_new_upstream_value(current_value_at_source)
-                else:
-                    last_data_records = self.__get_last_n_data(source_name, datacount)
-                    implementation.on_new_upstream_value(last_data_records)
+                    passed_data = current_value_at_source
 
                 # once indicator is updated, number of results
                 all_results_count = len(implementation.all_result)
                 if all_results_count != self.__price_bars_counter:
                     raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
-                                     % (indicator_name, self.__price_bars_counter, all_results_count, last_data_records))
+                                     % (indicator_name, self.__price_bars_counter, all_results_count, passed_data))
 
     # update values related to static fields, mainly: price bar fields
     def __update_static_values(self, price_bar):
@@ -129,16 +134,7 @@ class Indicators(object):
 
         return implementation.result
 
-    def __get_last_n_data(self, indicator_name, last_records_count):
+    def __get_all_results(self, indicator_name):
         implementation = self.__all_indicators[indicator_name]['implementation']
 
-        all_results = implementation.all_result
-
-        # return 'None' if there's not enough data to extract
-        # return All available data if last_records_count is set to <=0
-        if last_records_count <= 0:
-            return all_results
-        elif len(all_results) >= last_records_count:
-            return all_results[-last_records_count:]
-        else:
-            return None
+        return implementation.all_result

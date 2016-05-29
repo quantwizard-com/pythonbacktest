@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 class IndicatorsHistoryAnimation(IPythonAnimation):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
+    CHART_TEXT_FORMAT = "X = %d"
 
     def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[], canvassize=None):
 
@@ -16,15 +17,20 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         self.__all_marker_plots = {}
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
         self.__markets = markers
-        number_of_frames = len(self.__indicator_snapshot)
+        self.__chart_text = None
+        number_of_frames = 1000#len(self.__indicator_snapshot)
 
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
 
-        # on the create canvas - create all charts
+        # on the create canvas - create all charts and chart text
         self.__create_all_chart_rows(indicators, markers)
+        self.__create_chart_text()
 
     def _init_animation(self):
+
+        self.__chart_text.set_text('')
+
         # init all chart plots
         for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
             single_chart_plot.set_data([], [])
@@ -44,9 +50,19 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             single_chart_plot.set_data(x_data, y_data)
             yield single_chart_plot
 
+        self.__chart_text.set_text(self.CHART_TEXT_FORMAT % animation_frame_index)
+
     #
     # HELP SET-UP METHODS
     #
+
+    def __create_chart_text(self):
+        self.__chart_text = plt.text(-20, -20, '',
+                                     #transform=ax.transAxes,
+                                     verticalalignment='bottom',
+                                     horizontalalignment='right',
+                                     fontsize=15, color='green',
+                                     bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 10})
 
     def __create_all_chart_rows(self, indicators, marker_names):
 

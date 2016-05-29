@@ -60,6 +60,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             ax = plt.subplot(all_charts_count, 1, current_chart_id)
             ax.set_xlim(x_min, x_max)
             ax.set_ylim(y_min, y_max)
+            ax.grid(True)
 
             self.__create_all_draws_per_chart(ax, indicators_with_colors, marker_names)
 

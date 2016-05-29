@@ -30,25 +30,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="indicatorshistoryanimation.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="indicatorshistoryanimation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="42" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
+            <state relative-caret-position="390">
+              <caret line="62" column="24" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ipythonanimation.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="81" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -118,8 +106,8 @@
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" />
         <option value="$PROJECT_DIR$/testcases/indicator_tests/differentialtests.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/indicators.py" />
-        <option value="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
       </list>
     </option>
   </component>
@@ -1080,7 +1068,7 @@
       <workItem from="1463388144240" duration="12537000" />
       <workItem from="1463669249976" duration="4573000" />
       <workItem from="1463729196115" duration="10163000" />
-      <workItem from="1463949097285" duration="27624000" />
+      <workItem from="1463949097285" duration="27874000" />
     </task>
     <servers />
   </component>
@@ -1117,7 +1105,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="131851000" />
+    <option name="totallyTimeSpent" value="132101000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1606,22 +1594,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="42" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
+        <state relative-caret-position="720">
+          <caret line="48" column="82" selection-start-line="48" selection-start-column="82" selection-end-line="48" selection-end-column="82" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py">
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="48" column="58" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="81" />
+        <state relative-caret-position="390">
+          <caret line="62" column="24" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

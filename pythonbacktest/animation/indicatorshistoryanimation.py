@@ -6,6 +6,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
     CHART_TEXT_FORMAT = "X = %d"
+    MAX_X_POINTS_PER_FRAME = 1000
 
     def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[], canvassize=None):
 
@@ -15,6 +16,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         self.__all_chart_plots = {}
         self.__all_marker_plots = {}
+        self.__all_axes = []
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
         self.__markets = markers
         self.__chart_text = None
@@ -52,6 +54,15 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         self.__chart_text.set_text(self.CHART_TEXT_FORMAT % animation_frame_index)
 
+        border_x_point = self.MAX_X_POINTS_PER_FRAME - self.MAX_X_POINTS_PER_FRAME * 0.2
+        if animation_frame_index > border_x_point:
+            translation = animation_frame_index - border_x_point
+            x_min = translation
+            x_max = self.MAX_X_POINTS_PER_FRAME - 1 + translation
+
+            for axis in self.__all_axes:
+                axis.set_xlim(x_min, x_max)
+
     #
     # HELP SET-UP METHODS
     #
@@ -77,6 +88,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             ax.set_xlim(x_min, x_max)
             ax.set_ylim(y_min, y_max)
             ax.grid(True)
+
+            self.__all_axes.append(ax)
 
             self.__create_all_draws_per_chart(ax, indicators_with_colors, marker_names)
 
@@ -108,13 +121,13 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # x goes (for now) between 0 and maximum number of elements minus 1
         # the assumption: all data for all indicators will have the same length
         x_min = 0
-        x_max = -1
+        x_max = self.MAX_X_POINTS_PER_FRAME - 1
 
         indicators = [t[0] for t in indicators_with_colors]
 
         for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
-            if x_max == -1:
-                x_max = len(snapshot_all_values) - 1
+            #if x_max == -1:
+            #    x_max = len(snapshot_all_values) - 1
 
             if indicator_name in indicators or not indicators:
                 values_filtered_none = [t for t in snapshot_all_values if t is not None]

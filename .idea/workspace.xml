@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e8ab827a-7982-4e40-86ae-3aade989418b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" afterPath="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" afterPath="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic backtest.ipynb" />
     </list>
     <ignored path="pythonbacktest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,8 +31,8 @@
       <file leaf-file-name="indicatorshistoryanimation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+            <state relative-caret-position="371">
+              <caret line="63" column="42" selection-start-line="63" selection-start-column="42" selection-end-line="63" selection-end-column="42" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -1067,7 +1066,7 @@
       <workItem from="1463388144240" duration="12537000" />
       <workItem from="1463669249976" duration="4573000" />
       <workItem from="1463729196115" duration="10163000" />
-      <workItem from="1463949097285" duration="29279000" />
+      <workItem from="1463949097285" duration="30280000" />
     </task>
     <servers />
   </component>
@@ -1104,7 +1103,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133506000" />
+    <option name="totallyTimeSpent" value="134507000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1176,7 +1175,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py</url>
-          <line>39</line>
+          <line>41</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -1607,8 +1606,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+        <state relative-caret-position="371">
+          <caret line="63" column="42" selection-start-line="63" selection-start-column="42" selection-end-line="63" selection-end-column="42" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

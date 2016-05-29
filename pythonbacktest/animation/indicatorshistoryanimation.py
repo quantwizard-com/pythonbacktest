@@ -6,7 +6,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
 
-    def __init__(self, indicators_history, date, interval=20, indicators=[], markers=[], canvassize=None):
+    def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[], canvassize=None):
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
@@ -22,7 +22,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
 
         # on the create canvas - create all charts
-        self.__create_all_charts(indicators, markers)
+        self.__create_all_chart_rows(indicators, markers)
 
     def _init_animation(self):
         # init all chart plots
@@ -48,10 +48,24 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
     # HELP SET-UP METHODS
     #
 
-    def __create_all_charts(self, indicators_with_colors, marker_names):
-        x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
+    def __create_all_chart_rows(self, indicators, marker_names):
 
-        ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
+        all_charts_count = len(indicators)
+        current_chart_id = 1
+
+        for indicators_with_colors in indicators:
+            # unpack collection of collections of charts
+            x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
+
+            ax = plt.subplot(all_charts_count, 1, current_chart_id)
+            ax.set_xlim(x_min, x_max)
+            ax.set_ylim(y_min, y_max)
+
+            self.__create_all_draws_per_chart(ax, indicators_with_colors, marker_names)
+
+            current_chart_id += 1
+
+    def __create_all_draws_per_chart(self, ax, indicators_with_colors, marker_names):
 
         for indicator_name, indicator_color in indicators_with_colors:
             single_chart_plot, = ax.plot([], [], color=indicator_color, lw=1)

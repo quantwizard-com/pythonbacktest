@@ -20,7 +20,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
         self.__markets = markers
         self.__chart_text = None
-        number_of_frames = 1000#len(self.__indicator_snapshot)
+        number_of_frames = len(self.__indicator_snapshot)
 
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)

@@ -20,7 +20,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
         self.__markets = markers
         self.__chart_text = None
-        number_of_frames = len(self.__indicator_snapshot)
+        number_of_frames = 500 #len(self.__indicator_snapshot)
 
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
@@ -126,8 +126,6 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         indicators = [t[0] for t in indicators_with_colors]
 
         for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
-            #if x_max == -1:
-            #    x_max = len(snapshot_all_values) - 1
 
             if indicator_name in indicators or not indicators:
                 values_filtered_none = [t for t in snapshot_all_values if t is not None]

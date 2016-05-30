@@ -1,5 +1,5 @@
 from indicatorsnapshot import IndicatorsSnapshot
-import collections
+from collections import OrderedDict
 
 
 # collection of indicators for given moment in day and time
@@ -17,7 +17,7 @@ class IndicatorHistory(object):
         # - value - dictionary: indicators for all data points during that day
         # -- key - date and time of indicators
         # -- value - IndicatorsSnapshot object with all collected indicators
-        self.__indicators_storage = {}
+        self.__indicators_storage = OrderedDict()
 
         # names of all indicators stored in the history
         self.__indicator_names = []
@@ -32,7 +32,7 @@ class IndicatorHistory(object):
         date = timestamp.date()
 
         if date not in self.__indicators_storage:
-            self.__indicators_storage[date] = {}
+            self.__indicators_storage[date] = OrderedDict()
         elif timestamp in self.__indicators_storage[date]:
             raise ValueError("Duplicated indicators for timestamp: " + str(timestamp))
 
@@ -42,7 +42,7 @@ class IndicatorHistory(object):
 
         # store name of all indicators
         if not self.__indicator_names:
-            self.__indicator_names = indicators.indicator_names;
+            self.__indicator_names = indicators.indicator_names
 
     # return sorted list of tuples (sorted by datetime)
     # value 1: date time of when the indicator has been recorded
@@ -51,7 +51,8 @@ class IndicatorHistory(object):
     def get_indicator_history_for_day(self, day_date):
         data_per_day = self.__indicators_storage[day_date]
 
-        return collections.OrderedDict(sorted(data_per_day.items())).items()
+        # return list of key, values, where: key is datetime and value: all collected indicators for that timestamp
+        return data_per_day.items()
 
     @property
     def all_indicator_names(self):

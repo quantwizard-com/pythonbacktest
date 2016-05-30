@@ -1,4 +1,5 @@
 from . import *
+import numpy
 from bokeh.io import vplot
 from bokeh.plotting import figure, show
 from bokeh.models import BoxAnnotation
@@ -30,11 +31,24 @@ class BokehChartRenderer(AbstractChartRendered):
             if first_chart is None:
                 first_chart = new_chart
 
+            # if given chart doesn't contain 'close' indicator, there's no point in setting markets
+
+            average_value = None
+            set_markers_at_average = True
             for indicator_name, color in name_collection:
                 indicator_data = indicators.get_all_values_for_indicator(indicator_name)
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
-            self.__add_markers_to_chart(new_chart, indicators, markers)
+                average_data = numpy.mean([t for t in indicator_data if t is not None])
+                if average_value is None:
+                    average_value = average_data
+                else:
+                    average_value = (average_data + average_value) / 2
+
+                if indicator_name == 'close':
+                    set_markers_at_average = False
+
+            self.__add_markers_to_chart(new_chart, indicators, markers, average_value, set_markers_at_average)
 
         if len(all_charts) == 1:
             show(first_chart)
@@ -69,12 +83,16 @@ class BokehChartRenderer(AbstractChartRendered):
         # unpack data for x and y
         target_chart.line(x_data, y_data, **chartparams)
 
-    def __add_markers_to_chart(self, target_chart, indicators, markers):
+    def __add_markers_to_chart(self, target_chart, indicators, markers, average_value, set_markers_at_average):
 
         if markers is not None:
             for single_marker in markers:
                 indicator_data = indicators.get_all_values_for_indicator(single_marker)
+
                 x_data, y_data = self.__pack_data_with_index(indicator_data)
+
+                if set_markers_at_average:
+                    y_data = [average_value] * len(y_data)
 
                 # render markers
                 target_chart.circle(x_data, y_data, size=self.CHART_MARKER_SIZE,
@@ -83,12 +101,21 @@ class BokehChartRenderer(AbstractChartRendered):
 
     def __pack_data_with_index(self, data):
 
-        # add 0-based indexes to the data
-        chart_data = zip([t for t in range(0, len(data))], data)
+        result_x = []
+        result_y = []
 
-        # filter out all tuples, where there's at least one None
-        chart_data = [(x, y) for (x, y) in chart_data if y is not None]
+        current_x = 0
 
-        return [x for (x, y) in chart_data], [y for (x, y) in chart_data]
+        # 1. take all records in data
+        # 2. assign index (0-based to each record)
+        # 3. filter-out records AND corresponding index for records = None
+        for record in data:
+            if record is not None:
+                result_x.append(current_x)
+                result_y.append(record)
+
+            current_x += 1
+
+        return result_x, result_y
 
 

@@ -8,7 +8,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
     CHART_TEXT_FORMAT = "X = %d"
     MAX_X_POINTS_PER_FRAME = 1000
 
-    def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[], canvassize=None):
+    def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[],
+                 canvassize=None, datarange=(0, None)):
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
@@ -20,10 +21,27 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
         self.__markets = markers
         self.__chart_text = None
-        number_of_frames = 500 #len(self.__indicator_snapshot)
+
+        range_start, range_end = datarange
+
+        self.__data_range_start = range_start
+
+        number_of_snapshots = len(self.__indicator_snapshot)
+        self.__data_range_end = range_end \
+            if (range_end is not None and range_end < number_of_snapshots) \
+            else number_of_snapshots - 1
+
+        number_of_frames = self.__data_range_end - self.__data_range_start + 1
+
+        if number_of_frames < 0:
+            raise ValueError("Number of frames cannot be negative. Range setting: " + datarange)
 
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
+
+        self.__points_per_frame = self.MAX_X_POINTS_PER_FRAME \
+            if self.MAX_X_POINTS_PER_FRAME < number_of_frames \
+            else number_of_frames
 
         # on the create canvas - create all charts and chart text
         self.__create_all_chart_rows(indicators, markers)
@@ -39,7 +57,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             yield single_chart_plot
 
     def _animate_callback(self, animation_frame_index):
-        single_snapshot = self.__indicator_snapshot[animation_frame_index]
+        single_snapshot = self.__indicator_snapshot[animation_frame_index + self.__data_range_start]
 
         snapshot_data = single_snapshot[1].snapshot_data
 
@@ -54,11 +72,11 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         self.__chart_text.set_text(self.CHART_TEXT_FORMAT % animation_frame_index)
 
-        border_x_point = self.MAX_X_POINTS_PER_FRAME - self.MAX_X_POINTS_PER_FRAME * 0.2
+        border_x_point = self.__points_per_frame - self.__points_per_frame * 0.2
         if animation_frame_index > border_x_point:
             translation = animation_frame_index - border_x_point
-            x_min = translation
-            x_max = self.MAX_X_POINTS_PER_FRAME - 1 + translation
+            x_min = self.__data_range_start + translation
+            x_max = self.__data_range_start + self.__points_per_frame - 1 + translation
 
             for axis in self.__all_axes:
                 axis.set_xlim(x_min, x_max)
@@ -120,8 +138,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         # x goes (for now) between 0 and maximum number of elements minus 1
         # the assumption: all data for all indicators will have the same length
-        x_min = 0
-        x_max = self.MAX_X_POINTS_PER_FRAME - 1
+        x_min = self.__data_range_start
+        x_max = self.__data_range_start + self.__points_per_frame - 1
 
         indicators = [t[0] for t in indicators_with_colors]
 

@@ -44,5 +44,15 @@ for transaction in trade_log.all_transactions:
           (transaction.timestamp, transaction.transaction_type,
            transaction.transaction_price_per_share, transaction.cash_after)
 
-indicators_animation = IndicatorsHistoryAnimation(indicator_history, DATE_TO_ANALYSIS, indicators=[], markers=['trade_buy', 'trade_sell'])
+indicators_to_display = [('close', 'gray'),
+                         ('SMA200', 'blue'),
+                         ('SMA50', 'orange')]
+
+volume_indicators = [('volume', 'red')]
+
+# let's introduce an animation
+indicators_animation = IndicatorsHistoryAnimation(indicator_history, DATE_TO_ANALYSIS,
+                                                  canvassize=(10,10),
+                                                  markers=['trade_buy', 'trade_sell'],
+                                                  indicators=[indicators_to_display, volume_indicators])
 indicators_animation.start_animation()

@@ -142,11 +142,19 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
     def __pack_data_with_index(self, data):
 
-        # add 0-based indexes to the data
-        chart_data = zip([t for t in range(0, len(data))], data)
+        result_x = []
+        result_y = []
 
-        # filter out all tuples, where there's at least one None
-        chart_data = [(x, y) for (x, y) in chart_data if y is not None]
+        current_x = 0
 
-        return [x for (x, y) in chart_data], [y for (x, y) in chart_data]
+        # 1. take all records in data
+        # 2. assign index (0-based to each record)
+        # 3. filter-out records AND corresponding index for records = None
+        for record in data:
+            if record is not None:
+                result_x.append(current_x)
+                result_y.append(record)
 
+            current_x += 1
+
+        return result_x, result_y

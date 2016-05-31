@@ -82,7 +82,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
                 if not close_indicator_in_data:
                     # we don't have close data, so we have to replace marker y with average between ymin and ymax
-                    y_avg = (ymax - ymin) / 2
+                    y_avg = ymin + ((ymax - ymin) / 2)
                     y_data = [y_avg for y in y_data]
 
                 plot.set_data(x_data, y_data)

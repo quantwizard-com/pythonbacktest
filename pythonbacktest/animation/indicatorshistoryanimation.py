@@ -15,12 +15,9 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # - key: name of the indicator
         # - value: chart plot
 
-        self.__all_chart_plots = {}
-        self.__all_marker_plots = {}
+        self.__all_axes_plots = []
         self.__all_axes = []
         self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
-        self.__markets = markers
-        self.__chart_text = None
 
         range_start, range_end = datarange
 
@@ -45,33 +42,53 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         # on the create canvas - create all charts and chart text
         self.__create_all_chart_rows(indicators, markers)
-        self.__create_chart_text()
 
     def _init_animation(self):
 
-        self.__chart_text.set_text('')
-
-        # init all chart plots
-        for indicator_name, single_chart_plot in self.__all_chart_plots.iteritems():
-            single_chart_plot.set_data([], [])
-            yield single_chart_plot
+        for axis_data in self.__all_axes_plots:
+            for indicator_name, plot in axis_data['plots'].iteritems():
+                plot.set_data([], [])
+                yield plot
 
     def _animate_callback(self, animation_frame_index):
         single_snapshot = self.__indicator_snapshot[animation_frame_index + self.__data_range_start]
 
         snapshot_data = single_snapshot[1].snapshot_data
 
-        # fill individual charts with data from the snapshot
-        for indicator_name, single_chart_plot in dict(self.__all_chart_plots, **self.__all_marker_plots).iteritems():
-            snapshot_data_per_indicator = snapshot_data[indicator_name]
+        # enumerate all axes and assign data to each one of those
+        for axis_data in self.__all_axes_plots:
+            plots_per_axis = axis_data['plots']
+            markers_per_axis = axis_data['markers']
+            ymin = axis_data['ymin']
+            ymax = axis_data['ymax']
 
-            x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
+            close_indicator_in_data = False
 
-            single_chart_plot.set_data(x_data, y_data)
-            yield single_chart_plot
+            for indicator_name, plot in plots_per_axis.iteritems():
+                snapshot_data_per_indicator = snapshot_data[indicator_name]
 
-        self.__chart_text.set_text(self.CHART_TEXT_FORMAT % animation_frame_index)
+                x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
 
+                plot.set_data(x_data, y_data)
+
+                if indicator_name == 'close':
+                    close_indicator_in_data = True
+
+                yield plot
+
+            for marker_name, plot in markers_per_axis.iteritems():
+                snapshot_data_per_marker = snapshot_data[marker_name]
+                x_data, y_data = self.__pack_data_with_index(snapshot_data_per_marker)
+
+                if not close_indicator_in_data:
+                    # we don't have close data, so we have to replace marker y with average between ymin and ymax
+                    y_avg = (ymax - ymin) / 2
+                    y_data = [y_avg for y in y_data]
+
+                plot.set_data(x_data, y_data)
+                yield plot
+
+        # calculate if chart should be moved on the x-axis to show data
         border_x_point = self.__points_per_frame - self.__points_per_frame * 0.2
         if animation_frame_index > border_x_point:
             translation = animation_frame_index - border_x_point
@@ -85,46 +102,53 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
     # HELP SET-UP METHODS
     #
 
-    def __create_chart_text(self):
-        self.__chart_text = plt.text(-20, -20, '',
-                                     #transform=ax.transAxes,
-                                     verticalalignment='bottom',
-                                     horizontalalignment='right',
-                                     fontsize=15, color='green',
-                                     bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 10})
-
     def __create_all_chart_rows(self, indicators, marker_names):
 
         all_charts_count = len(indicators)
-        current_chart_id = 1
+        current_axis_id = 1
 
         for indicators_with_colors in indicators:
             # unpack collection of collections of charts
             x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
 
-            ax = plt.subplot(all_charts_count, 1, current_chart_id)
+            ax = plt.subplot(all_charts_count, 1, current_axis_id)
             ax.set_xlim(x_min, x_max)
             ax.set_ylim(y_min, y_max)
             ax.grid(True)
-
             self.__all_axes.append(ax)
 
-            self.__create_all_draws_per_chart(ax, indicators_with_colors, marker_names)
+            self.__all_axes_plots.append({'axis': ax,
+                                    'plots': self.__create_all_plots_per_axis(ax, indicators_with_colors),
+                                    'markers': self.__create_all_markers_per_axis(ax, marker_names),
+                                    'xmin': x_min,
+                                    'xmax': x_max,
+                                    'ymin': y_min,
+                                    'ymax': y_max})
 
-            current_chart_id += 1
+            current_axis_id += 1
 
-    def __create_all_draws_per_chart(self, ax, indicators_with_colors, marker_names):
+    def __create_all_plots_per_axis(self, ax, indicators_with_colors):
+
+        all_axis_plots = {}
 
         for indicator_name, indicator_color in indicators_with_colors:
             single_chart_plot, = ax.plot([], [], color=indicator_color, lw=1)
-            self.__all_chart_plots[indicator_name] = single_chart_plot
+            all_axis_plots[indicator_name] = single_chart_plot
+
+        return all_axis_plots
+
+    def __create_all_markers_per_axis(self, ax, marker_names):
+
+        all_markers_plots = {}
 
         for marker_name in marker_names:
             single_marker_plot, = ax.plot(
                 [], [],
                 marker='D', markersize=5,
                 color=self.TRADE_MARKER_COLORS[marker_name], lw=0)
-            self.__all_marker_plots[marker_name] = single_marker_plot
+            all_markers_plots[marker_name] = single_marker_plot
+
+        return all_markers_plots
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)
@@ -134,6 +158,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         all_y_max_values = []
         all_y_min_values = []
 
+        # get the last indicator
         timestamp, indicator_snapshot = indicator_snapshots[-1]
 
         # x goes (for now) between 0 and maximum number of elements minus 1

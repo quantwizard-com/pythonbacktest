@@ -16,16 +16,17 @@ class IPythonAnimation(object):
                  Your browser does not support the video tag.
                 </video>"""
 
-    def __init__(self, frames=100, interval=20, canvassize=None):
+    def __init__(self, frames=100, interval=20, canvassize=None, fps=10):
 
         self.__target_canvas = plt.figure(figsize=canvassize)
         self.__number_of_frames = frames
         self.__interval = interval
+        self.__fps = fps
 
     def __anim_to_html(self, animation):
         if not hasattr(animation, '_encoded_video'):
             with NamedTemporaryFile(suffix='.mp4') as f:
-                animation.save(f.name, fps=20, extra_args=['-vcodec', 'libx264'])
+                animation.save(f.name, fps=self.__fps, extra_args=['-vcodec', 'libx264'])
                 video = open(f.name, "rb").read()
             animation._encoded_video = video.encode("base64")
 

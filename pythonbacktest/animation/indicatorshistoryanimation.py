@@ -36,6 +36,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # we need to create the target canvas (figure)
         IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
 
+        # maximum number of horizontal points (x-axis) visible on the screen in the same time
+        # e.g.: 1000 means x can have values between (0, 999), (1, 1000), etc.
         self.__points_per_frame = self.MAX_X_POINTS_PER_FRAME \
             if self.MAX_X_POINTS_PER_FRAME < number_of_frames \
             else number_of_frames
@@ -158,8 +160,8 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         all_y_max_values = []
         all_y_min_values = []
 
-        # get the last indicator
-        timestamp, indicator_snapshot = indicator_snapshots[-1]
+        all_y_min_values_per_snapshot = []
+        all_y_max_values_per_snapshot = []
 
         # x goes (for now) between 0 and maximum number of elements minus 1
         # the assumption: all data for all indicators will have the same length
@@ -168,16 +170,28 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         indicators = [t[0] for t in indicators_with_colors]
 
-        for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
+        # get the last indicator
+        for timestamp, indicator_snapshot in indicator_snapshots:
 
-            if indicator_name in indicators or not indicators:
-                values_filtered_none = [t for t in snapshot_all_values if t is not None]
-                if len(values_filtered_none) > 0:
-                    all_y_max_values.append(max(values_filtered_none))
-                    all_y_min_values.append(min(values_filtered_none))
+            all_y_min_values_per_snapshot = []
+            all_y_max_values_per_snapshot = []
 
-        y_min = min(all_y_min_values)
-        y_max = max(all_y_max_values)
+            for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
+
+                if indicator_name in indicators or not indicators:
+                    values_filtered_none = [t for t in snapshot_all_values if t is not None]
+                    if len(values_filtered_none) > 0:
+                        all_y_min_values.append(min(values_filtered_none))
+                        all_y_max_values.append(max(values_filtered_none))
+
+            if len(all_y_min_values) > 0:
+                all_y_min_values_per_snapshot.append(min(all_y_min_values))
+
+            if len(all_y_max_values) > 0:
+                all_y_max_values_per_snapshot.append(max(all_y_max_values))
+
+        y_min = min(all_y_min_values_per_snapshot)
+        y_max = max(all_y_max_values_per_snapshot)
 
         return x_min, x_max, y_min, y_max
 

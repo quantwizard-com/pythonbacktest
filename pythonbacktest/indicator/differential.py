@@ -1,4 +1,3 @@
-# simple moving average calculation
 from . import AbstractIndicator
 
 

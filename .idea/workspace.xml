@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8ab827a-7982-4e40-86ae-3aade989418b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" afterPath="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/minmaxtracker.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testcases/indicator_tests/minmaxtrackertests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" afterPath="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" />
     </list>
     <ignored path="pythonbacktest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -16,8 +20,8 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/pythonbacktest$basic_backtest.coverage" NAME="basic_backtest Coverage Results" MODIFIED="1464436189292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/templateprojects/1. Basic Backtest" />
-    <SUITE FILE_PATH="coverage/pythonbacktest$Run_all_unit_tests.coverage" NAME="Run all unit tests Coverage Results" MODIFIED="1464437621278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/pythonbacktest$basic_backtest.coverage" NAME="basic_backtest Coverage Results" MODIFIED="1465051144319" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/templateprojects/1. Basic Backtest" />
+    <SUITE FILE_PATH="coverage/pythonbacktest$Run_all_unit_tests.coverage" NAME="Run all unit tests Coverage Results" MODIFIED="1465052202262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -28,11 +32,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="indicatorshistoryanimation.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
+      <file leaf-file-name="minmaxtracker.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/minmaxtracker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="190" column="16" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="16" />
+            <state relative-caret-position="454">
+              <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="minmaxtrackertests.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/testcases/indicator_tests/minmaxtrackertests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="407">
+              <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -40,14 +54,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ipythonanimation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py">
+      <file leaf-file-name="differential.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/differential.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
-              <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="126">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -100,7 +112,6 @@
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/sma.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/video/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/indicatorsnapshot.py" />
-        <option value="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" />
         <option value="$PROJECT_DIR$/testcases/__init__.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/abstractbacktestengine.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/backtestengine/basicbacktestengine.py" />
@@ -110,7 +121,6 @@
         <option value="$PROJECT_DIR$/testcases/indicator_tests/sampletests.py" />
         <option value="$PROJECT_DIR$/testcases/indicator_tests/dataprocessortests.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/dataprocessor.py" />
-        <option value="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" />
         <option value="$PROJECT_DIR$/testcases/indicator_tests/differentialtests.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/indicators.py" />
         <option value="$PROJECT_DIR$/templateprojects/1. Basic Backtest/basic_backtest.py" />
@@ -118,6 +128,10 @@
         <option value="$PROJECT_DIR$/pythonbacktest/indicator/indicatorhistory.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/animation/ipythonanimation.py" />
         <option value="$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/indicator/differential.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/indicator/__init__.py" />
+        <option value="$PROJECT_DIR$/pythonbacktest/indicator/minmaxtracker.py" />
+        <option value="$PROJECT_DIR$/testcases/indicator_tests/minmaxtrackertests.py" />
       </list>
     </option>
   </component>
@@ -268,6 +282,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="indicator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pythonbacktest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="charting" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -312,7 +344,7 @@
       <recent name="$PROJECT_DIR$/pythonbacktest/strategy" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.basic_backtest">
+  <component name="RunManager" selected="Python tests.Run all unit tests">
     <configuration default="false" name="basic_backtest" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -1027,44 +1059,44 @@
       <workItem from="1463949097285" duration="31242000" />
       <workItem from="1464584314669" duration="19183000" />
       <workItem from="1464977046049" duration="14000" />
-      <workItem from="1464977074787" duration="1034000" />
+      <workItem from="1464977074787" duration="5001000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 14m 00s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 14m 07s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 15m 38s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 15m 53s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 16m 46s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.27 at 18h 19m 18s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.28 at 12h 41m 41s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.28 at 12h 49m 07s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Run_all_unit_tests - 2016.05.28 at 13h 13m 41s.xml">
-      <configuration name="Run all unit tests" configurationId="tests" />
-    </history-entry>
     <history-entry file="Run_all_unit_tests - 2016.05.30 at 15h 27m 00s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 39m 14s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 43m 06s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 46m 46s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 46m 59s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 48m 51s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 52m 44s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 54m 14s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 55m 56s.xml">
+      <configuration name="Run all unit tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Run_all_unit_tests - 2016.06.04 at 15h 56m 42s.xml">
       <configuration name="Run all unit tests" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155700000" />
+    <option name="totallyTimeSpent" value="159667000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1086,7 +1118,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2234795" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32107496" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2234795" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.49190283" order="0" side_tool="false" content_ui="combo" />
@@ -1095,14 +1128,13 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5080972" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42291373" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32957748" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4229195" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32253522" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3253521" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1131,9 +1163,9 @@
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/pythonbacktest/indicator/differential.py</url>
-          <line>45</line>
-          <option name="timeStamp" value="37" />
+          <url>file://$PROJECT_DIR$/pythonbacktest/indicator/minmaxtracker.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1143,7 +1175,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="38" />
+      <option name="time" value="39" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1159,20 +1191,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/backtestengine/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="33" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/datafeed/tradingdaydata.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pythonbacktest/strategy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1329,13 +1347,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testcases/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -1369,21 +1380,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
           <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testcases/indicator_tests/differentialtests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="34" column="34" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/differential.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="32" column="39" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1511,8 +1507,54 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pythonbacktest/animation/indicatorshistoryanimation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="190" column="16" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="16" />
+        <state relative-caret-position="315">
+          <caret line="182" column="121" selection-start-line="182" selection-start-column="121" selection-end-line="182" selection-end-column="121" />
+          <folding>
+            <element signature="e#0#15#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding>
+            <element signature="e#65#113#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testcases/indicator_tests/differentialtests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/differential.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pythonbacktest/indicator/minmaxtracker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="454">
+          <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testcases/indicator_tests/minmaxtrackertests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

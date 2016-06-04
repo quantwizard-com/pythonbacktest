@@ -9,3 +9,4 @@ from .differential import Differential
 from .dataprocessor import DataProcessor
 from .indicatorhistory import IndicatorHistory
 from .indicatorsnapshot import IndicatorsSnapshot
+from .minmaxtracker import MinMaxTracker

@@ -36,12 +36,25 @@ class MinMaxTracker(AbstractIndicator):
 
         current_result_index = 0
         for input_item in input_list:
+
+            # if there's already list with elements
             if len(self.__all_min_max) > current_result_index:
                 current_result = self.__all_min_max[current_result_index]
-                current_min = min(current_result[0], input_item)
-                current_max = max(current_result[1], input_item)
-                self.__all_min_max[current_result_index] = (current_min, current_max)
+
+                # None input doesn't change anything in existing elements
+                if input_item is not None:
+                    if current_result is None:
+                        current_min = current_max = input_item
+                    else:
+                        current_min = min(current_result[0], input_item)
+                        current_max = max(current_result[1], input_item)
+                    self.__all_min_max[current_result_index] = (current_min, current_max)
             else:
-                self.__all_min_max.append((input_item, input_item))
+
+                # if there's no list of elements, we have to create it
+                if input_item is None:
+                    self.__all_min_max.append(None)
+                else:
+                    self.__all_min_max.append((input_item, input_item))
 
             current_result_index += 1

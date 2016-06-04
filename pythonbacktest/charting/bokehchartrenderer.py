@@ -31,15 +31,13 @@ class BokehChartRenderer(AbstractChartRendered):
             if first_chart is None:
                 first_chart = new_chart
 
-            # if given chart doesn't contain 'close' indicator, there's no point in setting markets
-
             average_value = None
             set_markers_at_average = True
             for indicator_name, color in name_collection:
                 indicator_data = indicators.get_all_values_for_indicator(indicator_name)
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
-                average_data = numpy.mean([t for t in indicator_data if t is not None])
+                average_data = self.__average_indicator_data(indicator_data)
                 if average_value is None:
                     average_value = average_data
                 else:
@@ -80,8 +78,17 @@ class BokehChartRenderer(AbstractChartRendered):
 
         x_data, y_data = self.__pack_data_with_index(data)
 
-        # unpack data for x and y
-        target_chart.line(x_data, y_data, **chartparams)
+        # check of we have tupple of values
+        if isinstance(y_data, tuple):
+            y_data = list(y_data)
+        else:
+            y_data = [y_data]
+
+        for y_record in y_data:
+            if y_record is None:
+                raise ValueError("y_record is None for some reason...")
+
+            target_chart.line(x_data, y_record, **chartparams)
 
     def __add_markers_to_chart(self, target_chart, indicators, markers, average_value, set_markers_at_average):
 
@@ -101,6 +108,9 @@ class BokehChartRenderer(AbstractChartRendered):
 
     def __pack_data_with_index(self, data):
 
+        if data is None:
+            raise ValueError("data is None")
+
         result_x = []
         result_y = []
 
@@ -117,5 +127,15 @@ class BokehChartRenderer(AbstractChartRendered):
             current_x += 1
 
         return result_x, result_y
+
+    def __average_indicator_data(self, indicator_data):
+
+        try:
+            return numpy.mean([t for t in indicator_data if t is not None])
+        except:
+            print len(indicator_data)
+            print indicator_data
+            return 0
+
 
 

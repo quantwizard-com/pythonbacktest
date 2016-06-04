@@ -170,8 +170,9 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         indicators = [t[0] for t in indicators_with_colors]
 
-        # get the last indicator
-        for timestamp, indicator_snapshot in indicator_snapshots:
+        # get go through all indicators accross all timestamps to find the maximum y value
+        # limit data based on the datarange
+        for timestamp, indicator_snapshot in indicator_snapshots[self.__data_range_start:self.__data_range_end]:
 
             all_y_min_values_per_snapshot = []
             all_y_max_values_per_snapshot = []
@@ -179,7 +180,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
 
                 if indicator_name in indicators or not indicators:
-                    values_filtered_none = [t for t in snapshot_all_values if t is not None]
+                    values_filtered_none = [t for t in snapshot_all_values[self.__data_range_start:self.__data_range_end] if t is not None]
                     if len(values_filtered_none) > 0:
                         all_y_min_values.append(min(values_filtered_none))
                         all_y_max_values.append(max(values_filtered_none))

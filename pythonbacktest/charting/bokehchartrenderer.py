@@ -2,7 +2,6 @@ from . import *
 import numpy
 from bokeh.io import vplot
 from bokeh.plotting import figure, show
-from bokeh.models import BoxAnnotation
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
     ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool
 
@@ -74,21 +73,59 @@ class BokehChartRenderer(AbstractChartRendered):
 
         return newchart
 
-    def __add_data_to_chart(self, target_chart, data, chartparams):
+    def __add_data_to_chart(self, target_chart, data_collection, chartparams):
 
-        x_data, y_data = self.__pack_data_with_index(data)
+        for data in self.__split_data_into_lists(data_collection):
+            x_data, y_data = self.__pack_data_with_index(data)
 
-        # check of we have tupple of values
-        if isinstance(y_data, tuple):
-            y_data = list(y_data)
-        else:
-            y_data = [y_data]
+            # check of we have tupple of values
+            if isinstance(y_data, tuple):
+                y_data = list(y_data)
+            else:
+                y_data = [y_data]
 
-        for y_record in y_data:
-            if y_record is None:
-                raise ValueError("y_record is None for some reason...")
+            for y_record in y_data:
+                if y_record is None:
+                    raise ValueError("y_record is None for some reason...")
 
-            target_chart.line(x_data, y_record, **chartparams)
+                target_chart.line(x_data, y_record, **chartparams)
+
+    # chart renderer may consume data consisting of multiple series, but which should be redered on single chart
+    # example: minmax tracker, which tracks minimum and maximum values, thus consists of 2 series
+    # data is served as collection of tuples - values per each serie at the given moment in time
+    # it has to be split into collection of series instead
+    def __split_data_into_lists(self, data):
+        number_of_series_in_data = None
+
+        # find out what's the length of the tuples in data
+        for record in data:
+            if record is not None:
+                number_of_series_in_data = 1
+                if isinstance(record, tuple):
+                    number_of_series_in_data = len(record)
+                break
+
+        if number_of_series_in_data is None:
+            # data is just collection of Nones - so the size is 1
+            number_of_series_in_data = 1
+
+        if number_of_series_in_data == 1:
+            return [data]
+
+        # actual split
+        result = [[] for x in xrange(number_of_series_in_data)]
+        for record in data:
+            if record is None:
+                for result_list in result:
+                    result_list.append(None)
+            else:
+                index = 0
+                for result_list in result:
+                    result_list.append(record[index])
+                    index += 1
+
+        return result
+
 
     def __add_markers_to_chart(self, target_chart, indicators, markers, average_value, set_markers_at_average):
 

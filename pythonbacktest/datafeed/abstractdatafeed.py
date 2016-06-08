@@ -14,10 +14,4 @@ class AbstractDataFeed(object):
     # get data for single day only
     # return price bars for the given date
     def get_prices_bars_for_day(self, trading_day):
-        return self.__data[trading_day].get_price_bars
-
-    # return iterator, which moves via individual trading days
-    # return: iterator over tuple: (date, price bars)
-    def trading_days_iterator(self):
-        for date, trading_day_data in self.__data:
-            yield date, trading_day_data.get_price_bars
+        return self.__data[trading_day].price_bars

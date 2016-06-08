@@ -17,7 +17,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
     def start_single_date(self, date):
 
         # let's extract single date and test price bars for that date
-        price_bars_per_date = self.data_feed[date]
+        price_bars_per_date = self.data_feed.get_prices_bars_for_day(date)
 
         if price_bars_per_date is None:
             raise "Can't extract data for date: " + date

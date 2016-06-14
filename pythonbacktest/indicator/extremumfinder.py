@@ -45,31 +45,35 @@ class ExtremumFinder(AbstractIndicator):
                 current_differential = current_value - previous_value
 
                 if previous_differential_l1 is not None:
-
                     current_distance = self.__calculate_distance_to_extremum(previous_differential_l1, current_differential)
 
                 previous_differential_l1 = current_differential
 
             previous_value = current_value
-
             self.__all_distances.append(current_distance)
 
     def __calculate_distance_to_extremum(self, previous_differential_l1, current_differential_l1):
 
+        current_differential_l2 = current_differential_l1 - previous_differential_l1
+
         # we need to calculate when differential will hit 0
-        if current_differential_l1 == 0 or previous_differential_l1 < 0 < current_differential_l1\
-                or previous_differential_l1 > 0 > current_differential_l1:
+        if current_differential_l1 == 0:
             return 0
 
         # constant growth, above 0
-        if current_differential_l1 > 0 and current_differential_l1 - previous_differential_l1 > 0:
+        if current_differential_l1 > 0 and current_differential_l2 > 0:
             return None
 
         # constant fall, below 0
-        if current_differential_l1 < 0 and current_differential_l1 - previous_differential_l1 < 0:
+        if current_differential_l1 < 0 and current_differential_l2 < 0:
             return None
 
-        # constant differential
-        if current_differential_l1 == previous_differential_l1:
+        # constant differential (== zero on L2 differential)
+        if current_differential_l2 == 0:
             return None
+
+        current_distance = abs(current_differential_l1 * 1.0 / current_differential_l2)
+
+        return current_distance
+
 

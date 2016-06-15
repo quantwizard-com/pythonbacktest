@@ -38,6 +38,8 @@ class ExtremumFinder(AbstractIndicator):
         previous_differential_l1 = None
         previous_value = None
 
+        self.__all_distances = []
+
         for current_value in self.__all_input_values:
             current_distance = None
 

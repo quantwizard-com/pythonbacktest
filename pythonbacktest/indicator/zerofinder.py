@@ -1,4 +1,5 @@
 from . import AbstractIndicator
+import math
 
 
 class ZeroFinder(AbstractIndicator):
@@ -61,7 +62,9 @@ class ZeroFinder(AbstractIndicator):
         if current_value < 0 and current_differential < 0:
             return None
 
-        return abs(current_value * 1.0 / current_differential)
+        return round(math.log10(abs(current_value * 1.0 / current_differential)))
+
+
 
 
 

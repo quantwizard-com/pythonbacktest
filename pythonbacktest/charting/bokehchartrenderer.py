@@ -157,13 +157,12 @@ class BokehChartRenderer(AbstractChartRendered):
         # 2. assign index (0-based to each record)
         # 3. filter-out records AND corresponding index for records = None
         for record in data:
-            if record is not None:
-                result_x.append(current_x)
-                result_y.append(record)
+            result_x.append(current_x)
+            result_y.append(record if record is not None else numpy.nan)
 
             current_x += 1
 
-        return result_x, result_y
+        return result_x, numpy.array(result_y)
 
     def __average_indicator_data(self, indicator_data):
 

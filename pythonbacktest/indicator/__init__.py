@@ -11,3 +11,4 @@ from .indicatorhistory import IndicatorHistory
 from .indicatorsnapshot import IndicatorsSnapshot
 from .minmaxtracker import MinMaxTracker
 from .extremumfinder import ExtremumFinder
+from .zerofinder import ZeroFinder

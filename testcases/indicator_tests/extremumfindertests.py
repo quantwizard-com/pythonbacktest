@@ -37,6 +37,9 @@ class ExtremumFinderTests(unittest.TestCase):
 
     def test_x2_list_values_in_stages(self):
 
+        #                           min                      max
+        #                           ||                       ||
+        #                           \/                       \/
         input_values = [16, 9, 4, 1, 0, 1, 4, 9, 16, 21, 24, 25, 24, 21, 16, 9]
         expected_all_results = [None, None, 2.5, 1.5, 0.5, None, None, None, None, 2.5, 1.5, 0.5, None, None, None, None]
         expected_result = None

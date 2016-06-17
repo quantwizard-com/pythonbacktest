@@ -62,6 +62,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         for axis_data in self.__all_axes_plots:
             plots_per_axis = axis_data['plots']
             markers_per_axis = axis_data['markers']
+            progress_plot = axis_data['progress']
             ymin = axis_data['ymin']
             ymax = axis_data['ymax']
 
@@ -73,6 +74,10 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
                 x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
 
                 plot.set_data(x_data, y_data)
+
+                # set progress bar
+                progress_bar_x = [x_data[-1]] * 2
+                progress_plot.set_data(progress_bar_x, [ymin, ymax])
 
                 if indicator_name == 'close':
                     close_indicator_in_data = True
@@ -123,6 +128,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             self.__all_axes_plots.append({'axis': ax,
                                     'plots': self.__create_all_plots_per_axis(ax, indicators_with_colors),
                                     'markers': self.__create_all_markers_per_axis(ax, marker_names),
+                                    'progress': self.__create_progress_bar_per_axis(ax),
                                     'xmin': x_min,
                                     'xmax': x_max,
                                     'ymin': y_min,
@@ -152,6 +158,11 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             all_markers_plots[marker_name] = single_marker_plot
 
         return all_markers_plots
+
+    def __create_progress_bar_per_axis(self, ax):
+        single_progress_bar_plot, = ax.plot([], [], color='black', lw=1, ls=':')
+        return single_progress_bar_plot
+
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)

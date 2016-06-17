@@ -133,17 +133,16 @@ class BokehChartRenderer(AbstractChartRendered):
             for single_marker in markers:
                 indicator_data = indicators.get_all_values_for_indicator(single_marker)
 
-                x_data, y_data = self.__pack_data_with_index(indicator_data)
+                y_replacement = average_value if set_markers_at_average else None
 
-                if set_markers_at_average:
-                    y_data = [average_value] * len(y_data)
+                x_data, y_data = self.__pack_data_with_index(indicator_data, y_replacement=y_replacement)
 
                 # render markers
                 target_chart.circle(x_data, y_data, size=self.CHART_MARKER_SIZE,
                                     fill_color='white', line_color=self.TRADE_MARKER_COLORS[single_marker],
                                     line_width=3)
 
-    def __pack_data_with_index(self, data):
+    def __pack_data_with_index(self, data, y_replacement=None):
 
         if data is None:
             raise ValueError("data is None")
@@ -158,7 +157,9 @@ class BokehChartRenderer(AbstractChartRendered):
         # 3. filter-out records AND corresponding index for records = None
         for record in data:
             result_x.append(current_x)
-            result_y.append(record if record is not None else numpy.nan)
+
+            current_y = record if y_replacement is None else y_replacement if record is not None else None
+            result_y.append(current_y if current_y is not None else numpy.nan)
 
             current_x += 1
 

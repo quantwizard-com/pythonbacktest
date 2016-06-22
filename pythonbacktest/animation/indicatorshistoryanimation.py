@@ -86,12 +86,13 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
             for marker_name, plot in markers_per_axis.iteritems():
                 snapshot_data_per_marker = snapshot_data[marker_name]
-                x_data, y_data = self.__pack_data_with_index(snapshot_data_per_marker)
 
+                y_average = None
                 if not close_indicator_in_data:
                     # we don't have close data, so we have to replace marker y with average between ymin and ymax
-                    y_avg = ymin + ((ymax - ymin) / 2)
-                    y_data = [y_avg for y in y_data]
+                    y_average = ymin + ((ymax - ymin) / 2)
+
+                x_data, y_data = self.__pack_data_with_index(snapshot_data_per_marker, y_replacement=y_average)
 
                 plot.set_data(x_data, y_data)
                 yield plot
@@ -208,7 +209,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         return x_min, x_max, y_min, y_max
 
-    def __pack_data_with_index(self, data):
+    def __pack_data_with_index(self, data, y_replacement=None):
 
         result_x = []
         result_y = []
@@ -220,7 +221,9 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
         # 3. filter-out records AND corresponding index for records = None
         for record in data:
             result_x.append(current_x)
-            result_y.append(record if record is not None else numpy.nan)
+
+            current_y = record if y_replacement is None else y_replacement if record is not None else None
+            result_y.append(current_y if current_y is not None else numpy.nan)
 
             current_x += 1
 

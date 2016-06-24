@@ -1,5 +1,6 @@
 import unittest
 from pythonbacktest.indicator import ZeroFinder
+import math
 
 class ZeroFinderTests(unittest.TestCase):
 
@@ -22,7 +23,10 @@ class ZeroFinderTests(unittest.TestCase):
     def test_growing_and_falling_line_list_values(self):
 
         input_values = [-5, -4, -3, -2, -1, -1, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0]
-        expected_all_results = [None, 4, 3, 2, 1, None, 0, None, None, None, None, None, 4, 3, 2, 1, 0]
+        expected_all_results = [None, -math.log(4.0 + 1, 2), -2.0, -math.log(2.0 + 1, 2),\
+                                -1.0, None, 0.0, None, None, None, None, None,\
+                                math.log(4.0 + 1, 2), 2.0, math.log(2.0 + 1, 2), 1.0, 0.0]
+
         expected_result = 0
 
         zero_finder = ZeroFinder()

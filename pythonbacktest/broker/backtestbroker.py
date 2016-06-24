@@ -16,14 +16,16 @@ class BackTestBroker(AbstractBroker):
 
         # what's the current price per share?
         self.__current_price_bar = None
+        self.__current_price_bar_index = None
 
         self.__trade_log = trade_log
 
         self.__indicators = None
 
     # set current price of the security
-    def set_current_price_bar(self, current_price_bar):
+    def set_current_price_bar(self, current_price_bar, current_price_bar_index):
         self.__current_price_bar = current_price_bar
+        self.__current_price_bar_index = current_price_bar_index
 
     # set Indicators object, which will be used to collect trade markets
     def set_indicators(self, indicators):
@@ -111,6 +113,7 @@ class BackTestBroker(AbstractBroker):
 
         if self.__trade_log is not None:
             self.__trade_log.log_transaction(
+                price_bar_index_per_day=self.__current_price_bar_index,
                 price_bar_time_stamp=self.__current_price_bar.timestamp,
                 transaction_type=transaction_type,
                 shares_amount=shares_amount,

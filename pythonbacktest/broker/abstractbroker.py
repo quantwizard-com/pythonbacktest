@@ -29,7 +29,7 @@ class AbstractBroker(object):
 
     # set current price bar of the security
     @abc.abstractmethod
-    def set_current_price_bar(self, current_price_bar):
+    def set_current_price_bar(self, current_price_bar, current_price_bar_index):
         raise NotImplementedError()
 
     # current price of the security

@@ -1,5 +1,6 @@
 class TransactionRecord(object):
     timestamp = None,
+    price_bar_index_per_day = None,
     transaction_type = None,
     shares_amount = None,
     transaction_price_per_share = None,

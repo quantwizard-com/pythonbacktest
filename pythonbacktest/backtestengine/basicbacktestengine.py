@@ -34,10 +34,12 @@ class BasicBackTestEngine(AbstractBackTestEngine):
         # allow strategy to set indicators from scratch for a new day
         self.strategy.init_indicators(indicators)
 
+        price_bar_index = 0
         for price_bar in price_bars:
 
             indicators.new_price_bar(price_bar)
-            self.broker.set_current_price_bar(price_bar)
+            self.broker.set_current_price_bar(price_bar, price_bar_index)
+            price_bar_index += 1
 
             # once everything's set, call the strategy to do the voodoo magic
             self.strategy.new_price_bar(price_bar, indicators, self.broker)

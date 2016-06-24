@@ -12,6 +12,6 @@ class AbstractTradeLog(object):
     # - shares_amount - number of shares traded
     # -
     @abc.abstractmethod
-    def log_transaction(self, price_bar_time_stamp, transaction_type, shares_amount, transaction_price_per_share,
+    def log_transaction(self, price_bar_index_per_day, price_bar_time_stamp, transaction_type, shares_amount, transaction_price_per_share,
                         cash_spent, cash_after, position_after):
         raise NotImplementedError()

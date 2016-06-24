@@ -62,7 +62,11 @@ class ZeroFinder(AbstractIndicator):
         if current_value < 0 and current_differential < 0:
             return None
 
-        return round(math.log10(abs(current_value * 1.0 / current_differential)))
+        distance_to_zero = abs(current_value * 1.0 / current_differential)
+        log_value = math.log(distance_to_zero + 1, 2)
+        round_with_sign = -math.copysign(1, current_differential) * log_value
+
+        return round_with_sign
 
 
 

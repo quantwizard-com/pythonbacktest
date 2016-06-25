@@ -19,7 +19,7 @@ class ZeroFinder(AbstractIndicator):
     def result(self):
         return self.__all_distances[-1] if len(self.__all_distances) > 0 else None
 
-    def on_new_upstream_value(self, new_value):
+    def     on_new_upstream_value(self, new_value):
         if new_value is None:
             raise ValueError("None is not allowed")
 

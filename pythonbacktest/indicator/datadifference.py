@@ -42,14 +42,13 @@ class DataDifference(AbstractIndicator):
         else:
             self.__input_data_1.append(passed_param_1)
             self.__input_data_2.append(passed_param_2)
-            result = passed_param_1 - passed_param_2 if passed_param_1 is not None and passed_param_2 is not None else None
-            self.__output_data.append(result)
-
+            self.__output_data.append(self.__calculate_single_difference(passed_param_1, passed_param_2))
 
     def __recalculate_differences(self):
-        self.__output_data = []
+        self.__output_data = [self.__calculate_single_difference(param1, param2)
+                              for param1, param2 in itertools.izip(self.__input_data_1, self.__input_data_2)]
 
-        for param1, param2 in itertools.izip(self.__input_data_1, self.__input_data_2):
-            self.__output_data.append(param1 - param2)
+    def __calculate_single_difference(self, param1, param2):
+        return param1 - param2 if param1 is not None and param2 is not None else None
 
 

@@ -26,8 +26,8 @@ class DataDifferenceTests(unittest.TestCase):
 
     def test_number_set_list_numbers(self):
 
-        input_values_1 = [1, 4, 7, 2, 8, 12, 14, 16]
-        input_values_2 = [3, 1, 7, 0, 2, 3, 8, 6]
+        input_values_1 = [1, 4, None, 2, 8, 12, 14, None, 1]
+        input_values_2 = [3, 1, None, 0, None, 3, 14, 6, 2]
 
         all_expected_results = [t - k if t is not None and k is not None else None for (t, k) in zip(input_values_1, input_values_2)]
         expected_result = input_values_1[-1] - input_values_2[-1]

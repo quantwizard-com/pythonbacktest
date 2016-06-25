@@ -71,18 +71,16 @@ class Indicators(object):
 
             implementation = indicator_record['implementation']
             passalldata = indicator_record['passalldata']
-            source_name = indicator_record['source']
-            if source_name is not None:
-
-                passed_data = None
+            source_indicator_names = indicator_record['source']
+            if source_indicator_names is not None:
 
                 if passalldata:
-                    all_results_from_source = self.__get_all_results(source_name)
-                    implementation.on_new_upstream_value(all_results_from_source)
+                    all_results_from_source = self.__get_all_results(source_indicator_names)
+                    implementation.on_new_upstream_value(*all_results_from_source)
                     passed_data = all_results_from_source
                 else:
-                    current_value_at_source = self[source_name]
-                    implementation.on_new_upstream_value(current_value_at_source)
+                    current_value_at_source = self.__get_result(source_indicator_names)
+                    implementation.on_new_upstream_value(*current_value_at_source)
                     passed_data = current_value_at_source
 
                 # once indicator is updated, number of results
@@ -134,7 +132,24 @@ class Indicators(object):
 
         return implementation.result
 
-    def __get_all_results(self, indicator_name):
-        implementation = self.__all_indicators[indicator_name]['implementation']
+    def __get_all_results(self, indicator_names):
 
-        return implementation.all_result
+        all_source_results = []
+        all_source_indicator_names = indicator_names if type(indicator_names) is list else [indicator_names]
+
+        for indicator_name in all_source_indicator_names:
+            implementation = self.__all_indicators[indicator_name]['implementation']
+            all_source_results.append(implementation.all_result)
+
+        return all_source_results
+
+    def __get_result(self, indicator_names):
+
+        source_results = []
+        source_indicator_names = indicator_names if type(indicator_names) is list else [indicator_names]
+
+        for indicator_name in source_indicator_names:
+            implementation = self.__all_indicators[indicator_name]['implementation']
+            source_results.append(implementation.result)
+
+        return source_results

@@ -25,12 +25,6 @@ class DataDifference(AbstractIndicator):
         passed_param_1 = new_value[0]
         passed_param_2 = new_value[1]
 
-        if passed_param_1 is None or passed_param_2 is None:
-            raise ValueError("At least one parameters on None")
-
-        if type(passed_param_1) != type(passed_param_2):
-            raise ValueError("Both parameters must have the same type")
-
         if type(passed_param_1) is list:
             len_param_1 = len(passed_param_1)
             len_param_2 = len(passed_param_2)
@@ -48,7 +42,8 @@ class DataDifference(AbstractIndicator):
         else:
             self.__input_data_1.append(passed_param_1)
             self.__input_data_2.append(passed_param_2)
-            self.__output_data.append(passed_param_1 - passed_param_2)
+            result = passed_param_1 - passed_param_2 if passed_param_1 is not None and passed_param_2 is not None else None
+            self.__output_data.append(result)
 
 
     def __recalculate_differences(self):

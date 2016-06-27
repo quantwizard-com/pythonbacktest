@@ -239,9 +239,13 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             current_x = 0
             for record in data:
                 if is_tuple:
-                    value = record[count] if record is not None else numpy.nan
+                    value = numpy.nan if (record is None or record[count] is None)\
+                        else y_replacement if y_replacement is not None\
+                        else record[count]
                 else:
-                    value = record if record is not None else numpy.nan
+                    value = numpy.nan if (record is None or record is None) \
+                        else y_replacement if y_replacement is not None \
+                        else record
 
                 result_x.append(current_x)
                 result_y.append(value)

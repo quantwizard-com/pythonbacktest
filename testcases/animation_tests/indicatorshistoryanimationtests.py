@@ -15,6 +15,19 @@ class IndicatorsHistoryAnimationTests(unittest.TestCase):
         self.assertEqual(expected_output[0], actual_output[0])
         self.assertEqual(expected_output[1].tolist(), actual_output[1].tolist())
 
+    def test_pack_data_with_index_flat_list_with_replacement(self):
+
+        input_data = [1, 2, 3, 4, 5]
+        replacement_value = 999
+
+        expected_output = ([0, 1, 2, 3, 4], np.array([replacement_value] * len(input_data)))
+
+        actual_output = IndicatorsHistoryAnimation._IndicatorsHistoryAnimation__pack_data_with_index(
+            input_data, y_replacement=replacement_value)
+
+        self.assertEqual(expected_output[0], actual_output[0])
+        self.assertEqual(expected_output[1].tolist(), actual_output[1].tolist())
+
     def test_pack_data_with_index_flat_list_2nones(self):
 
         input_data = [1, None, 3, None, 5]
@@ -25,6 +38,21 @@ class IndicatorsHistoryAnimationTests(unittest.TestCase):
 
         self.assertEqual(expected_output[0], actual_output[0])
         np.testing.assert_equal(actual_output[1], expected_output[1])
+
+    def test_pack_data_with_index_flat_list_2nones_with_replacement(self):
+
+        input_data = [1, None, 3, None, 5]
+        replacement_value = 999
+
+        expected_output = ([0, 1, 2, 3, 4],
+                           np.array([replacement_value, np.nan, replacement_value, np.nan, replacement_value]))
+
+        actual_output = IndicatorsHistoryAnimation._IndicatorsHistoryAnimation__pack_data_with_index(
+            input_data, replacement_value)
+
+        self.assertEqual(expected_output[0], actual_output[0])
+        np.testing.assert_equal(actual_output[1], expected_output[1])
+
 
     def test_pack_data_with_index_tuple_list(self):
 

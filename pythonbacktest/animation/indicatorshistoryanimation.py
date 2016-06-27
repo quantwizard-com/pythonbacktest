@@ -194,9 +194,18 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
                 if indicator_name in indicators or not indicators:
                     values_filtered_none = [t for t in snapshot_all_values[self.__data_range_start:self.__data_range_end] if t is not None]
+
+                    flat_values = []
+                    # some values may be tuples, so extract individual values and calculate minimum
+                    for value in values_filtered_none:
+                        if type(value) == tuple:
+                            flat_values.extend(value)
+                        else:
+                            flat_values.append(value)
+
                     if len(values_filtered_none) > 0:
-                        all_y_min_values.append(min(values_filtered_none))
-                        all_y_max_values.append(max(values_filtered_none))
+                        all_y_min_values.append(min(flat_values))
+                        all_y_max_values.append(max(flat_values))
 
             if len(all_y_min_values) > 0:
                 all_y_min_values_per_snapshot.append(min(all_y_min_values))
@@ -209,22 +218,38 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         return x_min, x_max, y_min, y_max
 
-    def __pack_data_with_index(self, data, y_replacement=None):
+    @staticmethod
+    def __pack_data_with_index(data, y_replacement=None):
 
         result_x = []
         result_y = []
 
-        current_x = 0
+        is_tuple = False
+        tuple_len = 1
 
-        # 1. take all records in data
-        # 2. assign index (0-based to each record)
-        # 3. filter-out records AND corresponding index for records = None
+        # 1 scan data for any tuples and find length of that tuple
         for record in data:
-            result_x.append(current_x)
+            if type(record) == tuple:
+                tuple_len = len(record)
+                is_tuple = True
+                break
 
-            current_y = record if y_replacement is None else y_replacement if record is not None else None
-            result_y.append(current_y if current_y is not None else numpy.nan)
+        for count in range(0, tuple_len):
 
-            current_x += 1
+            current_x = 0
+            for record in data:
+                if is_tuple:
+                    value = record[count] if record is not None else numpy.nan
+                else:
+                    value = record if record is not None else numpy.nan
+
+                result_x.append(current_x)
+                result_y.append(value)
+
+                current_x += 1
+
+            if count < tuple_len - 1:
+                result_x.append(0)
+                result_y.append(numpy.nan)
 
         return result_x, numpy.array(result_y)

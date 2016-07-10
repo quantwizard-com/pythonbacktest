@@ -23,8 +23,9 @@ class BokehChartRenderer(AbstractChartRendered):
 
         for name_collection in name_collections:
             # for each collection we will have collection of indicator names and color
-
-            new_chart = self.__create_chart(first_chart.x_range if first_chart is not None else None)
+            chart_title = self.__generate_chart_title(name_collection)
+            new_chart = self.__create_chart(first_chart.x_range if first_chart is not None else None,
+                                            title=chart_title)
             all_charts.append(new_chart)
 
             if first_chart is None:
@@ -63,8 +64,8 @@ class BokehChartRenderer(AbstractChartRendered):
         )
         return [BoxZoomTool(), BoxSelectTool(), PanTool(), WheelZoomTool(), CrosshairTool(), ResizeTool(), ResetTool(), hover]
 
-    def __create_chart(self, x_range=None):
-        newchart = figure(title='', width=self.chart_width, height=self.chart_height,
+    def __create_chart(self, x_range=None, title=''):
+        newchart = figure(title=title, width=self.chart_width, height=self.chart_height,
                           tools=self.__create_chart_tools(), toolbar_location=self.CHART_TOOLBAR_LOCATION)
         newchart.grid.grid_line_dash = [4, 2]
 
@@ -173,6 +174,11 @@ class BokehChartRenderer(AbstractChartRendered):
             print len(indicator_data)
             print indicator_data
             return 0
+
+    def __generate_chart_title(self, name_color_collection):
+        indicator_names = [t[0] for t in name_color_collection]
+        return ', '.join(indicator_names)
+
 
 
 

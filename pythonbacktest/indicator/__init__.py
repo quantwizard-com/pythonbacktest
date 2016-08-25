@@ -13,3 +13,4 @@ from .minmaxtracker import MinMaxTracker
 from .extremumfinder import ExtremumFinder
 from .zerofinder import ZeroFinder
 from .datadifference import DataDifference
+from .datadelay import DataDelay

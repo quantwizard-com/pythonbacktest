@@ -1,6 +1,7 @@
 from . import AbstractIndicator
 from Queue import Queue
 
+
 # delay input data by the given number of cycles
 class DataDelay(AbstractIndicator):
 
@@ -8,10 +9,7 @@ class DataDelay(AbstractIndicator):
         AbstractIndicator.__init__(self)
 
         self.__delay_size = delay_size
-        self.__delay_queue = Queue(maxsize=0)
-
-        self.__latest_result = None
-        self.__all_results = []
+        self.__initiate_data()
 
     @property
     def result(self):
@@ -24,6 +22,8 @@ class DataDelay(AbstractIndicator):
     def on_new_upstream_value(self, new_value):
 
         if type(new_value) is list:
+            self.__initiate_data()
+
             for number in new_value:
                 self.__add_number_to_queue(number)
         else:
@@ -39,4 +39,11 @@ class DataDelay(AbstractIndicator):
 
         self.__latest_result = result
         self.__all_results.append(result)
+
+    def __initiate_data(self):
+        self.__delay_queue = Queue(maxsize=0)
+
+        self.__latest_result = None
+        self.__all_results = []
+
 

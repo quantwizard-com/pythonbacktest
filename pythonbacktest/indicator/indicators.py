@@ -5,7 +5,7 @@ import copy
 
 class Indicators(object):
 
-    ALL_STATIC_FIELDS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
+    ALL_STATIC_INDICATORS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
     TRANSACTION_TO_FIELD_NAME = {"BUY": "trade_buy", "SELL": "trade_sell", "SHORT": "trade_short"}
 
     def __init__(self, indicators_to_copy=None):
@@ -22,7 +22,7 @@ class Indicators(object):
 
         if indicators_to_copy is None:
             # set static values for price bar values
-            for price_bar_field in self.ALL_STATIC_FIELDS:
+            for price_bar_field in self.ALL_STATIC_INDICATORS:
                 self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(),
                                                           'passalldata': False}
         else:
@@ -64,7 +64,7 @@ class Indicators(object):
 
         self.__price_bars_counter += 1
 
-        self.__update_static_values(price_bar)
+        self.__update_static_indicators(price_bar)
 
         # move through all listed indicators and calculate all of those
         for indicator_name, indicator_record in self.__all_indicators.iteritems():
@@ -85,12 +85,15 @@ class Indicators(object):
 
                 # once indicator is updated, number of results
                 all_results_count = len(implementation.all_result)
+
+                # self-check: number of results on the Indicator MUST BE the same as number of pricebars
+                # passed to this method; this is important to align all indicators with price bars
                 if all_results_count != self.__price_bars_counter:
                     raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
                                      % (indicator_name, self.__price_bars_counter, all_results_count, passed_data))
 
     # update values related to static fields, mainly: price bar fields
-    def __update_static_values(self, price_bar):
+    def __update_static_indicators(self, price_bar):
         field_values = {"open": price_bar.open, "close": price_bar.close,
                         "high": price_bar.high, "low": price_bar.low,
                         "volume": price_bar.volume,

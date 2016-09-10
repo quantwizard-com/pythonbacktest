@@ -37,12 +37,17 @@ class BasicBackTestEngine(AbstractBackTestEngine):
         price_bar_index = 0
         for price_bar in price_bars:
 
+            # this is point, where we trigger ALL non-transactional indicator calculation
             indicators.new_price_bar(price_bar)
-            self.broker.set_current_price_bar(price_bar, price_bar_index)
-            price_bar_index += 1
 
-            # once everything's set, call the strategy to do the voodoo magic
-            self.strategy.new_price_bar(price_bar, indicators, self.broker)
+            # this is transactional section - proceed only if broker AND strategy are set
+
+            if self.broker and self.strategy:
+                self.broker.set_current_price_bar(price_bar, price_bar_index)
+                price_bar_index += 1
+
+                # once everything's set, call the strategy to do the voodoo magic
+                self.strategy.new_price_bar(price_bar, indicators, self.broker)
 
             # finally: preserve state of indicators in history (if needed)
             if self.indicator_history:

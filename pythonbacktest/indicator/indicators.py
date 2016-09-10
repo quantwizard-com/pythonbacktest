@@ -5,7 +5,7 @@ import copy
 
 class Indicators(object):
 
-    ALL_STATIC_INDICATORS = ["open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
+    ALL_STATIC_INDICATORS = ["timestamp", "open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
     TRANSACTION_TO_FIELD_NAME = {"BUY": "trade_buy", "SELL": "trade_sell", "SHORT": "trade_short"}
 
     def __init__(self, indicators_to_copy=None):

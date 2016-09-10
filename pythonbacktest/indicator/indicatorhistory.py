@@ -54,6 +54,13 @@ class IndicatorHistory(object):
         # return list of key, values, where: key is datetime and value: all collected indicators for that timestamp
         return data_per_day.items()
 
+    # get last snapshot of all recorded indicators for the given day
+    def get_last_indicator_snapshot_per_day(self, day_date):
+        data_per_day = self.__indicators_storage[day_date]
+        last_key = data_per_day.keys()[-1]
+
+        return data_per_day[last_key]
+
     @property
     def all_indicator_names(self):
         """

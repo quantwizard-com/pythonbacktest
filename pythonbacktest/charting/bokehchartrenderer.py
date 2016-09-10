@@ -16,7 +16,7 @@ class BokehChartRenderer(AbstractChartRendered):
     def __init__(self, width=900, height=500):
         AbstractChartRendered.__init__(self, width, height)
 
-    def render_indicators(self, indicators, markers, *name_collections):
+    def render_indicators(self, indicators_snapshot, markers, *name_collections):
 
         all_charts = []
         first_chart = None
@@ -34,7 +34,7 @@ class BokehChartRenderer(AbstractChartRendered):
             average_value = None
             set_markers_at_average = True
             for indicator_name, color in name_collection:
-                indicator_data = indicators.get_all_values_for_indicator(indicator_name)
+                indicator_data = indicators_snapshot.snapshot_data[indicator_name]
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
                 average_data = self.__average_indicator_data(indicator_data)
@@ -46,7 +46,7 @@ class BokehChartRenderer(AbstractChartRendered):
                 if indicator_name == 'close':
                     set_markers_at_average = False
 
-            self.__add_markers_to_chart(new_chart, indicators, markers, average_value, set_markers_at_average)
+            self.__add_markers_to_chart(new_chart, indicators_snapshot, markers, average_value, set_markers_at_average)
 
         if len(all_charts) == 1:
             show(first_chart)
@@ -127,12 +127,11 @@ class BokehChartRenderer(AbstractChartRendered):
 
         return result
 
-
-    def __add_markers_to_chart(self, target_chart, indicators, markers, average_value, set_markers_at_average):
+    def __add_markers_to_chart(self, target_chart, indicators_snapshot, markers, average_value, set_markers_at_average):
 
         if markers is not None:
             for single_marker in markers:
-                indicator_data = indicators.get_all_values_for_indicator(single_marker)
+                indicator_data = indicators_snapshot.snapshot_data[single_marker]
 
                 y_replacement = average_value if set_markers_at_average else None
 

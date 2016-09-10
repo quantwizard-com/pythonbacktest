@@ -3,15 +3,14 @@ import abc
 
 class AbstractBackTestEngine(object):
 
-    def __init__(self, data_feed, strategy, broker, indicator_history):
+    def __init__(self, data_feed, broker, indicator_history):
         self.__data_feed = data_feed
-        self.__strategy = strategy
         self.__broker = broker
         self.__indicator_history = indicator_history
 
         # list of indicators collected per day for the current security
         # format:
-        # key - date (day)
+        # key - date (day)Î
         # value - indicators
         self.__all_indicators_per_day = {}
 
@@ -25,10 +24,6 @@ class AbstractBackTestEngine(object):
     @property
     def data_feed(self):
         return self.__data_feed
-
-    @property
-    def strategy(self):
-        return self.__strategy
 
     @property
     def broker(self):

@@ -94,7 +94,8 @@ class Indicators(object):
 
     # update values related to static fields, mainly: price bar fields
     def __update_static_indicators(self, price_bar):
-        field_values = {"open": price_bar.open, "close": price_bar.close,
+        field_values = {"timestamp": price_bar.timestamp,
+                        "open": price_bar.open, "close": price_bar.close,
                         "high": price_bar.high, "low": price_bar.low,
                         "volume": price_bar.volume,
                         "trade_buy": None, "trade_sell": None, "trade_short": None}

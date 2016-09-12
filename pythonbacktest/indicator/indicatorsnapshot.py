@@ -1,24 +1,27 @@
-import copy
-
-
 # this class is responsible for keeping snapshot of the current status of the Indicators
 class IndicatorsSnapshot(object):
 
-    def __init__(self, timestamp, indicators):
+    def __init__(self, timestamp):
         # dictionary keeping status of indicators at the given moment in time, structure:
-        # - key - name of the indicators
+        # - key - name of the indicator
         # - value - list of values of the indicator at to this moment in time for the given day
         self.__snapshot_data = {}
 
-        # first - take names of all indicators
-        indicator_names = indicators.indicator_names
+        self.___snapshots_timestamp = timestamp
 
-        for name in indicator_names:
-            all_values_for_indicator = indicators.get_all_values_for_indicator(name)
-            self.__snapshot_data[name] = copy.copy(all_values_for_indicator)
+    def save_indicator_snapshot(self, timestamp, indicator_name, all_indicator_values):
 
-        # when the snapshot was taken
-        self.__snapshot_timestamp = timestamp
+        # consistency check - saved indicator values must be on the same timestamp
+        if timestamp != self.___snapshots_timestamp:
+            raise ValueError("Indicator snapshot has invalid timestamp. Expected %s, got: %s"
+                             % (str(self.___snapshots_timestamp), str(timestamp)))
+
+        # check of there're data already saved for this indicator name
+        if self.__snapshot_data.has_key(indicator_name):
+            raise ValueError("There's already snapshot data for indicator: %s, timestamp: %s"
+                             % (indicator_name, str(timestamp)))
+
+        self.__snapshot_data[indicator_name] = list(all_indicator_values)
 
     @property
     def snapshot_data(self):

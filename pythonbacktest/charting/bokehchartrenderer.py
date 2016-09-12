@@ -46,7 +46,7 @@ class BokehChartRenderer(AbstractChartRendered):
                 if indicator_name == 'close':
                     set_markers_at_average = False
 
-            self.__add_markers_to_chart(new_chart, indicators_snapshot, markers, average_value, set_markers_at_average)
+            #self.__add_markers_to_chart(new_chart, indicators_snapshot, markers, average_value, set_markers_at_average)
 
         if len(all_charts) == 1:
             show(first_chart)

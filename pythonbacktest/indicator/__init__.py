@@ -3,7 +3,6 @@
 """
 
 from .abstractindicator import AbstractIndicator
-from .indicators import Indicators
 from .sma import SMA
 from .differential import Differential
 from .dataprocessor import DataProcessor
@@ -14,3 +13,4 @@ from .extremumfinder import ExtremumFinder
 from .zerofinder import ZeroFinder
 from .datadifference import DataDifference
 from .datadelay import DataDelay
+from .indicatorscalculator import IndicatorsCalculator

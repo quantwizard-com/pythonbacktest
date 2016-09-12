@@ -1,14 +1,15 @@
+from pythonbacktest.indicator import IndicatorHistory
+from pythonbacktest.indicator import IndicatorsSnapshot
 from .staticvalue import StaticValue
 from collections import OrderedDict
 import copy
 
 
-class Indicators(object):
+class IndicatorsCalculator(object):
 
-    ALL_STATIC_INDICATORS = ["timestamp", "open", "close", "high", "low", "volume", "trade_sell", "trade_buy", "trade_short"]
-    TRANSACTION_TO_FIELD_NAME = {"BUY": "trade_buy", "SELL": "trade_sell", "SHORT": "trade_short"}
+    ALL_STATIC_INDICATORS = ["timestamp", "open", "close", "high", "low", "volume"]
 
-    def __init__(self, indicators_to_copy=None):
+    def __init__(self):
         """
         Constructor with copying functionality
         :type indicators_to_copy: Indicators
@@ -20,14 +21,10 @@ class Indicators(object):
         # so this counter is used primarily to check on how individual indicators behave
         self.__price_bars_counter = 0
 
-        if indicators_to_copy is None:
-            # set static values for price bar values
-            for price_bar_field in self.ALL_STATIC_INDICATORS:
-                self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(),
-                                                          'passalldata': False}
-        else:
-            # indicators is not None, so we have to copy its content without changing anything
-            self.__all_indicators = copy.deepcopy(indicators_to_copy.__all_indicators)
+        # set static values for price bar values
+        for price_bar_field in self.ALL_STATIC_INDICATORS:
+            self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(),
+                                                      'passalldata': False}
 
     # indicators - define collection of indicators, which should be collected during trading;
     #   collection of dictionaries with following fields:
@@ -36,7 +33,7 @@ class Indicators(object):
     # - implementation - implementation of the indicator
     # - datacount - if specified, source data will be extracted from 'source name' from all_result;
     #               it will extract 'datacount' last records
-    def set_indicators(self, indicator_records):
+    def define_indicators_map(self, indicator_records):
 
         for record in indicator_records:
 
@@ -54,17 +51,36 @@ class Indicators(object):
 
             self.__all_indicators[indicator_name] = record
 
+    def run_computation(self, date, data_feed):
+
+        # let's extract single date and test price bars for that date
+        price_bars_per_date = data_feed.get_prices_bars_for_day(date)
+
+        if price_bars_per_date is None:
+            raise "Can't extract data for date: " + date
+
+        indicators_history = IndicatorHistory()
+
+        for price_bar in price_bars_per_date:
+            # calculate status of the indicators, get snapshot and save it to the history
+            indicator_snapshot = self.__new_price_bar(price_bar)
+            indicators_history.store_snapshot(price_bar.timestamp, indicator_snapshot)
+
+        return indicators_history
+
     # a new price bar has arrived
     # that will trigger operatotion of moving through all the indicators
     # passing values in and calculating outcomes
-    def new_price_bar(self, price_bar):
+    def __new_price_bar(self, price_bar):
 
         if price_bar is None:
             raise ValueError("price_bar is null")
 
         self.__price_bars_counter += 1
-
         self.__update_static_indicators(price_bar)
+        timestamp = price_bar.timestamp
+
+        indicators_snapshot = IndicatorsSnapshot(timestamp)
 
         # move through all listed indicators and calculate all of those
         for indicator_name, indicator_record in self.__all_indicators.iteritems():
@@ -92,13 +108,16 @@ class Indicators(object):
                     raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
                                      % (indicator_name, self.__price_bars_counter, all_results_count, passed_data))
 
+            indicators_snapshot.save_indicator_snapshot(timestamp, indicator_name, implementation.all_result)
+
+        return indicators_snapshot
+
     # update values related to static fields, mainly: price bar fields
     def __update_static_indicators(self, price_bar):
         field_values = {"timestamp": price_bar.timestamp,
                         "open": price_bar.open, "close": price_bar.close,
                         "high": price_bar.high, "low": price_bar.low,
-                        "volume": price_bar.volume,
-                        "trade_buy": None, "trade_sell": None, "trade_short": None}
+                        "volume": price_bar.volume}
 
         for key, value in field_values.iteritems():
             # these are all static values, so the only impact here is recording new values
@@ -115,20 +134,6 @@ class Indicators(object):
     def indicator_names(self):
         # return names of all collected indicators
         return self.__all_indicators.keys()
-
-    # mark one of the transaction indicator (buy, sell or short) with the given value
-    # (which in most cases will be current price)
-    def mark_transaction(self, transaction_name, mark_value):
-        transaction_indicator_name = self.TRANSACTION_TO_FIELD_NAME[transaction_name]
-
-        implementation = self.__all_indicators[transaction_indicator_name]['implementation']
-
-        # update existing static value indicator, but check if it's actually not-set
-        # if it's set with some value already, we have some issue with the logic
-        if implementation.all_result[-1] is not None:
-            raise Exception('There''s some value, but None is expected!!!')
-
-        implementation.all_result[-1] = mark_value
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):

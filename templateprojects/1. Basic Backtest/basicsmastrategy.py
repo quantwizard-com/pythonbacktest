@@ -8,7 +8,7 @@ class BasicSMAStrategy(AbstractTradingStrategy):
         AbstractTradingStrategy.__init__(self)
 
     def init_indicators(self, indicators):
-        indicators.set_indicators(
+        indicators.define_indicators_map(
             [
                 {'name': 'SMA200', 'source': 'close', 'implementation': SMA(200)},
                 {'name': 'SMA50', 'source': 'close', 'implementation': SMA(50)}

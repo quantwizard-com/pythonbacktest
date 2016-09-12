@@ -4,17 +4,19 @@ from pythonbacktest import datafeed
 
 class AbstractTradingStrategy(object):
 
-    # set all the indicators, which need to be calculated for this strategy
-    # argument: indicators - instance of the Indicators class
     @abc.abstractmethod
-    def init_indicators(self, indicators):
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def new_price_bar(self, price_bar, indicators, broker):
+    def new_price_bar(self, price_bar, indicators_snapshot, lastest_indicators_values, broker):
+        """
+        New price bar just arrived
+        :param price_bar: Price bar structure (timestamp, open, close, high, low, volume)
+        :param indicators_snapshot: Snapshot of all indicator values up to this point in time (i.e.: timestamp)
+        :param lastest_indicators_values: Value of the indicator values at exactly point in time (i.e.: timestamp)
+        :param broker: Broker, which will collect orders
+        :return:
+        """
         raise NotImplementedError()
 
     # event fired when we hit the last price bar
     @abc.abstractmethod
-    def day_end(self, final_price_bar, indicators, broker):
+    def day_end_price_bar(self, price_bar, indicators_snapshot, lastest_indicators_values, broker):
         raise NotImplementedError()

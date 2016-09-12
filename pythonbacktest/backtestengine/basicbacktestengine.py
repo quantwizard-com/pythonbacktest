@@ -1,55 +1,48 @@
+from pythonbacktest.datafeed import PriceBar
 from . import *
-
-from pythonbacktest.indicator import Indicators
 
 
 class BasicBackTestEngine(AbstractBackTestEngine):
 
-    def __init__(self, data_feed, broker, indicator_history=None):
-        AbstractBackTestEngine.__init__(self, data_feed, broker, indicator_history)
-
-    def start(self):
-
-        for date, trading_day_data in self.data_feed.all_data.iteritems():
-            self.__backtest_single_day(date, trading_day_data.price_bars)
+    def __init__(self):
+        AbstractBackTestEngine.__init__(self)
 
     # run backtest on single day only
-    def start_single_date(self, date, strategy):
+    def start_single_date(self, date, strategy, indicators_history, broker):
 
-        # let's extract single date and test price bars for that date
-        price_bars_per_date = self.data_feed.get_prices_bars_for_day(date)
+        indicators_history_per_date = indicators_history.get_indicator_history_for_day(date)
 
-        if price_bars_per_date is None:
-            raise "Can't extract data for date: " + date
-        self.__backtest_single_day(date, price_bars_per_date, strategy)
-
-    # backtest single date (as: single day) with give intraday price bars
-    def __backtest_single_day(self, date, price_bars, strategy):
-
-        # create fresh set of indicators for each day
-        indicators = Indicators()
-        self.broker.set_indicators(indicators)
-
-        # allow strategy to set indicators from scratch for a new day
-        strategy.init_indicators(indicators)
+        if indicators_history_per_date is None:
+            raise ValueError("Can't get history for given date: " + str(date))
 
         price_bar_index = 0
-        for price_bar in price_bars:
 
-            # this is point, where we trigger ALL non-transactional indicator calculation
-            indicators.new_price_bar(price_bar)
+        for timestamp, indicators_snapshot in indicators_history_per_date:
+            snapshot_data = indicators_snapshot.snapshot_data
+            latest_snapshot_data = self.__get_latest_values_for_indicators_snapshot(snapshot_data)
+            price_bar = self.__latest_snapshot_to_price_bar(latest_snapshot_data)
 
-            # this is transactional section - proceed only if broker AND strategy are set
+            broker.set_current_price_bar(price_bar, price_bar_index)
+            strategy.new_price_bar(price_bar, snapshot_data, latest_snapshot_data, broker)
+            price_bar_index += 1
 
-            if self.broker and strategy:
-                self.broker.set_current_price_bar(price_bar, price_bar_index)
-                price_bar_index += 1
+    def __get_latest_values_for_indicators_snapshot(self, snapshot_data):
+        result = {}
 
-                # once everything's set, call the strategy to do the voodoo magic
-                strategy.new_price_bar(price_bar, indicators, self.broker)
+        for indicator_name, indicator_values in snapshot_data.iteritems():
+            result[indicator_name] = indicator_values[-1]
 
-            # finally: preserve state of indicators in history (if needed)
-            if self.indicator_history:
-                self.indicator_history.record_state_of_indicators(price_bar.timestamp, indicators)
+        return result
+
+    def __latest_snapshot_to_price_bar(self, latest_snapshot_data):
+        price_bar = PriceBar()
+        price_bar.timestamp = latest_snapshot_data["timestamp"]
+        price_bar.open = latest_snapshot_data["open"]
+        price_bar.close = latest_snapshot_data["close"]
+        price_bar.high = latest_snapshot_data["high"]
+        price_bar.low = latest_snapshot_data["low"]
+        price_bar.volume = latest_snapshot_data["volume"]
+
+        return price_bar
 
 

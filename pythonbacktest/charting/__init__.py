@@ -2,5 +2,5 @@
 .. moduleauthor:: Krzysztof Wasiak (k.wasiak@gmail.com)
 """
 
-from .abstractchartrendered import AbstractChartRendered
+from .abstractchartrenderer import AbstractChartRenderer
 from .bokehchartrenderer import BokehChartRenderer

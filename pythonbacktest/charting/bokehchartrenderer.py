@@ -6,22 +6,21 @@ from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
     ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool
 
 
-class BokehChartRenderer(AbstractChartRendered):
+class BokehChartRenderer(AbstractChartRenderer):
 
     CHART_TOOLBAR_LOCATION = 'left'
     CHART_MARKER_SIZE = 10
 
-    TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
+    TRADE_MARKER_COLORS = {"BUY": "green", "SELL": "red", "SHORT": "purple"}
 
     def __init__(self, width=900, height=500):
-        AbstractChartRendered.__init__(self, width, height)
+        AbstractChartRenderer.__init__(self, width, height)
 
-    def render_indicators(self, indicators_snapshot, markers, *name_collections):
-
+    def render_chart(self):
         all_charts = []
         first_chart = None
 
-        for name_collection in name_collections:
+        for name_collection in self.indicators_name_collections:
             # for each collection we will have collection of indicator names and color
             chart_title = self.__generate_chart_title(name_collection)
             new_chart = self.__create_chart(first_chart.x_range if first_chart is not None else None,
@@ -33,8 +32,9 @@ class BokehChartRenderer(AbstractChartRendered):
 
             average_value = None
             set_markers_at_average = True
+
             for indicator_name, color in name_collection:
-                indicator_data = indicators_snapshot.snapshot_data[indicator_name]
+                indicator_data = self.indicators_history.snapshot_data[indicator_name]
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
                 average_data = self.__average_indicator_data(indicator_data)
@@ -46,15 +46,13 @@ class BokehChartRenderer(AbstractChartRendered):
                 if indicator_name == 'close':
                     set_markers_at_average = False
 
-            #self.__add_markers_to_chart(new_chart, indicators_snapshot, markers, average_value, set_markers_at_average)
+            self.__add_trade_log_to_chart(new_chart, average_value, set_markers_at_average)
 
         if len(all_charts) == 1:
             show(first_chart)
         else:
             show(vplot(*all_charts))
 
-    def render_trades(self, trade_log):
-        pass
 
     def __create_chart_tools(self):
         hover = HoverTool(
@@ -127,19 +125,18 @@ class BokehChartRenderer(AbstractChartRendered):
 
         return result
 
-    def __add_markers_to_chart(self, target_chart, indicators_snapshot, markers, average_value, set_markers_at_average):
+    def __add_trade_log_to_chart(self, target_chart, average_value, set_markers_at_average):
 
-        if markers is not None:
-            for single_marker in markers:
-                indicator_data = indicators_snapshot.snapshot_data[single_marker]
+        if self.trade_transactions is not None:
+            for transaction_name, transaction_data in self.trade_transactions.iteritems():
 
-                y_replacement = average_value if set_markers_at_average else None
+                price_bar_index, transaction_price_per_share = transaction_data
 
-                x_data, y_data = self.__pack_data_with_index(indicator_data, y_replacement=y_replacement)
+                y_data = average_value if set_markers_at_average else None
 
                 # render markers
-                target_chart.circle(x_data, y_data, size=self.CHART_MARKER_SIZE,
-                                    fill_color='white', line_color=self.TRADE_MARKER_COLORS[single_marker],
+                target_chart.circle(price_bar_index, y_data, size=self.CHART_MARKER_SIZE,
+                                    fill_color='white', line_color=self.TRADE_MARKER_COLORS[transaction_name],
                                     line_width=3)
 
     def __pack_data_with_index(self, data, y_replacement=None):

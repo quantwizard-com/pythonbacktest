@@ -16,7 +16,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_chart(self):
+    def render_charts(self):
         all_charts = []
         first_chart = None
 
@@ -52,7 +52,6 @@ class BokehChartRenderer(AbstractChartRenderer):
             show(first_chart)
         else:
             show(vplot(*all_charts))
-
 
     def __create_chart_tools(self):
         hover = HoverTool(
@@ -130,14 +129,13 @@ class BokehChartRenderer(AbstractChartRenderer):
         if self.trade_transactions is not None:
             for transaction_name, transaction_data in self.trade_transactions.iteritems():
 
-                price_bar_index, transaction_price_per_share = transaction_data
+                for price_bar_index, transaction_price_per_share in transaction_data:
+                    y_data = average_value if set_markers_at_average else transaction_price_per_share
 
-                y_data = average_value if set_markers_at_average else None
-
-                # render markers
-                target_chart.circle(price_bar_index, y_data, size=self.CHART_MARKER_SIZE,
-                                    fill_color='white', line_color=self.TRADE_MARKER_COLORS[transaction_name],
-                                    line_width=3)
+                    # render markers
+                    target_chart.circle(price_bar_index, y_data, size=self.CHART_MARKER_SIZE,
+                                        fill_color='white', line_color=self.TRADE_MARKER_COLORS[transaction_name],
+                                        line_width=3)
 
     def __pack_data_with_index(self, data, y_replacement=None):
 

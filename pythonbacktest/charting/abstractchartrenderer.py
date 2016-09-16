@@ -30,7 +30,7 @@ class AbstractChartRenderer(object):
                     self.__trade_transactions[transaction_type] = list([(price_bar_index, transaction_price_per_share)])
 
     @abc.abstractmethod
-    def render_chart(self):
+    def render_charts(self):
         raise NotImplementedError()
 
     @property

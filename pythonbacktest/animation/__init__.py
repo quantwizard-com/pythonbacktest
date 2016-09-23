@@ -2,6 +2,6 @@
 .. moduleauthor:: Krzysztof Wasiak (k.wasiak@gmail.com)
 """
 
-from .ipythonanimation import IPythonAnimation
+from .ipythonchartanimation import IPythonChartAnimation
 from .indicatorshistoryanimation import IndicatorsHistoryAnimation
 

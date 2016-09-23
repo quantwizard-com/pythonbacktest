@@ -2,13 +2,12 @@ from IPython.display import HTML, display
 from tempfile import NamedTemporaryFile
 from matplotlib import pyplot as plt
 from matplotlib import animation
+from pythonbacktest.visualization.abstractdatavisualization import AbstractDataVisualization
 
 import abc
 
 
-# this is baseclass for all classes, which intend to render animation
-# within IPython notebook
-class IPythonAnimation(object):
+class IPythonChartAnimation(AbstractDataVisualization):
     __metaclass__ = abc.ABCMeta
 
     VIDEO_TAG = """<video controls>
@@ -18,6 +17,7 @@ class IPythonAnimation(object):
 
     def __init__(self, frames=100, interval=20, canvassize=None, fps=10):
 
+        AbstractDataVisualization.__init__(self)
         self.__target_canvas = plt.figure(figsize=canvassize)
         self.__number_of_frames = frames
         self.__interval = interval

@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy
 
 
-class IndicatorsHistoryAnimation(IPythonAnimation):
+class IndicatorsHistoryAnimation(IPythonChartAnimation):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
     CHART_TEXT_FORMAT = "X = %d"
@@ -35,7 +35,7 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
             raise ValueError("Number of frames cannot be negative. Range setting: " + datarange)
 
         # we need to create the target canvas (figure)
-        IPythonAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
+        IPythonChartAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
 
         # maximum number of horizontal points (x-axis) visible on the screen in the same time
         # e.g.: 1000 means x can have values between (0, 999), (1, 1000), etc.
@@ -45,6 +45,12 @@ class IndicatorsHistoryAnimation(IPythonAnimation):
 
         # on the create canvas - create all charts and chart text
         self.__create_all_chart_rows(indicators, markers)
+
+    def add_indicators(self, indicators_history, *indicators_name_collections):
+        pass
+
+    def add_transactions_from_trade_log(self, trade_log, *transaction_names):
+        pass
 
     def _init_animation(self):
 

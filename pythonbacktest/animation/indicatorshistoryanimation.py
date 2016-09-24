@@ -6,7 +6,7 @@ import numpy
 
 class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualization):
 
-    TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
+    TRADE_MARKER_COLORS = {"BUY": "green", "SELL": "red", "SHORT": "purple"}
     CHART_TEXT_FORMAT = "X = %d"
     MAX_X_POINTS_PER_FRAME = 1000
 
@@ -54,7 +54,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
         target_canvas = plt.figure(figsize=canvas_size)
 
         # on the create canvas - create all charts and chart text
-        self.__create_all_chart_rows(self.indicators_name_collections, [])
+        self.__create_all_chart_rows()
 
         # time to start the animation
         self._start_animation(animation_callback=self._animate_callback,
@@ -85,10 +85,12 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
             close_indicator_in_data = False
 
+            max_x_data = None
             for indicator_name, plot in plots_per_axis.iteritems():
                 snapshot_data_per_indicator = snapshot_data[indicator_name]
 
                 x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
+                max_x_data = x_data[-1]
 
                 plot.set_data(x_data, y_data)
 
@@ -101,15 +103,14 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
                 yield plot
 
-            for marker_name, plot in markers_per_axis.iteritems():
-                snapshot_data_per_marker = snapshot_data[marker_name]
-
+            for transaction_name, plot in markers_per_axis.iteritems():
                 y_average = None
                 if not close_indicator_in_data:
                     # we don't have close data, so we have to replace marker y with average between ymin and ymax
                     y_average = ymin + ((ymax - ymin) / 2)
 
-                x_data, y_data = self.__pack_data_with_index(snapshot_data_per_marker, y_replacement=y_average)
+                x_data, y_data = self.__pack_transactions_data_into_numpy_arrays(
+                    transaction_name, max_x_data, replacement_data=y_average)
 
                 plot.set_data(x_data, y_data)
                 yield plot
@@ -128,11 +129,11 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
     # HELP SET-UP METHODS
     #
 
-    def __create_all_chart_rows(self, indicators, marker_names):
-        all_charts_count = len(indicators)
+    def __create_all_chart_rows(self):
+        all_charts_count = len(self.indicators_name_collections)
         current_axis_id = 1
 
-        for indicators_with_colors in indicators:
+        for indicators_with_colors in self.indicators_name_collections:
             # unpack collection of collections of charts
             x_min, x_max, y_min, y_max = self.__find_chart_boundaries(self.__indicator_snapshot, indicators_with_colors)
 
@@ -144,7 +145,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
             self.__all_axes_plots.append({'axis': ax,
                                     'plots': self.__create_all_plots_per_axis(ax, indicators_with_colors),
-                                    'markers': self.__create_all_markers_per_axis(ax, marker_names),
+                                    'markers': self.__create_all_markers_per_axis(ax),
                                     'progress': self.__create_progress_bar_per_axis(ax),
                                     'xmin': x_min,
                                     'xmax': x_max,
@@ -163,11 +164,11 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
         return all_axis_plots
 
-    def __create_all_markers_per_axis(self, ax, marker_names):
+    def __create_all_markers_per_axis(self, ax):
 
         all_markers_plots = {}
 
-        for marker_name in marker_names:
+        for marker_name in self.recorded_transaction_names:
             single_marker_plot, = ax.plot(
                 [], [],
                 marker='D', markersize=5,
@@ -232,6 +233,27 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
         y_max = max(all_y_max_values_per_snapshot)
 
         return x_min, x_max, y_min, y_max
+
+    def __pack_transactions_data_into_numpy_arrays(self, transaction_name, max_x_data, replacement_data=None):
+        result_x = []
+        result_y = []
+
+        for transaction_data in self.trade_transactions[transaction_name]:
+
+            transaction_index, transaction_value = transaction_data
+
+            if transaction_index <= max_x_data:
+                if replacement_data is not None:
+                    transaction_value = replacement_data
+
+                # add index twice, since for each index we need to add value AND NaN value
+                result_x.append(transaction_index)
+                result_x.append(transaction_index)
+
+                result_y.append(transaction_value)
+                result_y.append(numpy.nan)
+
+        return result_x, numpy.array(result_y)
 
     @staticmethod
     def __pack_data_with_index(data, y_replacement=None):

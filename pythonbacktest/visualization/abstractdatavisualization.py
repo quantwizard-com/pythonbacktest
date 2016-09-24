@@ -9,7 +9,7 @@ class AbstractDataVisualization(object):
 
         self.__trade_transactions = {}
 
-    def add_indicators(self, indicators_history, *indicators_name_collections):
+    def add_indicators_history(self, indicators_history, *indicators_name_collections):
         self.__indicators_history = indicators_history
         self.__indicators_name_collections = indicators_name_collections
 

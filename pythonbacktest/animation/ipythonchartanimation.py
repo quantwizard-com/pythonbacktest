@@ -2,12 +2,11 @@ from IPython.display import HTML, display
 from tempfile import NamedTemporaryFile
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from pythonbacktest.visualization.abstractdatavisualization import AbstractDataVisualization
 
 import abc
 
 
-class IPythonChartAnimation(AbstractDataVisualization):
+class IPythonChartAnimation(object):
     __metaclass__ = abc.ABCMeta
 
     VIDEO_TAG = """<video controls>
@@ -15,40 +14,33 @@ class IPythonChartAnimation(AbstractDataVisualization):
                  Your browser does not support the video tag.
                 </video>"""
 
-    def __init__(self, frames=100, interval=20, canvassize=None, fps=10):
+    def __init__(self):
+        pass
 
-        AbstractDataVisualization.__init__(self)
-        self.__target_canvas = plt.figure(figsize=canvassize)
-        self.__number_of_frames = frames
-        self.__interval = interval
-        self.__fps = fps
-
-    def __anim_to_html(self, animation):
+    def __anim_to_html(self, animation, fps):
         if not hasattr(animation, '_encoded_video'):
             with NamedTemporaryFile(suffix='.mp4') as f:
-                animation.save(f.name, fps=self.__fps, extra_args=['-vcodec', 'libx264'])
+                animation.save(f.name, fps=fps, extra_args=['-vcodec', 'libx264'])
                 video = open(f.name, "rb").read()
             animation._encoded_video = video.encode("base64")
 
         return self.VIDEO_TAG.format(animation._encoded_video)
 
-    def __display_animation(self, anim):
+    def __display_animation(self, anim, fps):
         plt.close(anim._fig)
-        return HTML(self.__anim_to_html(anim))
+        return HTML(self.__anim_to_html(anim, fps))
 
     @abc.abstractmethod
     def _init_animation(self):
         raise NotImplementedError()
 
-    @abc.abstractmethod
-    def _animate_callback(self, animation_parameter):
-        raise NotImplementedError()
+    def _start_animation(self, animation_callback, init_animation_callback,
+                         target_canvas, frames=100, interval=20, fps=10):
 
-    def start_animation(self):
-        animation_handle = animation.FuncAnimation(self.target_canvas, self._animate_callback,
-                                                   init_func=self._init_animation,
-                                                   frames=self.__number_of_frames, interval=self.__interval, blit=True)
-        return display(self.__display_animation(animation_handle))
+        animation_handle = animation.FuncAnimation(target_canvas, animation_callback,
+                                                   init_func=init_animation_callback,
+                                                   frames=frames, interval=interval, blit=True)
+        return display(self.__display_animation(animation_handle, fps))
 
     @property
     def target_canvas(self):

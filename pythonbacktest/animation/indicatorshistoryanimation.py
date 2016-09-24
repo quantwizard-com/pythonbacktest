@@ -1,16 +1,19 @@
+from pythonbacktest.visualization import AbstractDataVisualization
 from . import *
 from matplotlib import pyplot as plt
 import numpy
 
 
-class IndicatorsHistoryAnimation(IPythonChartAnimation):
+class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualization):
 
     TRADE_MARKER_COLORS = {"trade_buy": "green", "trade_sell": "red", "trade_short": "purple"}
     CHART_TEXT_FORMAT = "X = %d"
     MAX_X_POINTS_PER_FRAME = 1000
 
-    def __init__(self, indicators_history, date, indicators=[], interval=20, markers=[],
-                 canvassize=None, datarange=(0, None)):
+    def __init__(self):
+
+        AbstractDataVisualization.__init__(self)
+        IPythonChartAnimation.__init__(self)
 
         # all chart plots; dictionary, where:
         # - key: name of the indicator
@@ -18,9 +21,17 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation):
 
         self.__all_axes_plots = []
         self.__all_axes = []
-        self.__indicator_snapshot = indicators_history.get_indicator_history_for_day(date)
+        self.__indicator_snapshot = []
+        self.__data_range_start = None
+        self.__data_range_end = None
+        self.__points_per_frame = None
 
-        range_start, range_end = datarange
+    def render_animation(self, date, canvas_size, interval=20, fps=10, data_range=(0, None)):
+
+        # calculate number of frames
+        self.__indicator_snapshot = self.indicators_history.get_indicator_history_for_day(date)
+
+        range_start, range_end = data_range
 
         self.__data_range_start = range_start
 
@@ -32,10 +43,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation):
         number_of_frames = self.__data_range_end - self.__data_range_start + 1
 
         if number_of_frames < 0:
-            raise ValueError("Number of frames cannot be negative. Range setting: " + datarange)
-
-        # we need to create the target canvas (figure)
-        IPythonChartAnimation.__init__(self, number_of_frames, interval, canvassize=canvassize)
+            raise ValueError("Number of frames cannot be negative. Range setting: " + data_range)
 
         # maximum number of horizontal points (x-axis) visible on the screen in the same time
         # e.g.: 1000 means x can have values between (0, 999), (1, 1000), etc.
@@ -43,17 +51,20 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation):
             if self.MAX_X_POINTS_PER_FRAME < number_of_frames \
             else number_of_frames
 
+        target_canvas = plt.figure(figsize=canvas_size)
+
         # on the create canvas - create all charts and chart text
-        self.__create_all_chart_rows(indicators, markers)
+        self.__create_all_chart_rows(self.indicators_name_collections, [])
 
-    def add_indicators(self, indicators_history, *indicators_name_collections):
-        pass
-
-    def add_transactions_from_trade_log(self, trade_log, *transaction_names):
-        pass
+        # time to start the animation
+        self._start_animation(animation_callback=self._animate_callback,
+                              init_animation_callback=self._init_animation,
+                              target_canvas=target_canvas,
+                              frames=number_of_frames,
+                              interval=interval,
+                              fps=fps)
 
     def _init_animation(self):
-
         for axis_data in self.__all_axes_plots:
             for indicator_name, plot in axis_data['plots'].iteritems():
                 plot.set_data([], [])
@@ -118,7 +129,6 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation):
     #
 
     def __create_all_chart_rows(self, indicators, marker_names):
-
         all_charts_count = len(indicators)
         current_axis_id = 1
 
@@ -169,7 +179,6 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation):
     def __create_progress_bar_per_axis(self, ax):
         single_progress_bar_plot, = ax.plot([], [], color='black', lw=1, ls=':')
         return single_progress_bar_plot
-
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)

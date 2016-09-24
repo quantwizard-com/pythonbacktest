@@ -16,7 +16,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_charts(self):
+    def render_charts(self, date_to_display):
         all_charts = []
         first_chart = None
 
@@ -33,8 +33,11 @@ class BokehChartRenderer(AbstractChartRenderer):
             average_value = None
             set_markers_at_average = True
 
+            # get last data snapshot for the given day
+            indicators_snapshot = self.indicators_history.get_last_indicator_snapshot_per_day(date_to_display)
+
             for indicator_name, color in name_collection:
-                indicator_data = self.indicators_history.snapshot_data[indicator_name]
+                indicator_data = indicators_snapshot.snapshot_data[indicator_name]
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
                 average_data = self.__average_indicator_data(indicator_data)

@@ -17,6 +17,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__current_indicators_snapshot = None
         self.__current_latest_indicators_values = None
         self.__is_last_pricebar = False
+        self.__switch_new_state_name = None
 
     def set_states_map(self, states_map):
         if not states_map:
@@ -24,11 +25,29 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         self.__states_map = states_map
 
-    def set_current_state(self, state_name):
+    def set_next_state(self, state_name):
+        """
+        Set state, which should be called to handler the next price bar
+        :param state_name: Next state name
+        :return: None
+        """
         if state_name not in self.__states_map:
             raise ValueError("Can't find state definition for state: " + state_name)
 
         self.__current_state_name = state_name
+
+    def switch_current_state(self, state_name):
+        """
+        Switch the state from current to the new one.
+        State handler will be called AFTER current handler exits.
+        Best practice: leave current handler after switching state
+        :param state_name: New state after switch
+        :return: None
+        """
+        if state_name not in self.__states_map:
+            raise ValueError("Can't find state definition for state: " + state_name)
+
+        self.__switch_new_state_name = state_name
 
     def new_price_bar(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
         if self.is_last_pricebar:
@@ -53,7 +72,19 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__current_latest_indicators_values = latest_indicators_values
 
         state_handling_func = self.__states_map[self.__current_state_name]
+
+        # call the handler
         state_handling_func(broker)
+
+        # check if the hasn't been switch called
+        # in that case: re-call this handler for the new state name
+        switch_state_name = self.__switch_new_state_name
+        if switch_state_name:
+            self.__switch_new_state_name = None
+            self.__current_state_name = switch_state_name
+
+            # recall handler for the new state AFTER switching
+            self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
 
     @property
     def current_state_name(self):

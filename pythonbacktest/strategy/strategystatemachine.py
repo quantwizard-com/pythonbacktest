@@ -31,14 +31,14 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__current_state_name = state_name
 
     def new_price_bar(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
-        if self.__is_last_pricebar:
+        if self.is_last_pricebar:
             raise AttributeError("self.__is_last_pricebar has already been set. Unexpected price bar")
 
         self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
 
     def day_end_price_bar(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
 
-        if self.__is_last_pricebar:
+        if self.is_last_pricebar:
             raise AttributeError("self.__is_last_pricebar has already been set. Wrong state of the strategy")
 
         self.__is_last_pricebar = True

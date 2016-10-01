@@ -238,20 +238,21 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
         result_x = []
         result_y = []
 
-        for transaction_data in self.trade_transactions[transaction_name]:
+        if transaction_name in self.trade_transactions:
+            for transaction_data in self.trade_transactions[transaction_name]:
 
-            transaction_index, transaction_value = transaction_data
+                transaction_index, transaction_value = transaction_data
 
-            if transaction_index <= max_x_data:
-                if replacement_data is not None:
-                    transaction_value = replacement_data
+                if transaction_index <= max_x_data:
+                    if replacement_data is not None:
+                        transaction_value = replacement_data
 
-                # add index twice, since for each index we need to add value AND NaN value
-                result_x.append(transaction_index)
-                result_x.append(transaction_index)
+                    # add index twice, since for each index we need to add value AND NaN value
+                    result_x.append(transaction_index)
+                    result_x.append(transaction_index)
 
-                result_y.append(transaction_value)
-                result_y.append(numpy.nan)
+                    result_y.append(transaction_value)
+                    result_y.append(numpy.nan)
 
         return result_x, numpy.array(result_y)
 

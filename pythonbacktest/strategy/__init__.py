@@ -4,3 +4,4 @@
 
 from .abstracttradingstrategy import AbstractTradingStrategy
 from .strategyimporter import import_strategy
+from .strategystatemachine import StrategyStateMachine

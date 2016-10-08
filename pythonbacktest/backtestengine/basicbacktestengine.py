@@ -16,6 +16,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
             raise ValueError("Can't get history for given date: " + str(date))
 
         price_bar_index = 0
+        number_of_pricebars = len(indicators_history_per_date)
 
         for timestamp, indicators_snapshot in indicators_history_per_date:
             snapshot_data = indicators_snapshot.snapshot_data
@@ -23,7 +24,12 @@ class BasicBackTestEngine(AbstractBackTestEngine):
             price_bar = self.__latest_snapshot_to_price_bar(latest_snapshot_data)
 
             broker.set_current_price_bar(price_bar, price_bar_index)
-            strategy.new_price_bar(price_bar, snapshot_data, latest_snapshot_data, broker)
+
+            if price_bar_index == number_of_pricebars - 1:
+                strategy.day_end_price_bar(price_bar, price_bar_index, snapshot_data, latest_snapshot_data, broker)
+            else:
+                strategy.new_price_bar(price_bar, price_bar_index, snapshot_data, latest_snapshot_data, broker)
+
             price_bar_index += 1
 
     def __get_latest_values_for_indicators_snapshot(self, snapshot_data):

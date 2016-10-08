@@ -18,6 +18,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__current_latest_indicators_values = None
         self.__is_last_pricebar = False
         self.__switch_new_state_name = None
+        self.__current_price_bar_index = None
 
     def set_states_map(self, states_map):
         if not states_map:
@@ -49,27 +50,30 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         self.__switch_new_state_name = state_name
 
-    def new_price_bar(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
+    def new_price_bar(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
         if self.is_last_pricebar:
             raise AttributeError("self.__is_last_pricebar has already been set. Unexpected price bar")
 
-        self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
+        self.__pass_price_bar_downstream(price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker)
 
-    def day_end_price_bar(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
+    def day_end_price_bar(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
 
         if self.is_last_pricebar:
             raise AttributeError("self.__is_last_pricebar has already been set. Wrong state of the strategy")
 
         self.__is_last_pricebar = True
-        self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
+        broker.cover_position()
+        print 'covered'
+        #self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
 
-    def __pass_price_bar_downstream(self, price_bar, indicators_snapshot, latest_indicators_values, broker):
+    def __pass_price_bar_downstream(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
         if self.__states_map is None or not self.__states_map:
             raise ValueError("__states_map is None or empty")
 
         self.__current_price_bar = price_bar
         self.__current_indicators_snapshot = indicators_snapshot
         self.__current_latest_indicators_values = latest_indicators_values
+        self.__current_price_bar_index = price_bar_index
 
         state_handling_func = self.__states_map[self.__current_state_name]
 
@@ -84,7 +88,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
             self.__current_state_name = switch_state_name
 
             # recall handler for the new state AFTER switching
-            self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
+            self.__pass_price_bar_downstream(price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker)
 
     @property
     def current_state_name(self):
@@ -95,7 +99,11 @@ class StrategyStateMachine(AbstractTradingStrategy):
         return self.__current_price_bar
 
     @property
-    def current_indicators_snapshot (self):
+    def current_price_bar_index(self):
+        return self.__current_price_bar_index
+
+    @property
+    def current_indicators_snapshot(self):
         return self.__current_indicators_snapshot
 
     @property

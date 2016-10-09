@@ -32,19 +32,19 @@ class BackTestBroker(AbstractBroker):
         self.__indicators = indicators
 
     # buy certain number of shares
-    def go_long(self, number_of_shares):
+    def go_long(self, number_of_shares, comment=None):
         self.__check_current_price()
 
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.current_price
         self.__charge_commission()
 
-        self.__log_trade("BUY", number_of_shares)
+        self.__log_trade("BUY", number_of_shares, comment=comment)
 
     # sell exact number of shares from portfolio
     # if number of shares to sale is more than in portfolio,
     # sell all portfolio to 0, but DON"T go short
-    def go_sell(self, number_of_shares):
+    def go_sell(self, number_of_shares, comment=None):
 
         if number_of_shares < 0:
             raise Exception("Number of shares to sale should be more than 0")
@@ -55,11 +55,11 @@ class BackTestBroker(AbstractBroker):
         self.__budget += number_of_shares_to_sale * self.current_price
         self.__charge_commission()
 
-        self.__log_trade("SELL", number_of_shares)
+        self.__log_trade("SELL", number_of_shares, comment=comment)
 
     # self exact number of shares in portfolio
     # but go short (below 0) if there's not enough shares to sale
-    def go_short(self, number_of_shares):
+    def go_short(self, number_of_shares, comment=None):
         if number_of_shares < 0:
             raise Exception("Number of shares to short should be more than 0")
 
@@ -69,13 +69,13 @@ class BackTestBroker(AbstractBroker):
         self.__budget += number_of_shares_to_sale * self.current_price
         self.__charge_commission()
 
-        self.__log_trade("SHORT", number_of_shares)
+        self.__log_trade("SHORT", number_of_shares, comment=comment)
 
-    def cover_position(self):
+    def cover_position(self, comment=None):
         if self.__position < 0:
-            self.go_long(-self.__position)
+            self.go_long(-self.__position, comment=comment)
         elif self.__position > 0:
-            self.go_sell(self.__position)
+            self.go_sell(self.__position, comment=comment)
 
     @property
     def current_price(self):
@@ -107,7 +107,7 @@ class BackTestBroker(AbstractBroker):
     def __charge_commission(self):
         self.__budget -= self.__commision
 
-    def __log_trade(self, transaction_type, shares_amount):
+    def __log_trade(self, transaction_type, shares_amount, comment=None):
         if self.__indicators is not None:
             self.__indicators.mark_transaction(transaction_type, self.current_price)
 
@@ -120,4 +120,5 @@ class BackTestBroker(AbstractBroker):
                 transaction_price_per_share=self.current_price,
                 cash_spent=shares_amount * self.current_price,
                 cash_after=self.free_cash,
-                position_after=self.current_position)
+                position_after=self.current_position,
+                comment=comment)

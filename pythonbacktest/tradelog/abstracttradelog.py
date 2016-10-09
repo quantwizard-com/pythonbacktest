@@ -13,7 +13,7 @@ class AbstractTradeLog(object):
     # -
     @abc.abstractmethod
     def log_transaction(self, price_bar_index_per_day, price_bar_time_stamp, transaction_type, shares_amount, transaction_price_per_share,
-                        cash_spent, cash_after, position_after):
+                        cash_spent, cash_after, position_after, comment=None):
         raise NotImplementedError()
 
     @property

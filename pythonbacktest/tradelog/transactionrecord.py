@@ -6,4 +6,6 @@ class TransactionRecord(object):
     transaction_price_per_share = None,
     cash_spent = None,
     cash_after = None,
-    position_after = None
+    position_after = None,
+    comment = None,
+    total_assets = None

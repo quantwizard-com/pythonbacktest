@@ -7,7 +7,7 @@ class MemoryTradeLog(AbstractTradeLog):
         AbstractTradeLog.__init__(self)
 
     def log_transaction(self, price_bar_index_per_day, price_bar_time_stamp, transaction_type, shares_amount, transaction_price_per_share,
-                        cash_spent, cash_after, position_after):
+                        cash_spent, cash_after, position_after, comment=None):
 
         new_transaction_record = TransactionRecord()
         new_transaction_record.timestamp = price_bar_time_stamp
@@ -18,6 +18,8 @@ class MemoryTradeLog(AbstractTradeLog):
         new_transaction_record.cash_spent = cash_spent
         new_transaction_record.cash_after = cash_after
         new_transaction_record.position_after = position_after
+        new_transaction_record.comment = comment
+        new_transaction_record.total_assets = cash_after + position_after * transaction_price_per_share
 
         self.all_transactions.append(new_transaction_record)
 

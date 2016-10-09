@@ -25,6 +25,11 @@ class SMA(AbstractIndicator):
 
     def on_new_upstream_value(self, new_value):
 
+        if new_value is None:
+            self.__latest_result = None
+            self.__all_sma.append(None)
+            return
+
         self.__sum_of_elements += new_value
         self.__data_storage.append(new_value)
 

@@ -63,8 +63,6 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         self.__is_last_pricebar = True
         broker.cover_position()
-        print 'covered'
-        #self.__pass_price_bar_downstream(price_bar, indicators_snapshot, latest_indicators_values, broker)
 
     def __pass_price_bar_downstream(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
         if self.__states_map is None or not self.__states_map:

@@ -14,6 +14,8 @@ class BackTestBroker(AbstractBroker):
         # <0 - overall portfolio is short
         self.__position = 0
 
+        self.__avg_price_per_share = 0
+
         # what's the current price per share?
         self.__current_price_bar = None
         self.__current_price_bar_index = None
@@ -35,6 +37,10 @@ class BackTestBroker(AbstractBroker):
     def go_long(self, number_of_shares, comment=None):
         self.__check_current_price()
 
+        # update average price per share
+        self.__avg_price_per_share = \
+            (self.__avg_price_per_share * self.__position + number_of_shares * self.current_price) / (self.__position + number_of_shares)
+
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.current_price
         self.__charge_commission()
@@ -50,6 +56,13 @@ class BackTestBroker(AbstractBroker):
             raise Exception("Number of shares to sale should be more than 0")
 
         number_of_shares_to_sale = number_of_shares if number_of_shares <= self.__position else self.__position
+
+        # update average price per share
+        if self.__position == number_of_shares_to_sale:
+            self.__avg_price_per_share = 0
+        else:
+            self.__avg_price_per_share = \
+                (self.__avg_price_per_share * self.__position - number_of_shares_to_sale * self.current_price) / (self.__position - number_of_shares_to_sale)
 
         self.__position -= number_of_shares_to_sale
         self.__budget += number_of_shares_to_sale * self.current_price
@@ -97,6 +110,10 @@ class BackTestBroker(AbstractBroker):
     @property
     def current_position(self):
         return self.__position
+
+    @property
+    def avg_price_per_share(self):
+        return self.__avg_price_per_share
 
     # check if current price is set
     def __check_current_price(self):

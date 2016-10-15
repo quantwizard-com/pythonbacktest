@@ -3,14 +3,17 @@ from .abstractindicator import AbstractIndicator
 class DataProcessor(AbstractIndicator):
 
     def __init__(self, processing_proc):
-        self.__current_value = None
-        self.__all_values = []
-        self.__all_results = []
-
         if processing_proc is None:
             raise ValueError("processing_proc must be set")
 
         self.__processing_proc = processing_proc
+
+        self.reset()
+
+    def reset(self):
+        self.__current_value = None
+        self.__all_values = []
+        self.__all_results = []
 
     @property
     def result(self):

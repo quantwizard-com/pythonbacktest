@@ -6,12 +6,11 @@ class Differential(AbstractIndicator):
     def __init__(self):
         AbstractIndicator.__init__(self)
 
+        self.reset()
+
+    def reset(self):
         self.__last_value = None
-
-        # entire SMA data for all input which came
         self.__all_differential = []
-
-        # all values passed to this indicator
         self.__all_values = []
 
     @property

@@ -53,6 +53,9 @@ class IndicatorsCalculator(object):
 
     def run_computation(self, date, data_feed):
 
+        # make sure all indicator implementations are 'clear'
+        self.__reset_all_implementations()
+
         # let's extract single date and test price bars for that date
         price_bars_per_date = data_feed.get_prices_bars_for_day(date)
 
@@ -162,3 +165,7 @@ class IndicatorsCalculator(object):
             source_results.append(implementation.result)
 
         return source_results
+
+    def __reset_all_implementations(self):
+        for indicator_name, indicator_record in self.__all_indicators.iteritems():
+            indicator_record['implementation'].reset()

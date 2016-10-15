@@ -6,9 +6,10 @@ class ZeroFinder(AbstractIndicator):
 
     def __init__(self):
         AbstractIndicator.__init__(self)
+        self.reset()
 
+    def reset(self):
         self.__all_input_values = []
-
         self.__all_distances = []
 
     @property
@@ -19,7 +20,7 @@ class ZeroFinder(AbstractIndicator):
     def result(self):
         return self.__all_distances[-1] if len(self.__all_distances) > 0 else None
 
-    def     on_new_upstream_value(self, new_value):
+    def on_new_upstream_value(self, new_value):
         if new_value is None:
             raise ValueError("None is not allowed")
 
@@ -67,13 +68,3 @@ class ZeroFinder(AbstractIndicator):
         round_with_sign = -math.copysign(1, current_differential) * log_value
 
         return round_with_sign
-
-
-
-
-
-
-
-
-
-

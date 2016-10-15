@@ -3,6 +3,15 @@ import abc
 
 class AbstractIndicator(object):
 
+    @abc.abstractmethod
+    def reset(self):
+        """
+        Reset indicator to the initial value. It's called when IndicatorsCalculator
+        starts calculation for single date
+        :return: None
+        """
+        raise NotImplementedError()
+
     # get LATEST indicator value (as: latest value)
     @abc.abstractproperty
     def result(self):

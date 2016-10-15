@@ -5,6 +5,9 @@ import itertools
 class DataDifference(AbstractIndicator):
 
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.__input_data_1 = []
         self.__input_data_2 = []
         self.__output_data = []

@@ -6,12 +6,12 @@ class SMA(AbstractIndicator):
 
     def __init__(self, window_len):
         AbstractIndicator.__init__(self)
-
-        self.__latest_result = None
         self.__window_len = window_len
-        self.__data_storage = []
+        self.reset()
 
-        # entire SMA data for all input which came
+    def reset(self):
+        self.__latest_result = None
+        self.__data_storage = []
         self.__all_sma = []
         self.__sum_of_elements = 0
 

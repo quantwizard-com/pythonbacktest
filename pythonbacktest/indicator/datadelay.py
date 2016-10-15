@@ -9,6 +9,9 @@ class DataDelay(AbstractIndicator):
         AbstractIndicator.__init__(self)
 
         self.__delay_size = delay_size
+        self.reset()
+
+    def reset(self):
         self.__initiate_data()
 
     @property

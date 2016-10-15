@@ -8,7 +8,10 @@ from . import AbstractIndicator
 class MinMaxTracker(AbstractIndicator):
 
     def __init__(self):
+        AbstractIndicator.__init__(self)
+        self.reset()
 
+    def reset(self):
         # collection with (min, max) tupples
         self.__all_min_max = []
 

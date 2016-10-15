@@ -7,9 +7,10 @@ class ExtremumFinder(AbstractIndicator):
 
     def __init__(self):
         AbstractIndicator.__init__(self)
+        self.reset()
 
+    def reset(self):
         self.__all_input_values = []
-
         self.__all_distances = []
 
     @property

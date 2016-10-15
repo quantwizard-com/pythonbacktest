@@ -3,6 +3,10 @@ from .abstractindicator import AbstractIndicator
 class StaticValue(AbstractIndicator):
 
     def __init__(self):
+        AbstractIndicator.__init__(self)
+        self.reset()
+
+    def reset(self):
         self.__current_value = None
         self.__all_values = []
 

@@ -103,6 +103,26 @@ class StrategyStateMachineTests(unittest.TestCase):
         self.assertEqual(price_bar, state_machine.current_price_bar)
         self.assertEqual("state3", state_machine.current_state_name)
         self.assertFalse(state_machine.is_last_pricebar)
+        self.assertEqual(1, state_machine.price_bars_in_state)
+
+        # let's call the handler again
+
+        state_machine.new_price_bar(price_bar=price_bar,
+                                    price_bar_index=5,
+                                    indicators_snapshot=indicators_snapshot,
+                                    latest_indicators_values=latest_indicators_values,
+                                    broker=broker)
+
+        args, kwargs = state_handler_3.call_args
+
+        self.assertEqual(broker, args[0])
+
+        self.assertEqual(indicators_snapshot, state_machine.current_indicators_snapshot)
+        self.assertEqual(latest_indicators_values, state_machine.current_latest_indicators_values)
+        self.assertEqual(price_bar, state_machine.current_price_bar)
+        self.assertEqual("state3", state_machine.current_state_name)
+        self.assertFalse(state_machine.is_last_pricebar)
+        self.assertEqual(2, state_machine.price_bars_in_state)
 
 
 

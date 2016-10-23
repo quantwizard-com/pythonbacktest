@@ -60,6 +60,14 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         self.__switch_new_state_name = state_name
 
+    def track_min_value(self, custom_state_param_name, current_value):
+        if custom_state_param_name not in self.__custom_state_params or current_value < self.__custom_state_params[custom_state_param_name]:
+            self.__custom_state_params[custom_state_param_name] = current_value
+
+    def track_max_value(self, custom_state_param_name, current_value):
+        if custom_state_param_name not in self.__custom_state_params or current_value > self.__custom_state_params[custom_state_param_name]:
+            self.__custom_state_params[custom_state_param_name] = current_value
+
     def new_price_bar(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
         if self.is_last_pricebar:
             raise AttributeError("self.__is_last_pricebar has already been set. Unexpected price bar")
@@ -119,6 +127,10 @@ class StrategyStateMachine(AbstractTradingStrategy):
     @property
     def current_price_bar(self):
         return self.__current_price_bar
+
+    @property
+    def current_close(self):
+        return self.__current_price_bar.close
 
     @property
     def current_price_bar_index(self):

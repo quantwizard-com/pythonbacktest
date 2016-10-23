@@ -26,6 +26,9 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__switch_new_state_name = None
         self.__current_price_bar_index = None
 
+        # current state parameters, to be used by the state; it's reset once the state is switched
+        self.__custom_state_params = {}
+
     def set_states_map(self, states_map):
         if not states_map:
             raise ValueError("states_map")
@@ -96,7 +99,9 @@ class StrategyStateMachine(AbstractTradingStrategy):
         state_handling_func = self.__states_map[self.__current_state_name]
 
         if self.__price_bars_in_state[0] != self.__current_state_name:
+            # let's switch current state
             self.__price_bars_in_state = (self.__current_state_name, 1)
+            self.__custom_state_params = {}
         else:
             self.__price_bars_in_state = (self.__current_state_name, self.__price_bars_in_state[1] + 1)
 
@@ -126,6 +131,10 @@ class StrategyStateMachine(AbstractTradingStrategy):
     @property
     def current_latest_indicators_values(self):
         return self.__current_latest_indicators_values
+
+    @property
+    def custom_state_params(self):
+        return self.__custom_state_params
 
     @property
     def is_last_pricebar(self):

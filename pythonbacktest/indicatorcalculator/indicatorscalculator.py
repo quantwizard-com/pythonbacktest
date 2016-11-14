@@ -2,7 +2,6 @@ from pythonbacktest.indicatorcalculator import IndicatorHistory
 from pythonbacktest.indicatorcalculator import IndicatorsSnapshot
 from pythonbacktest.indicator.staticvalue import StaticValue
 from collections import OrderedDict
-import copy
 
 
 class IndicatorsCalculator(object):
@@ -51,30 +50,13 @@ class IndicatorsCalculator(object):
 
             self.__all_indicators[indicator_name] = record
 
-    def run_computation(self, date, data_feed):
-
-        # make sure all indicator implementations are 'clear'
+    def reset(self):
         self.__reset_all_implementations()
 
-        # let's extract single date and test price bars for that date
-        price_bars_per_date = data_feed.get_prices_bars_for_day(date)
-
-        if price_bars_per_date is None:
-            raise "Can't extract data for date: " + date
-
-        indicators_history = IndicatorHistory()
-
-        for price_bar in price_bars_per_date:
-            # calculate status of the indicators, get snapshot and save it to the history
-            indicator_snapshot = self.__new_price_bar(price_bar)
-            indicators_history.store_snapshot(price_bar.timestamp, indicator_snapshot)
-
-        return indicators_history
-
     # a new price bar has arrived
-    # that will trigger operatotion of moving through all the indicators
+    # that will trigger operation of moving through all the indicators
     # passing values in and calculating outcomes
-    def __new_price_bar(self, price_bar):
+    def new_price_bar(self, price_bar):
 
         if price_bar is None:
             raise ValueError("price_bar is null")

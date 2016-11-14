@@ -1,6 +1,6 @@
 from pythonbacktest.indicator import IndicatorHistory
 from pythonbacktest.indicator import IndicatorsSnapshot
-from .staticvalue import StaticValue
+from pythonbacktest.indicator.staticvalue import StaticValue
 from collections import OrderedDict
 import copy
 

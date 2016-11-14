@@ -1,4 +1,3 @@
-from indicatorsnapshot import IndicatorsSnapshot
 from collections import OrderedDict
 
 

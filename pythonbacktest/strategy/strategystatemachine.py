@@ -1,5 +1,6 @@
 # this class is indended to help building state machine
 # for trading strategies
+import abc
 
 from pythonbacktest.strategy import AbstractTradingStrategy
 
@@ -28,6 +29,10 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         # current state parameters, to be used by the state; it's reset once the state is switched
         self.__custom_state_params = {}
+
+    @abc.abstractproperty
+    def indicator_map(self):
+        raise NotImplementedError()
 
     def set_states_map(self, states_map):
         if not states_map:

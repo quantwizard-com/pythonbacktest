@@ -4,6 +4,10 @@ from pythonbacktest import datafeed
 
 class AbstractTradingStrategy(object):
 
+    @abc.abstractproperty
+    def indicator_map(self):
+        raise NotImplementedError()
+
     @abc.abstractmethod
     def new_price_bar(self, price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker):
         """

@@ -36,11 +36,17 @@ class BokehChartRenderer(AbstractChartRenderer):
             # get last data snapshot for the given day
             indicators_snapshot = self.indicators_history.get_last_indicator_snapshot_per_day(date_to_display)
 
+            min_per_chart = []
+            max_per_chart = []
+
             for indicator_name, color in name_collection:
                 indicator_data = indicators_snapshot.snapshot_data[indicator_name]
                 self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
 
-                average_data = self.__average_indicator_data(indicator_data)
+                average_data, min_data, max_data = self.__average_indicator_data(indicator_data)
+                min_per_chart.append(min_data)
+                max_per_chart.append(max_data)
+
                 if average_value is None:
                     average_value = average_data
                 else:
@@ -50,6 +56,9 @@ class BokehChartRenderer(AbstractChartRenderer):
                     set_markers_at_average = False
 
             self.__add_trade_log_to_chart(new_chart, average_value, set_markers_at_average)
+
+            if min(min_per_chart) < 0 < max(max_per_chart):
+                self.__add_zero_line_to_chart(new_chart, len(indicator_data))
 
         if len(all_charts) == 1:
             show(first_chart)
@@ -140,6 +149,9 @@ class BokehChartRenderer(AbstractChartRenderer):
                                         fill_color='white', line_color=self.TRADE_MARKER_COLORS[transaction_name],
                                         line_width=3)
 
+    def __add_zero_line_to_chart(self, target_chart, data_len):
+        target_chart.line([0, data_len], [0, 0], line_color='red', line_width=1)
+
     def __pack_data_with_index(self, data, y_replacement=None):
 
         if data is None:
@@ -166,7 +178,9 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __average_indicator_data(self, indicator_data):
 
         try:
-            return numpy.mean([t for t in indicator_data if t is not None])
+            y_not_none = [t for t in indicator_data if t is not None]
+
+            return numpy.mean(y_not_none), min(y_not_none), max(y_not_none)
         except:
             print len(indicator_data)
             print indicator_data

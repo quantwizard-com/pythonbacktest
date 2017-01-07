@@ -80,12 +80,17 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
             plots_per_axis = axis_data['plots']
             markers_per_axis = axis_data['markers']
             progress_plot = axis_data['progress']
+            zero_line_plot = axis_data['zeroline']
             ymin = axis_data['ymin']
             ymax = axis_data['ymax']
+            xmin = axis_data['xmin']
+            xmax = axis_data['xmax']
 
             close_indicator_in_data = False
 
             max_x_data = None
+
+            # draw individual indicators
             for indicator_name, plot in plots_per_axis.iteritems():
                 snapshot_data_per_indicator = snapshot_data[indicator_name]
 
@@ -103,6 +108,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
                 yield plot
 
+            # draw transactions
             for transaction_name, plot in markers_per_axis.iteritems():
                 y_average = None
                 if not close_indicator_in_data:
@@ -114,6 +120,9 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
                 plot.set_data(x_data, y_data)
                 yield plot
+
+            # draw zero-line
+            zero_line_plot.set_data([xmin, xmax], [0, 0])
 
         # calculate if chart should be moved on the x-axis to show data
         border_x_point = self.__points_per_frame - self.__points_per_frame * 0.2
@@ -147,6 +156,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
                                     'plots': self.__create_all_plots_per_axis(ax, indicators_with_colors),
                                     'markers': self.__create_all_markers_per_axis(ax),
                                     'progress': self.__create_progress_bar_per_axis(ax),
+                                    'zeroline': self.__create_zero_line(ax),
                                     'xmin': x_min,
                                     'xmax': x_max,
                                     'ymin': y_min,
@@ -180,6 +190,10 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
     def __create_progress_bar_per_axis(self, ax):
         single_progress_bar_plot, = ax.plot([], [], color='black', lw=1, ls=':')
         return single_progress_bar_plot
+
+    def __create_zero_line(self, ax):
+        zero_line, = ax.plot([], [], color='red', lw=2)
+        return zero_line
 
     # find min and max values for x and y axis
     # - input: sorted (by timestamp) list of tuples: (timestamp, indicator snapshot)

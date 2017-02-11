@@ -1,6 +1,6 @@
 from . import *
 import numpy
-from bokeh.io import vplot
+from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
     ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool
@@ -63,7 +63,7 @@ class BokehChartRenderer(AbstractChartRenderer):
         if len(all_charts) == 1:
             show(first_chart)
         else:
-            show(vplot(*all_charts))
+            show(Column(*all_charts))
 
     def __create_chart_tools(self):
         hover = HoverTool(

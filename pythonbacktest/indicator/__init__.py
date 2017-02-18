@@ -10,5 +10,6 @@ from .differential import Differential
 from .extremumfinder import ExtremumFinder
 from .minmaxtracker import MinMaxTracker
 from .sma import SMA
+from .stdindicator import STD
 from .zerofinder import ZeroFinder
 

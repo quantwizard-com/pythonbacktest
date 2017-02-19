@@ -41,7 +41,7 @@ class BokehChartRenderer(AbstractChartRenderer):
 
             for indicator_name, color in name_collection:
                 indicator_data = indicators_snapshot.snapshot_data[indicator_name]
-                self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2})
+                self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2, 'legend': indicator_name })
 
                 average_data, min_data, max_data = self.__average_indicator_data(indicator_data)
                 min_per_chart.append(min_data)

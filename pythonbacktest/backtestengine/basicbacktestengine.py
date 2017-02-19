@@ -24,6 +24,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
             price_bar = self.__latest_snapshot_to_price_bar(latest_snapshot_data)
 
             broker.set_current_price_bar(price_bar, price_bar_index)
+            broker.set_current_indicators_values(latest_snapshot_data)
 
             if price_bar_index == number_of_pricebars - 1:
                 strategy.day_end_price_bar(price_bar, price_bar_index, snapshot_data, latest_snapshot_data, broker)

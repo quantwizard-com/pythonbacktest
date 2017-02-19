@@ -8,4 +8,5 @@ class TransactionRecord(object):
     cash_after = None,
     position_after = None,
     comment = None,
-    total_assets = None
+    total_assets = None,
+    all_indicators_values = None

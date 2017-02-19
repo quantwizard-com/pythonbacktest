@@ -20,18 +20,19 @@ class BackTestBroker(AbstractBroker):
         self.__current_price_bar = None
         self.__current_price_bar_index = None
 
-        self.__trade_log = trade_log
+        # snapshot of all indicators - used for debug purposes
+        self.__current_indicators_values = None
 
-        self.__indicators = None
+        self.__trade_log = trade_log
 
     # set current price of the security
     def set_current_price_bar(self, current_price_bar, current_price_bar_index):
         self.__current_price_bar = current_price_bar
         self.__current_price_bar_index = current_price_bar_index
 
-    # set Indicators object, which will be used to collect trade markets
-    def set_indicators(self, indicators):
-        self.__indicators = indicators
+    # set values of all indicators at this particular time
+    def set_current_indicators_values(self, indicator_values):
+        self.__current_indicators_values = indicator_values
 
     # buy certain number of shares
     def go_long(self, number_of_shares, comment=None):
@@ -125,8 +126,6 @@ class BackTestBroker(AbstractBroker):
         self.__budget -= self.__commision
 
     def __log_trade(self, transaction_type, shares_amount, comment=None):
-        if self.__indicators is not None:
-            self.__indicators.mark_transaction(transaction_type, self.current_price)
 
         if self.__trade_log is not None:
             self.__trade_log.log_transaction(
@@ -138,4 +137,5 @@ class BackTestBroker(AbstractBroker):
                 cash_spent=shares_amount * self.current_price,
                 cash_after=self.free_cash,
                 position_after=self.current_position,
+                all_indicators_values=self.__current_indicators_values,
                 comment=comment)

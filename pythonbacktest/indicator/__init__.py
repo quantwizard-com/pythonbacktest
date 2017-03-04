@@ -11,5 +11,6 @@ from .extremumfinder import ExtremumFinder
 from .minmaxtracker import MinMaxTracker
 from .sma import SMA
 from .stdindicator import STD
+from .varianceindicator import VAR
 from .zerofinder import ZeroFinder
 

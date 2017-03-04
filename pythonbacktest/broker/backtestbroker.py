@@ -39,8 +39,7 @@ class BackTestBroker(AbstractBroker):
         self.__check_current_price()
 
         # update average price per share
-        self.__avg_price_per_share = \
-            (self.__avg_price_per_share * self.__position + number_of_shares * self.current_price) / (self.__position + number_of_shares)
+        self.__avg_price_per_share = 0
 
         self.__position += number_of_shares
         self.__budget -= number_of_shares * self.current_price

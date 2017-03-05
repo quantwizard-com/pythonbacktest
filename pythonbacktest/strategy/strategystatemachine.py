@@ -26,6 +26,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
         self.__is_last_pricebar = False
         self.__switch_new_state_name = None
         self.__current_price_bar_index = None
+        self.__is_all_indicators_set = False
 
         # current state parameters, to be used by the state; it's reset once the state is switched
         self.__custom_state_params = {}
@@ -108,6 +109,13 @@ class StrategyStateMachine(AbstractTradingStrategy):
             # recall handler for the new state AFTER switching
             self.__pass_price_bar_downstream(price_bar, price_bar_index, indicators_snapshot, latest_indicators_values, broker)
 
+        # set flag indicating if all indicator values are set
+        self.__is_all_indicators_set = True
+        for key, value in  self.__current_latest_indicators_values.iteritems():
+            self.__is_all_indicators_set = value is not None
+            if not self.__is_all_indicators_set:
+                break
+
     def __call_state_handler(self, broker):
         state_handling_func = self.__states_map[self.__current_state_name]
 
@@ -156,6 +164,10 @@ class StrategyStateMachine(AbstractTradingStrategy):
     @property
     def is_last_pricebar(self):
         return self.__is_last_pricebar
+
+    @property
+    def is_all_indicators_set(self):
+        return self.__is_all_indicators_set
 
 
 

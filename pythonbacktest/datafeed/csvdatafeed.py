@@ -34,7 +34,7 @@ class CSVDataFeed(adf.AbstractDataFeed):
         price_bars = []
         current_date = None
 
-        with open(source_file, 'rb') as source_file:
+        with open(source_file, 'rt') as source_file:
             data_reader = csv.reader(source_file, delimiter=',')
 
             first_row = True

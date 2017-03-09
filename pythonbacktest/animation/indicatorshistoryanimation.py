@@ -66,12 +66,12 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
     def _init_animation(self):
         for axis_data in self.__all_axes_plots:
-            for indicator_name, plot in axis_data['plots'].iteritems():
+            for indicator_name, plot in axis_data['plots'].items():
                 plot.set_data([], [])
                 yield plot
 
     def _animate_callback(self, animation_frame_index):
-        single_snapshot = self.__indicator_snapshot[animation_frame_index + self.__data_range_start]
+        single_snapshot = list(self.__indicator_snapshot)[animation_frame_index + self.__data_range_start]
 
         snapshot_data = single_snapshot[1].snapshot_data
 
@@ -91,7 +91,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
             max_x_data = None
 
             # draw individual indicators
-            for indicator_name, plot in plots_per_axis.iteritems():
+            for indicator_name, plot in plots_per_axis.items():
                 snapshot_data_per_indicator = snapshot_data[indicator_name]
 
                 x_data, y_data = self.__pack_data_with_index(snapshot_data_per_indicator)
@@ -109,7 +109,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
                 yield plot
 
             # draw transactions
-            for transaction_name, plot in markers_per_axis.iteritems():
+            for transaction_name, plot in markers_per_axis.items():
                 y_average = None
                 if not close_indicator_in_data:
                     # we don't have close data, so we have to replace marker y with average between ymin and ymax
@@ -215,12 +215,12 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
 
         # get go through all indicators accross all timestamps to find the maximum y value
         # limit data based on the datarange
-        for timestamp, indicator_snapshot in indicator_snapshots[self.__data_range_start:self.__data_range_end]:
+        for timestamp, indicator_snapshot in list(indicator_snapshots)[self.__data_range_start:self.__data_range_end]:
 
             all_y_min_values_per_snapshot = []
             all_y_max_values_per_snapshot = []
 
-            for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.iteritems():
+            for indicator_name, snapshot_all_values in indicator_snapshot.snapshot_data.items():
 
                 if indicator_name in indicators or not indicators:
                     values_filtered_none = [t for t in snapshot_all_values[self.__data_range_start:self.__data_range_end] if t is not None]

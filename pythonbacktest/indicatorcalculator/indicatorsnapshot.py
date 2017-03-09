@@ -17,7 +17,7 @@ class IndicatorsSnapshot(object):
                              % (str(self.___snapshots_timestamp), str(timestamp)))
 
         # check of there're data already saved for this indicator name
-        if self.__snapshot_data.has_key(indicator_name):
+        if indicator_name in self.__snapshot_data:
             raise ValueError("There's already snapshot data for indicator: %s, timestamp: %s"
                              % (indicator_name, str(timestamp)))
 

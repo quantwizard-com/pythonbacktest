@@ -1,5 +1,5 @@
 from . import AbstractIndicator
-from Queue import Queue
+import queue as queue
 
 
 # delay input data by the given number of cycles
@@ -44,7 +44,7 @@ class DataDelay(AbstractIndicator):
         self.__all_results.append(result)
 
     def __initiate_data(self):
-        self.__delay_queue = Queue(maxsize=0)
+        self.__delay_queue = queue.Queue(maxsize=0)
 
         self.__latest_result = None
         self.__all_results = []

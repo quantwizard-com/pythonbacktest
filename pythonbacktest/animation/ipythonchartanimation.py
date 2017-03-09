@@ -2,6 +2,7 @@ from IPython.display import HTML, display
 from tempfile import NamedTemporaryFile
 from matplotlib import pyplot as plt
 from matplotlib import animation
+import base64
 
 import abc
 
@@ -21,8 +22,8 @@ class IPythonChartAnimation(object):
         if not hasattr(animation, '_encoded_video'):
             with NamedTemporaryFile(suffix='.mp4') as f:
                 animation.save(f.name, fps=fps, extra_args=['-vcodec', 'libx264'])
-                video = open(f.name, "rb").read()
-            animation._encoded_video = video.encode("base64")
+                video = open(f.name, "rb")
+            animation._encoded_video = base64.b64encode(video.read())
 
         return self.VIDEO_TAG.format(animation._encoded_video)
 

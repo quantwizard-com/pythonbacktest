@@ -42,7 +42,7 @@ class IndicatorsCalculator(object):
             if 'passalldata' not in record:
                 record['passalldata'] = False
 
-            if indicator_name in self.__all_indicators.iteritems():
+            if indicator_name in self.__all_indicators.items():
                 raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
 
             if source_name is None or implementation is None:
@@ -68,7 +68,7 @@ class IndicatorsCalculator(object):
         indicators_snapshot = IndicatorsSnapshot(timestamp)
 
         # move through all listed indicators and calculate all of those
-        for indicator_name, indicator_record in self.__all_indicators.iteritems():
+        for indicator_name, indicator_record in self.__all_indicators.items():
 
             implementation = indicator_record['implementation']
             passalldata = indicator_record['passalldata']
@@ -104,7 +104,7 @@ class IndicatorsCalculator(object):
                         "high": price_bar.high, "low": price_bar.low,
                         "volume": price_bar.volume}
 
-        for key, value in field_values.iteritems():
+        for key, value in field_values.items():
             # these are all static values, so the only impact here is recording new values
             implementation = self.__all_indicators[key]['implementation']
             implementation.on_new_upstream_value(value)
@@ -149,5 +149,5 @@ class IndicatorsCalculator(object):
         return source_results
 
     def __reset_all_implementations(self):
-        for indicator_name, indicator_record in self.__all_indicators.iteritems():
+        for indicator_name, indicator_record in self.__all_indicators.items():
             indicator_record['implementation'].reset()

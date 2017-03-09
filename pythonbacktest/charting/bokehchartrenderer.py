@@ -139,7 +139,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __add_trade_log_to_chart(self, target_chart, average_value, set_markers_at_average):
 
         if self.trade_transactions is not None:
-            for transaction_name, transaction_data in self.trade_transactions.iteritems():
+            for transaction_name, transaction_data in self.trade_transactions.items():
 
                 for price_bar_index, transaction_price_per_share in transaction_data:
                     y_data = average_value if set_markers_at_average else transaction_price_per_share
@@ -182,8 +182,8 @@ class BokehChartRenderer(AbstractChartRenderer):
 
             return numpy.mean(y_not_none), min(y_not_none), max(y_not_none)
         except:
-            print len(indicator_data)
-            print indicator_data
+            print(len(indicator_data))
+            print(indicator_data)
             return 0
 
     def __generate_chart_title(self, name_color_collection):

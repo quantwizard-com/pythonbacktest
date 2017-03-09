@@ -36,7 +36,7 @@ class BasicBackTestEngine(AbstractBackTestEngine):
     def __get_latest_values_for_indicators_snapshot(self, snapshot_data):
         result = {}
 
-        for indicator_name, indicator_values in snapshot_data.iteritems():
+        for indicator_name, indicator_values in snapshot_data.items():
             result[indicator_name] = indicator_values[-1]
 
         return result

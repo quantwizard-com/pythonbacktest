@@ -1,6 +1,4 @@
 from . import *
-import itertools
-
 
 class DataDifference(AbstractIndicator):
 
@@ -49,7 +47,7 @@ class DataDifference(AbstractIndicator):
 
     def __recalculate_differences(self):
         self.__output_data = [self.__calculate_single_difference(param1, param2)
-                              for param1, param2 in itertools.izip(self.__input_data_1, self.__input_data_2)]
+                              for param1, param2 in zip(self.__input_data_1, self.__input_data_2)]
 
     def __calculate_single_difference(self, param1, param2):
         return param1 - param2 if param1 is not None and param2 is not None else None

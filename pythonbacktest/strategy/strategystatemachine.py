@@ -111,7 +111,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
 
         # set flag indicating if all indicator values are set
         self.__is_all_indicators_set = True
-        for key, value in  self.__current_latest_indicators_values.iteritems():
+        for key, value in  self.__current_latest_indicators_values.items():
             self.__is_all_indicators_set = value is not None
             if not self.__is_all_indicators_set:
                 break

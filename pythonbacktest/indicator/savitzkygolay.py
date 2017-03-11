@@ -4,17 +4,20 @@ from scipy.signal import savgol_filter
 
 class SavitzkyGolay(AbstractIndicator):
 
-    def __init__(self, window_size, polyorder, level=1):
+    def __init__(self, window_size, polyorder, level=1, calculate_buffer_size=-1):
         """
         Constructor
         :param window_size: Windows size
         :param polyorder: Polyorder
         :param level: How many times Savitzky-Golay should be run on the given set of data. 1 by default.
+        :param calculate_buffer_size: If set, SavGol will be calculated on last 'calculate_buffer_size'
+               or 'window_size' elements in the buffer - whichever is larger
         """
         AbstractIndicator.__init__(self)
 
         self.__window_size = window_size
         self.__polyorder = polyorder
+        self.__calculate_buffer_size = calculate_buffer_size
 
         if level < 1:
             raise ValueError("level cannot be less than 1")
@@ -69,9 +72,21 @@ class SavitzkyGolay(AbstractIndicator):
         # set temp_storage to non-none elements only
         temp_storage = self.__data_storage[none_count:]
 
-        if len(temp_storage) >= self.__window_size:
-            for i in range(0, self.__level):
-                temp_storage = savgol_filter(temp_storage, self.__window_size, self.__polyorder).tolist()
+        window_size = self.__window_size
+        calculate_buffer_size = self.__calculate_buffer_size
+
+        if len(temp_storage) >= window_size:
+            passive_data = []
+            if len(temp_storage) >= calculate_buffer_size > 0:
+                passive_data = temp_storage[:-calculate_buffer_size]
+                temp_storage = temp_storage[-calculate_buffer_size:]
+
+            # depending on the level calculate Savgol multiple times recursively
+            for level_count in range(0, self.__level):
+                print(len(temp_storage))
+                temp_storage = savgol_filter(temp_storage, window_size, self.__polyorder).tolist()
+
+            self.__all_results.extend(passive_data)
             self.__all_results.extend(temp_storage)
         else:
             self.__all_results.extend([None] * len(temp_storage))

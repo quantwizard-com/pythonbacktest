@@ -2,13 +2,14 @@ from pythonbacktest.indicatorcalculator import IndicatorHistory
 from pythonbacktest.indicatorcalculator import IndicatorsSnapshot
 from pythonbacktest.indicator.staticvalue import StaticValue
 from collections import OrderedDict
+import time
 
 
 class IndicatorsCalculator(object):
 
     ALL_STATIC_INDICATORS = ["timestamp", "open", "close", "high", "low", "volume"]
 
-    def __init__(self):
+    def __init__(self, performance_monitor=None):
         """
         Constructor with copying functionality
         :type indicators_to_copy: Indicators
@@ -19,6 +20,8 @@ class IndicatorsCalculator(object):
         # number of processed bars should be consistent with number of results per each indicator
         # so this counter is used primarily to check on how individual indicators behave
         self.__price_bars_counter = 0
+
+        self.__performance_monitor = performance_monitor
 
         # set static values for price bar values
         for price_bar_field in self.ALL_STATIC_INDICATORS:
@@ -75,14 +78,17 @@ class IndicatorsCalculator(object):
             source_indicator_names = indicator_record['source']
             if source_indicator_names is not None:
 
+                # get data from up-stream
                 if passalldata:
-                    all_results_from_source = self.__get_all_results(source_indicator_names)
-                    implementation.on_new_upstream_value(*all_results_from_source)
-                    passed_data = all_results_from_source
+                    passed_data = self.__get_all_results(source_indicator_names)
                 else:
-                    current_value_at_source = self.__get_result(source_indicator_names)
-                    implementation.on_new_upstream_value(*current_value_at_source)
-                    passed_data = current_value_at_source
+                    passed_data = self.__get_result(source_indicator_names)
+
+                # pass data to downstream
+                execution_start_time = time.time()
+                implementation.on_new_upstream_value(*passed_data)
+                if self.__performance_monitor:
+                    self.__performance_monitor.report_execution_time(indicator_name, time.time() - execution_start_time)
 
                 # once indicator is updated, number of results
                 all_results_count = len(implementation.all_result)

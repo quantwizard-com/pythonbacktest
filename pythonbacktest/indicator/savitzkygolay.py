@@ -83,7 +83,6 @@ class SavitzkyGolay(AbstractIndicator):
 
             # depending on the level calculate Savgol multiple times recursively
             for level_count in range(0, self.__level):
-                print(len(temp_storage))
                 temp_storage = savgol_filter(temp_storage, window_size, self.__polyorder).tolist()
 
             self.__all_results.extend(passive_data)

@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 class IndicatorsCalculatorPerfMonitor(object):
 
@@ -15,4 +15,8 @@ class IndicatorsCalculatorPerfMonitor(object):
     @property
     def performance_stats(self):
         for key, value in self.__performance_data.items():
-            yield key, (numpy.mean(value), numpy.min(value), numpy.max(value))
+            yield key, (np.mean(value), np.min(value), np.max(value), np.median(value), np.std(value))
+
+    @property
+    def performance_data(self):
+        return self.__performance_data

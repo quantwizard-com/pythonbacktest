@@ -4,7 +4,7 @@ from scipy.signal import savgol_filter
 
 class SavitzkyGolay(AbstractIndicator):
 
-    def __init__(self, window_size, polyorder, level=1, calculate_buffer_size=-1):
+    def __init__(self, window_size, polyorder, level=1, calculate_buffer_size=-1, keep_last_results_only=False):
         """
         Constructor
         :param window_size: Windows size
@@ -12,12 +12,17 @@ class SavitzkyGolay(AbstractIndicator):
         :param level: How many times Savitzky-Golay should be run on the given set of data. 1 by default.
         :param calculate_buffer_size: If set, SavGol will be calculated on last 'calculate_buffer_size'
                or 'window_size' elements in the buffer - whichever is larger
+        :param keep_last_results_only: For each new record comming calculate savgol, then: take last result from
+                __all_results and save it to __last_results
+                WARNING: this will work only when this indicator consumes
+                only the latest result from the upstream indicator
         """
         AbstractIndicator.__init__(self)
 
         self.__window_size = window_size
         self.__polyorder = polyorder
         self.__calculate_buffer_size = calculate_buffer_size
+        self.__keep_last_results_only = keep_last_results_only
 
         if level < 1:
             raise ValueError("level cannot be less than 1")
@@ -29,10 +34,14 @@ class SavitzkyGolay(AbstractIndicator):
     def reset(self):
         self.__data_storage = []
         self.__all_results = []
+        self.__last_results = []
 
     @property
     def all_result(self):
-        return self.__all_results
+        if self.__keep_last_results_only:
+            return self.__last_results
+        else:
+            return self.__all_results
 
     @property
     def result(self):
@@ -89,5 +98,8 @@ class SavitzkyGolay(AbstractIndicator):
             self.__all_results.extend(temp_storage)
         else:
             self.__all_results.extend([None] * len(temp_storage))
+
+        # lets store the latest result
+        self.__last_results.append(self.__all_results[-1])
 
 

@@ -16,7 +16,9 @@ class IPythonChartAnimation(object):
                 </video>"""
 
     def __init__(self):
-        pass
+        self.__target_canvas = None
+        self.__number_of_frames = None
+        self.__interval = None
 
     def __anim_to_html(self, animation, fps):
         if not hasattr(animation, '_encoded_video'):
@@ -47,6 +49,10 @@ class IPythonChartAnimation(object):
     def target_canvas(self):
         return self.__target_canvas
 
+    @target_canvas.setter
+    def target_canvas(self, canvas):
+        self.__target_canvas = canvas
+
     @property
     def number_of_frames(self):
         return self.__number_of_frames
@@ -58,4 +64,8 @@ class IPythonChartAnimation(object):
     @property
     def interval(self):
         return self.__interval
+
+    @interval.setter
+    def interval(self, inter):
+        self.__interval = inter
 

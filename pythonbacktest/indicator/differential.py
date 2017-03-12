@@ -24,33 +24,39 @@ class Differential(AbstractIndicator):
     def on_new_upstream_value(self, new_value):
 
         # we expect None or array of numbers, which has exactly 'window_size' elements
-        if new_value is None:
-            self.__all_values.append(None)
+        if type(new_value) is list:
+            del self.__all_values[:len(new_value)]
+            self.__all_values.extend(new_value)
+            # ... and recalculate entire differential
+            self.__recalculate_all_diff()
         else:
-            if type(new_value) is list:
-                del self.__all_values[:len(new_value)]
-                self.__all_values.extend(new_value)
-
-                # ... and recalculate entire differential
-                self.__recalculate_all_diff()
-            else:
-                self.__all_values.append(new_value)
-                self.__recalculate_all_diff()
+            self.__all_values.append(new_value)
+            self.__calculate_last_diff()
 
     def __recalculate_all_diff(self):
         self.__all_differential = []
 
         last_value = None
-        diff = None
         for value in self.__all_values:
-
-            if last_value is not None:
-                diff = value - last_value
-
+            diff = self.__calculate_diff(last_value, value)
             self.__all_differential.append(diff)
             last_value = value
-
         self.__last_value = last_value
+
+    def __calculate_last_diff(self):
+        diff = None
+        if len(self.__all_values) > 1:
+            diff = self.__calculate_diff(self.__all_values[-2], self.__all_values[-1])
+        self.__all_differential.append(diff)
+
+
+    @staticmethod
+    def __calculate_diff(previous_value, next_value):
+        diff = None
+        if previous_value is not None and next_value is not None:
+            diff = next_value - previous_value
+
+        return diff
 
 
 

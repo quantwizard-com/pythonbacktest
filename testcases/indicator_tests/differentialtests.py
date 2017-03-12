@@ -3,6 +3,30 @@ from pythonbacktest.indicator import Differential
 
 class DifferentialTests(unittest.TestCase):
 
+    def test_differential_single_value_not_none(self):
+
+        test_data = [1]
+        expected_result = [None]
+
+        indicator = Differential()
+
+        for test_record in test_data:
+            indicator.on_new_upstream_value(test_record)
+
+        self.assertEqual(expected_result, indicator.all_result)
+
+    def test_differential_single_value_none(self):
+
+        test_data = [None]
+        expected_result = [None]
+
+        indicator = Differential()
+
+        for test_record in test_data:
+            indicator.on_new_upstream_value(test_record)
+
+        self.assertEqual(expected_result, indicator.all_result)
+
     def test_differential_individual_values(self):
 
         test_data = [1, 2, 3, 4, 2, 0, -2, -5]
@@ -27,7 +51,7 @@ class DifferentialTests(unittest.TestCase):
 
         self.assertEqual(expected_result, indicator.all_result)
 
-    def test_differential_collection_single_value(self):
+    def test_differential_collection_single_value_not_none(self):
 
         test_data = [1]
         expected_result = [None]
@@ -40,6 +64,18 @@ class DifferentialTests(unittest.TestCase):
         indicator.on_new_upstream_value(test_data)
         self.assertEqual(expected_result, indicator.all_result)
 
+    def test_differential_collection_single_value_none(self):
+
+        test_data = [None]
+        expected_result = [None]
+
+        indicator = Differential()
+
+        indicator.on_new_upstream_value(test_data)
+        self.assertEqual(expected_result, indicator.all_result)
+
+        indicator.on_new_upstream_value(test_data)
+        self.assertEqual(expected_result, indicator.all_result)
 
     def test_differential_collection(self):
 

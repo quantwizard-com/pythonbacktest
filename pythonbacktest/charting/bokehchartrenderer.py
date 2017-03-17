@@ -3,7 +3,7 @@ import numpy
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
-    ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool
+    ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool, SaveTool
 
 
 class BokehChartRenderer(AbstractChartRenderer):
@@ -71,7 +71,7 @@ class BokehChartRenderer(AbstractChartRenderer):
                 ("x", "$x"),
                 ("y", "$y")]
         )
-        return [BoxZoomTool(), BoxSelectTool(), PanTool(), WheelZoomTool(), CrosshairTool(), ResizeTool(), ResetTool(), hover]
+        return [SaveTool(), BoxZoomTool(), BoxSelectTool(), PanTool(), WheelZoomTool(), CrosshairTool(), ResizeTool(), ResetTool(), hover]
 
     def __create_chart(self, x_range=None, title=''):
         newchart = figure(title=title, width=self.chart_width, height=self.chart_height,
@@ -123,7 +123,7 @@ class BokehChartRenderer(AbstractChartRenderer):
             return [data]
 
         # actual split
-        result = [[] for x in xrange(number_of_series_in_data)]
+        result = [[] for x in range(number_of_series_in_data)]
         for record in data:
             if record is None:
                 for result_list in result:

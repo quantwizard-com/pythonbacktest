@@ -34,7 +34,7 @@ class VAR(AbstractIndicator):
 
         if len(self.__data_storage) == self.__window_len:
 
-            # calculate current standard deviation value
+            # calculate current varience value
             current_var = var(self.__data_storage)
             self.__latest_result = current_var
 

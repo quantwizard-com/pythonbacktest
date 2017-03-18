@@ -16,7 +16,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_charts(self, date_to_display):
+    def render_charts(self, date_to_display, sigma_data=None):
         all_charts = []
         first_chart = None
 
@@ -38,6 +38,11 @@ class BokehChartRenderer(AbstractChartRenderer):
 
             min_per_chart = []
             max_per_chart = []
+
+            for indicator_name, color in name_collection:
+                # check if we want to add sigma data for this indicator
+                if sigma_data is not None and indicator_name in sigma_data:
+                    self.__add_sigma_data(new_chart, sigma_data[indicator_name], len(indicator_data))
 
             for indicator_name, color in name_collection:
                 indicator_data = indicators_snapshot.snapshot_data[indicator_name]
@@ -151,6 +156,15 @@ class BokehChartRenderer(AbstractChartRenderer):
 
     def __add_zero_line_to_chart(self, target_chart, data_len):
         target_chart.line([0, data_len], [0, 0], line_color='red', line_width=1)
+
+    def __add_sigma_data(self, target_chart, sigma_data, data_len):
+        mean, sigma_records = sigma_data
+        target_chart.line([0, data_len], [mean, mean], line_color='green', line_width=1)
+
+        for sigma_level, sigmas in sigma_records.items():
+            (std_minus, std_plus), percentage = sigmas
+            target_chart.hbar(y=mean, height=std_plus - std_minus, right=data_len, fill_alpha=0.1, color='#888888')
+        return
 
     def __pack_data_with_index(self, data, y_replacement=None):
 

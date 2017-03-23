@@ -27,7 +27,7 @@ class AllIndicatorsPerTradeDebug(object):
                 for key, value in indicators.iteritems():
                     single_transaction_string = self.__append_string_with_tab(single_transaction_string, value)
 
-            print single_transaction_string
+            print(single_transaction_string)
 
     def __render_header(self, all_transactions, indicators_to_render):
         # set static header fields

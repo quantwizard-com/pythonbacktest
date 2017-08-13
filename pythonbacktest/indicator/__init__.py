@@ -13,5 +13,6 @@ from .minmaxtracker import MinMaxTracker
 from .sma import SMA
 from .stdindicator import STD
 from .savitzkygolay import SavitzkyGolay
+from .trendtracker import TrendTracker
 from .varianceindicator import VAR
 from .zerofinder import ZeroFinder

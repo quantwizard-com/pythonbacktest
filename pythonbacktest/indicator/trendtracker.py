@@ -33,11 +33,8 @@ class TrendTracker(AbstractIndicator):
 
         previous_numerical_record = None
         previous_numerical_record_index = None
-        local_minimum = None
-        local_maximum = None
         looking_for_minimum = None
         looking_for_maximum = None
-        first_record = True
         current_index = 0
 
         all_results = []
@@ -71,7 +68,5 @@ class TrendTracker(AbstractIndicator):
                 previous_numerical_record_index = current_index
 
             all_results.append((None, None))
-
             current_index += 1
-
         return all_results

@@ -57,6 +57,18 @@ class TrendTrackerTests(unittest.TestCase):
 
         self.assertEqual(expected_result, actual_result)
 
+    def test_single_resistance_point_with_a_few_constants(self):
+        test_data = [3, 3, 5, 5, 4, 3, 3]
+        expected_result = [(None, None), (None, None), (None, None), (None, 5), (None, None), (None, None), (None, None)]
+
+        trend_tracker = TrendTracker()
+        trend_tracker.on_new_upstream_value(test_data)
+
+        actual_result = trend_tracker.all_result
+
+        self.assertEqual(expected_result, actual_result)
+
+
     def test_resistance_then_support(self):
         test_data = [3, 4, 5, 4, 3, 2, 1, 2, 3, 4]
         expected_result = [

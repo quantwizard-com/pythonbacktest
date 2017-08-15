@@ -1,5 +1,6 @@
 from . import *
 import numpy
+import sys
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
@@ -191,18 +192,29 @@ class BokehChartRenderer(AbstractChartRenderer):
 
     def __average_indicator_data(self, indicator_data):
 
-        try:
-            y_not_none = [t for t in indicator_data if t is not None]
+        y_not_none = [t for t in [self.__average_single_y(y) for y in indicator_data] if t is not None]
 
-            return numpy.mean(y_not_none), min(y_not_none), max(y_not_none)
-        except:
-            print(len(indicator_data))
-            print(indicator_data)
-            return 0
+        return numpy.mean(y_not_none), min(y_not_none), max(y_not_none)
+
+    def __average_single_y(self, y):
+        """
+        In some cases y may consists of tumple, in which case that tuple has to be averaged
+        :return: Averaged y
+        """
+        if type(y) is tuple:
+            y_not_none = [t for t in list(y) if t is not None]
+            if y_not_none:
+                return numpy.mean(y_not_none)
+            else:
+                return None
+        else:
+            return y
 
     def __generate_chart_title(self, name_color_collection):
         indicator_names = [t[0] for t in name_color_collection]
         return ', '.join(indicator_names)
+
+
 
 
 

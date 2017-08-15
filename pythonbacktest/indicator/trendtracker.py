@@ -28,10 +28,18 @@ class TrendTracker(AbstractIndicator):
         return self.__all_results
 
     def __recalculate_all_result(self):
-        resistance_data = self.__calculate_resistance(self.__all_input_data)
-        support_data = self.__calculate_support(self.__all_input_data)
 
-        self.__all_results = list(zip(support_data,resistance_data))
+        support_data = self.__all_input_data
+        resistance_data = self.__all_input_data
+        current_level = self.__level
+
+        while current_level > 0:
+            resistance_data = self.__calculate_resistance(resistance_data)
+            support_data = self.__calculate_support(support_data)
+
+            current_level -= 1
+
+        self.__all_results = list(zip(support_data, resistance_data))
 
     def __calculate_support(self, input_data):
         previous_numerical_record = None
@@ -62,7 +70,6 @@ class TrendTracker(AbstractIndicator):
         return all_results
 
     def __calculate_resistance(self, input_data):
-
         previous_numerical_record = None
         previous_numerical_record_index = None
         looking_for_maximum = None

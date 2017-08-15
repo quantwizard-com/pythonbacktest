@@ -2,7 +2,8 @@ from . import AbstractIndicator
 import decimal
 
 class TrendTracker(AbstractIndicator):
-    def __init__(self):
+    def __init__(self, level=1):
+        self.__level = level
         self.reset()
 
     def reset(self):
@@ -27,46 +28,65 @@ class TrendTracker(AbstractIndicator):
         return self.__all_results
 
     def __recalculate_all_result(self):
-        self.__all_results = self.__recalculate_single_serie_result()
+        resistance_data = self.__calculate_resistance(self.__all_input_data)
+        support_data = self.__calculate_support(self.__all_input_data)
 
-    def __recalculate_single_serie_result(self):
+        self.__all_results = list(zip(support_data,resistance_data))
 
+    def __calculate_support(self, input_data):
         previous_numerical_record = None
         previous_numerical_record_index = None
         looking_for_minimum = None
-        looking_for_maximum = None
         current_index = 0
 
         all_results = []
 
-        for single_record in self.__all_input_data:
+        for single_record in input_data:
             if single_record is not None:
                 if previous_numerical_record is not None:
                     if single_record > previous_numerical_record:
                         if looking_for_minimum:
                             #we've hit a local minimum
-                            all_results[previous_numerical_record_index] = (previous_numerical_record, None)
-
-                            looking_for_maximum = True
+                            all_results[previous_numerical_record_index] = previous_numerical_record
                             looking_for_minimum = False
 
-                        if looking_for_maximum is None:
-                            looking_for_maximum = True
-
                     if single_record < previous_numerical_record:
-                        if looking_for_maximum:
-                            #we've hit a local maximum
-                            all_results[previous_numerical_record_index] = (None, previous_numerical_record)
-
-                            looking_for_maximum = False
-                            looking_for_minimum = True
-
-                        if looking_for_minimum is None:
+                        if not looking_for_minimum:
                             looking_for_minimum = True
 
                 previous_numerical_record = single_record
                 previous_numerical_record_index = current_index
 
-            all_results.append((None, None))
+            all_results.append(None)
+            current_index += 1
+        return all_results
+
+    def __calculate_resistance(self, input_data):
+
+        previous_numerical_record = None
+        previous_numerical_record_index = None
+        looking_for_maximum = None
+        current_index = 0
+
+        all_results = []
+
+        for single_record in input_data:
+            if single_record is not None:
+                if previous_numerical_record is not None:
+                    if single_record > previous_numerical_record:
+                        if not looking_for_maximum:
+                            looking_for_maximum = True
+
+                    if single_record < previous_numerical_record:
+                        if looking_for_maximum:
+                            #we've hit a local maximum
+                            all_results[previous_numerical_record_index] = previous_numerical_record
+
+                            looking_for_maximum = False
+
+                previous_numerical_record = single_record
+                previous_numerical_record_index = current_index
+
+            all_results.append(None)
             current_index += 1
         return all_results

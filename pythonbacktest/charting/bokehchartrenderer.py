@@ -181,10 +181,11 @@ class BokehChartRenderer(AbstractChartRenderer):
         # 2. assign index (0-based to each record)
         # 3. filter-out records AND corresponding index for records = None
         for record in data:
-            result_x.append(current_x)
+            if record is not None:
+                result_x.append(current_x)
 
-            current_y = record if y_replacement is None else y_replacement if record is not None else None
-            result_y.append(current_y if current_y is not None else numpy.nan)
+                current_y = record if y_replacement is None else y_replacement
+                result_y.append(current_y)
 
             current_x += 1
 

@@ -90,21 +90,10 @@ class BokehChartRenderer(AbstractChartRenderer):
         return newchart
 
     def __add_data_to_chart(self, target_chart, data_collection, chartparams):
-
         for data in self.__split_data_into_lists(data_collection):
             x_data, y_data = self.__pack_data_with_index(data)
 
-            # check of we have tupple of values
-            if isinstance(y_data, tuple):
-                y_data = list(y_data)
-            else:
-                y_data = [y_data]
-
-            for y_record in y_data:
-                if y_record is None:
-                    raise ValueError("y_record is None for some reason...")
-
-                target_chart.line(x_data, y_record, **chartparams)
+            target_chart.line(x_data, y_data, **chartparams)
 
     # chart renderer may consume data consisting of multiple series, but which should be redered on single chart
     # example: minmax tracker, which tracks minimum and maximum values, thus consists of 2 series

@@ -229,11 +229,11 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
                     # some values may be tuples, so extract individual values and calculate minimum
                     for value in values_filtered_none:
                         if type(value) == tuple:
-                            flat_values.extend(value)
+                            flat_values.extend([t for t in value if t is not None])
                         else:
                             flat_values.append(value)
 
-                    if len(values_filtered_none) > 0:
+                    if len(flat_values) > 0:
                         all_y_min_values.append(min(flat_values))
                         all_y_max_values.append(max(flat_values))
 
@@ -289,11 +289,13 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
         for count in range(0, tuple_len):
 
             current_x = 0
+
             for record in data:
                 if is_tuple:
                     value = numpy.nan if (record is None or record[count] is None)\
                         else y_replacement if y_replacement is not None\
                         else record[count]
+                    print(value)
                 else:
                     value = numpy.nan if (record is None or record is None) \
                         else y_replacement if y_replacement is not None \

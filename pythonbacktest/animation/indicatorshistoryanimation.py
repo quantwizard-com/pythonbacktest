@@ -295,7 +295,6 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
                     value = numpy.nan if (record is None or record[count] is None)\
                         else y_replacement if y_replacement is not None\
                         else record[count]
-                    print(value)
                 else:
                     value = numpy.nan if (record is None or record is None) \
                         else y_replacement if y_replacement is not None \

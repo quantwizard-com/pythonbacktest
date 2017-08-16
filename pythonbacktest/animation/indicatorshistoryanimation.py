@@ -90,7 +90,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
             close_indicator_in_data = False
 
             return IndicatorHistoryDataFrameRenderer.render_indicator_data(
-                plots_per_axis, snapshot_data, ymin, ymax, progress_plot)
+                plots_per_axis, snapshot_data, ymin, ymax, progress_plot, xmin + animation_frame_index)
 
             # draw transactions
             #for transaction_name, plot in markers_per_axis.items():

@@ -4,4 +4,5 @@
 
 from .ipythonchartanimation import IPythonChartAnimation
 from .indicatorshistoryanimation import IndicatorsHistoryAnimation
+from .indicatorhistorydataframerenderer import IndicatorHistoryDataFrameRenderer
 

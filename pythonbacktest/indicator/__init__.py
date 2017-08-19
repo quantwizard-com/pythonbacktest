@@ -14,5 +14,6 @@ from .sma import SMA
 from .stdindicator import STD
 from .savitzkygolay import SavitzkyGolay
 from .trendtracker import TrendTracker
+from .trendtrackerextremesonly import TrendTrackerExtremesOnly
 from .varianceindicator import VAR
 from .zerofinder import ZeroFinder

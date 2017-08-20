@@ -27,7 +27,14 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
         self.__data_range_end = None
         self.__points_per_frame = None
 
-    def render_animation(self, date, canvas_size, interval=20, fps=10, data_range=(0, None)):
+    def render_animation(self, date, canvas_size, interval=200, data_range=(0, None)):
+        """
+        Render the animation for the given data snapshot
+        :param date: Date for the data to be extracted from the snapshot
+        :param canvas_size: Size of the canvas
+        :param interval: Pause between individual frames of the animation (in ms); 200ms (0.2 s) by default
+        :param data_range: Data range from each snapshot to be extracted. Whole range by default.
+        """
 
         # calculate number of frames
         self.__indicator_snapshot = self.indicators_history.get_indicator_history_for_day(date)
@@ -62,8 +69,7 @@ class IndicatorsHistoryAnimation(IPythonChartAnimation, AbstractDataVisualizatio
                               init_animation_callback=self._init_animation,
                               target_canvas=target_canvas,
                               frames=number_of_frames,
-                              interval=interval,
-                              fps=fps)
+                              interval=interval)
 
     def _init_animation(self):
         for axis_data in self.__all_axes_plots:

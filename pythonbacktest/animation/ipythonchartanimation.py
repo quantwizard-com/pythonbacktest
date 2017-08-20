@@ -22,7 +22,7 @@ class IPythonChartAnimation(object):
         raise NotImplementedError()
 
     def _start_animation(self, animation_callback, init_animation_callback,
-                         target_canvas, frames=100, interval=20, fps=10):
+                         target_canvas, frames=100, interval=200):
 
         anim = animation.FuncAnimation(target_canvas, animation_callback,
                                                    init_func=init_animation_callback,

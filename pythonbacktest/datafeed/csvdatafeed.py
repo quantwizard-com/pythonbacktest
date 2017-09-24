@@ -8,7 +8,19 @@ from . import abstractdatafeed as adf, pricebar as pb, tradingdaydata as tdd
 
 class CSVDataFeed(adf.AbstractDataFeed):
     def __init__(self):
+        # data feed data storage - dictionary
+        # key - date of the data
+        # value - collection of TradingDayData ordered by date for the given day
+        self.__data = {}
+        self.__data_view_range = (0, None)
+
         adf.AbstractDataFeed.__init__(self)
+
+    def get_prices_bars_for_day(self, trading_day):
+        if self.__data_view_range[1] is None:
+            return self.__data[trading_day].price_bars[self.__data_view_range[0]:]
+        else:
+            return self.__data[trading_day].price_bars[self.__data_view_range[0]:self.__data_view_range[1] + 1]
 
     def load_data(self, source_location):
 
@@ -19,7 +31,7 @@ class CSVDataFeed(adf.AbstractDataFeed):
             self.load_data_from_file(source_location)
 
         else:
-            raise "Source location doesn't exist"
+            raise Exception("Source location doesn't exist")
 
     def load_data_from_directory(self, source_directory):
 
@@ -58,7 +70,7 @@ class CSVDataFeed(adf.AbstractDataFeed):
                 first_row = False
 
         # now: add downloaded bars to the storage
-        if current_date not in self.all_data:
-            self.all_data[current_date] = tdd.TradingDayData(price_bars, current_date)
+        if current_date not in self.__data:
+            self.__data[current_date] = tdd.TradingDayData(price_bars, current_date)
         else:
             raise "There's already data for given date: " + current_date

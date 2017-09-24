@@ -7,6 +7,7 @@ from . import abstractdatafeed as adf, pricebar as pb, tradingdaydata as tdd
 
 
 class CSVDataFeed(adf.AbstractDataFeed):
+
     def __init__(self):
         # data feed data storage - dictionary
         # key - date of the data
@@ -21,6 +22,10 @@ class CSVDataFeed(adf.AbstractDataFeed):
             return self.__data[trading_day].price_bars[self.__data_view_range[0]:]
         else:
             return self.__data[trading_day].price_bars[self.__data_view_range[0]:self.__data_view_range[1] + 1]
+
+    def get_prices_bars_for_day_for_symbol(self, trading_day, symbol_name):
+        # we don't make distinction between symbols when data is loaded from the single folder
+        raise Exception("Not implemented method!!!")
 
     def load_data(self, source_location):
 

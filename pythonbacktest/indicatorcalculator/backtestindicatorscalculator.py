@@ -15,20 +15,25 @@ class BacktestIndicatorsCalculator(object):
         :return:
         """
 
-        # make sure all indicator implementations are 'clear'
-        indicators_calculator.reset()
-
         # let's extract single date and test price bars for that date
         price_bars_per_date = data_feed.get_prices_bars_for_day(date)
 
         if price_bars_per_date is None:
             raise "Can't extract data for date: " + date
 
+        return self.run_computation_for_data(price_bars_per_date, indicators_calculator)
+
+    def run_computation_for_data(self, data, indicators_calculator):
+
+        # make sure all indicator implementations are 'clear'
+        indicators_calculator.reset()
+
         indicators_history = IndicatorHistory()
 
-        for price_bar in price_bars_per_date:
+        for price_bar in data:
             # calculate status of the indicators, get snapshot and save it to the history
             indicator_snapshot = indicators_calculator.new_price_bar(price_bar)
             indicators_history.store_snapshot(price_bar.timestamp, indicator_snapshot)
 
         return indicators_history
+

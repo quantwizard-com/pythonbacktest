@@ -14,5 +14,5 @@ class AbstractDataFeed(object):
     # get data for single day only
     # return price bars for the given date for the given symbol
     @abstractmethod
-    def get_prices_bars_for_day(self, trading_day, security_symbol):
+    def get_prices_bars_for_day_for_symbol(self, trading_day, security_symbol):
         raise Exception("Not implemented method!!!")

@@ -21,11 +21,7 @@ class DBDataFeed(AbstractDataFeed):
     def get_prices_bars_for_day_for_symbol(self, trading_day, security_symbol):
         price_bars = []
 
-        connection = mysql.connector.connect(
-            host=self.__db_host,
-            user=self.__db_user_name,
-            password=self.__db_password,
-            database=self.__db_database_name)
+        connection = self.__create_connection()
 
         query = "select pb.Date, pb.Open, pb.Close, pb.High, pb.Low, pb.Volume " \
                 "from PriceBars pb, SecurityContracts sc " \
@@ -51,3 +47,39 @@ class DBDataFeed(AbstractDataFeed):
         connection.close()
 
         return price_bars
+
+    def get_dates_for_symbol_min_data(self, symbol, min_data=1):
+        """
+        Get dates for symbol where number of data points is at least min_data
+        :param symbol: Symbol of the security
+        :param min_data: Minimum number of datapoints
+        :return: List of dates
+        """
+
+        dates = []
+
+        connection = self.__create_connection()
+
+        query = "select date(pb.Date) as single_date " \
+                "from PriceBars pb, SecurityContracts sc where pb.SecurityContractID = sc.ID " \
+                "and sc.ContractTickerSymbol = %s " \
+                "group by single_date " \
+                "having count(pb.ID) >= %s " \
+                "order by single_date asc"
+
+        cursor = connection.cursor()
+        cursor.execute(query, (symbol, min_data))
+
+        for (data_date) in cursor:
+            dates.append(data_date)
+
+        connection.close()
+
+        return dates
+
+    def __create_connection(self):
+        return mysql.connector.connect(
+            host=self.__db_host,
+            user=self.__db_user_name,
+            password=self.__db_password,
+            database=self.__db_database_name)

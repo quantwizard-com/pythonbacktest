@@ -70,7 +70,7 @@ class DBDataFeed(AbstractDataFeed):
         cursor = connection.cursor()
         cursor.execute(query, (symbol, min_data))
 
-        for (data_date) in cursor:
+        for (data_date,) in cursor:
             dates.append(data_date)
 
         connection.close()

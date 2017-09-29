@@ -12,7 +12,7 @@ class AbstractChartRenderer(AbstractDataVisualization):
         self.__chart_height = height
 
     @abc.abstractmethod
-    def render_charts(self, date_to_display):
+    def render_charts(self):
         raise NotImplementedError()
 
     @property

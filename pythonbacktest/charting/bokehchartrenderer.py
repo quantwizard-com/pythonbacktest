@@ -17,7 +17,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_charts(self, date_to_display, sigma_data=None):
+    def render_charts(self, sigma_data=None):
         all_charts = []
         first_chart = None
 
@@ -35,7 +35,7 @@ class BokehChartRenderer(AbstractChartRenderer):
             set_markers_at_average = True
 
             # get last data snapshot for the given day
-            indicators_snapshot = self.indicators_history.get_last_indicator_snapshot_per_day(date_to_display)
+            indicators_snapshot = self.indicators_history.get_last_indicators_snapshot()
 
             min_per_chart = []
             max_per_chart = []

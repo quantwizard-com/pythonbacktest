@@ -1,3 +1,6 @@
+from pythonbacktest.indicatorcalculator import IndicatorHistory
+
+
 class BacktestIndicatorsCalculator(object):
     """
     Class responsible for generating Indicators History for given collection of the input data feed (price bars)

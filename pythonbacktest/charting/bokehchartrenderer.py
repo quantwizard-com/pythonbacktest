@@ -1,6 +1,5 @@
 from . import *
 import numpy
-import sys
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
@@ -77,11 +76,20 @@ class BokehChartRenderer(AbstractChartRenderer):
                 ("x", "$x"),
                 ("y", "$y")]
         )
-        return [SaveTool(), BoxZoomTool(), BoxSelectTool(), PanTool(), WheelZoomTool(), CrosshairTool(), ResizeTool(), ResetTool(), hover]
+        return [SaveTool(),
+                BoxZoomTool(),
+                BoxSelectTool(),
+                PanTool(),
+                WheelZoomTool(),
+                CrosshairTool(),
+                ResetTool(),
+                hover]
 
     def __create_chart(self, x_range=None, title=''):
         newchart = figure(title=title, width=self.chart_width, height=self.chart_height,
-                          tools=self.__create_chart_tools(), toolbar_location=self.CHART_TOOLBAR_LOCATION)
+                          tools=self.__create_chart_tools(),
+                          toolbar_location=self.CHART_TOOLBAR_LOCATION
+                        )
         newchart.grid.grid_line_dash = [4, 2]
 
         if x_range is not None:

@@ -36,7 +36,11 @@ class IndicatorsSnapshot(object):
                 raise ValueError(f"Wrong length of the indicator values. Expected: {self.__records_length}, "
                                  f"got {new_data_lenght}")
 
-        self.__snapshot_data[indicator_name] = list(all_indicator_values)
+        list_all_values = all_indicator_values
+        if not isinstance(all_indicator_values, list):
+            list_all_values = list(all_indicator_values)
+
+        self.__snapshot_data[indicator_name] = list_all_values
 
     @property
     def snapshot_data(self):

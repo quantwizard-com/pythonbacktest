@@ -104,15 +104,14 @@ class IndicatorsCalculator(object):
 
     # update values related to static fields, mainly: price bar fields
     def __update_static_indicators(self, price_bar):
-        field_values = {"timestamp": price_bar.timestamp,
-                        "open": price_bar.open, "close": price_bar.close,
-                        "high": price_bar.high, "low": price_bar.low,
-                        "volume": price_bar.volume}
 
-        for key, value in field_values.items():
-            # these are all static values, so the only impact here is recording new values
-            implementation = self.__all_indicators[key]['implementation']
-            implementation.on_new_upstream_value(value)
+        # these are all static values, so the only impact here is recording new values
+        self.__all_indicators["timestamp"]['implementation'].on_new_upstream_value(price_bar.timestamp)
+        self.__all_indicators["open"]['implementation'].on_new_upstream_value(price_bar.open)
+        self.__all_indicators["close"]['implementation'].on_new_upstream_value(price_bar.close)
+        self.__all_indicators["high"]['implementation'].on_new_upstream_value(price_bar.high)
+        self.__all_indicators["low"]['implementation'].on_new_upstream_value(price_bar.low)
+        self.__all_indicators["volume"]['implementation'].on_new_upstream_value(price_bar.volume)
 
     # get all values for the given indicator
     def get_all_values_for_indicator(self, indicator_name):

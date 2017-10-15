@@ -1,3 +1,5 @@
+import copy
+
 # this class is responsible for keeping snapshot of the current status of the Indicators
 class IndicatorsSnapshot(object):
 
@@ -29,6 +31,8 @@ class IndicatorsSnapshot(object):
                              % (indicator_name, str(timestamp)))
 
         if not self.__snapshot_data:
+            # for first set of data record the length - that will allow us to track
+            # consistency in terms of length for all indicators being snapshots
             self.__records_length = len(all_indicator_values)
         else:
             new_data_lenght = len(all_indicator_values)
@@ -36,9 +40,7 @@ class IndicatorsSnapshot(object):
                 raise ValueError(f"Wrong length of the indicator values. Expected: {self.__records_length}, "
                                  f"got {new_data_lenght}")
 
-        list_all_values = all_indicator_values
-        if not isinstance(all_indicator_values, list):
-            list_all_values = list(all_indicator_values)
+        list_all_values = copy.copy(all_indicator_values)
 
         self.__snapshot_data[indicator_name] = list_all_values
 

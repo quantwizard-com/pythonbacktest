@@ -49,17 +49,17 @@ all_generated_values_count = len(generated_values)
 
 for generated_value in generated_values:
     indicators_map = [
-        # {'name': 'SMA_1', 'source': 'close',
-        # 'implementation': SMA(generated_value['SMA_1']), 'passalldata': False},
-        # {'name': 'SMA_2', 'source': 'close',
-        # 'implementation': SMA(generated_value['SMA_2']), 'passalldata': False}
+         {'name': 'SMA_1', 'source': 'close',
+         'implementation': SMA(generated_value['SMA_1']), 'passalldata': False},
+         {'name': 'SMA_2', 'source': 'close',
+         'implementation': SMA(generated_value['SMA_2']), 'passalldata': False}
     ]
 
     perf_monitor = IndicatorsCalculatorPerfMonitor()
     indicators_history = {}
     for single_date, data in data_loaded_from_db:
         indicators_calculator = IndicatorsCalculator(performance_monitor=perf_monitor)
-        # indicators_calculator.define_indicators_map(indicators_map)
+        indicators_calculator.define_indicators_map(indicators_map)
 
         back_test_indicators_calculator = BacktestIndicatorsCalculator()
         indicators_history[single_date] = back_test_indicators_calculator.run_computation_for_data(data,

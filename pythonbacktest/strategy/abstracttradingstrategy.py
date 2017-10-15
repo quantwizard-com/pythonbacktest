@@ -4,7 +4,7 @@ from pythonbacktest import datafeed
 
 class AbstractTradingStrategy(object):
 
-    @abc.abstractproperty
+    @abc.abstractmethod
     def indicator_map(self):
         raise NotImplementedError()
 

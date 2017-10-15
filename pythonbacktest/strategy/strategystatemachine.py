@@ -31,7 +31,7 @@ class StrategyStateMachine(AbstractTradingStrategy):
         # current state parameters, to be used by the state; it's reset once the state is switched
         self.__custom_state_params = {}
 
-    @abc.abstractproperty
+    @abc.abstractmethod
     def indicator_map(self):
         raise NotImplementedError()
 

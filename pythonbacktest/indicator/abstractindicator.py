@@ -13,13 +13,13 @@ class AbstractIndicator(object):
         raise NotImplementedError()
 
     # get LATEST indicator value (as: latest value)
-    @abc.abstractproperty
+    @abc.abstractmethod
     def result(self):
         raise NotImplementedError()
 
     # return entire collection of results for the given indicator
     # e.g.: for SMA that would be all SMA values for the given input
-    @abc.abstractproperty
+    @abc.abstractmethod
     def all_result(self):
         raise NotImplementedError()
 

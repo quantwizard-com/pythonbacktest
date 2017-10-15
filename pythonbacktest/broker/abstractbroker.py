@@ -33,23 +33,23 @@ class AbstractBroker(object):
         raise NotImplementedError()
 
     # current price of the security
-    @abc.abstractproperty
+    @abc.abstractmethod
     def current_price(self):
         raise NotImplementedError()
 
     # get amount of free money on the account
     # that may also include a debt
-    @abc.abstractproperty
+    @abc.abstractmethod
     def free_cash(self):
         raise NotImplementedError()
 
     # get value of all holdings: cash + portfolio (base of the current price)
-    @abc.abstractproperty
+    @abc.abstractmethod
     def current_value(self):
         raise NotImplementedError()
 
     # number of shares in the portfolio
-    @abc.abstractproperty
+    @abc.abstractmethod
     def current_position(self):
         raise NotImplementedError()
 

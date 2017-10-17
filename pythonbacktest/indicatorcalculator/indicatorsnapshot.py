@@ -20,25 +20,7 @@ class IndicatorsSnapshot(object):
 
     def save_indicator_snapshot(self, timestamp, indicator_name, all_indicator_values):
 
-        # consistency check - saved indicator values must be on the same timestamp
-        if timestamp != self.___snapshots_timestamp:
-            raise ValueError("Indicator snapshot has invalid timestamp. Expected %s, got: %s"
-                             % (str(self.___snapshots_timestamp), str(timestamp)))
-
-        # check of there're data already saved for this indicator name
-        if indicator_name in self.__snapshot_data:
-            raise ValueError("There's already snapshot data for indicator: %s, timestamp: %s"
-                             % (indicator_name, str(timestamp)))
-
-        if not self.__snapshot_data:
-            # for first set of data record the length - that will allow us to track
-            # consistency in terms of length for all indicators being snapshots
-            self.__records_length = len(all_indicator_values)
-        else:
-            new_data_lenght = len(all_indicator_values)
-            if self.__records_length != new_data_lenght:
-                raise ValueError(f"Wrong length of the indicator values. Expected: {self.__records_length}, "
-                                 f"got {new_data_lenght}")
+        self.__assert_input_data(timestamp, indicator_name, all_indicator_values)
 
         list_all_values = copy.copy(all_indicator_values)
 
@@ -67,5 +49,26 @@ class IndicatorsSnapshot(object):
 
             for indicator_values in indicator_values_all:
                 self.__snapshot_data_list.append(dict(zip(indicator_names, indicator_values)))
+
+    def __assert_input_data(self, timestamp, indicator_name, all_indicator_values):
+        # consistency check - saved indicator values must be on the same timestamp
+        if timestamp != self.___snapshots_timestamp:
+            raise ValueError("Indicator snapshot has invalid timestamp. Expected %s, got: %s"
+                             % (str(self.___snapshots_timestamp), str(timestamp)))
+
+        # check of there're data already saved for this indicator name
+        if indicator_name in self.__snapshot_data:
+            raise ValueError("There's already snapshot data for indicator: %s, timestamp: %s"
+                             % (indicator_name, str(timestamp)))
+
+        if not self.__snapshot_data:
+            # for first set of data record the length - that will allow us to track
+            # consistency in terms of length for all indicators being snapshots
+            self.__records_length = len(all_indicator_values)
+        else:
+            new_data_lenght = len(all_indicator_values)
+            if self.__records_length != new_data_lenght:
+                raise ValueError(f"Wrong length of the indicator values. Expected: {self.__records_length}, "
+                                 f"got {new_data_lenght}")
 
 

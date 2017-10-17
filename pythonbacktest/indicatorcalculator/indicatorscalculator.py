@@ -1,6 +1,7 @@
 from pythonbacktest.indicatorcalculator import IndicatorsSnapshot
 from pythonbacktest.indicator.staticvalue import StaticValue
 from collections import OrderedDict
+from .indicatorrecord import IndicatorRecord
 import time
 
 
@@ -41,8 +42,6 @@ class IndicatorsCalculator(object):
             indicator_name = record['name']
             source_name = record['source']
             implementation = record['implementation']
-            if 'passalldata' not in record:
-                record['passalldata'] = False
 
             if indicator_name in self.__all_indicators.items():
                 raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
@@ -50,7 +49,11 @@ class IndicatorsCalculator(object):
             if source_name is None or implementation is None:
                 raise ValueError("Either input_name or implementation is null")
 
-            self.__all_indicators[indicator_name] = record
+            indicator_record = IndicatorRecord(indicator_name,
+                                               indicator_source=self.__all_indicators[source_name],
+                                               indicator_implementation=implementation)
+
+            self.__all_indicators[indicator_name] = indicator_record
 
     def reset(self):
         self.__reset_all_implementations()
@@ -72,16 +75,12 @@ class IndicatorsCalculator(object):
         # move through all listed indicators and calculate all of those
         for indicator_name, indicator_record in self.__all_indicators.items():
 
-            implementation = indicator_record['implementation']
-            passalldata = indicator_record['passalldata']
+            implementation = indicator_record.implementation
             source_indicator_names = indicator_record['source']
+
             if source_indicator_names is not None:
 
-                # get data from up-stream
-                if passalldata:
-                    passed_data = self.__get_all_results(source_indicator_names)
-                else:
-                    passed_data = self.__get_result(source_indicator_names)
+                passed_data = self.__get_result(source_indicator_names)
 
                 # pass data to downstream
                 execution_start_time = time.time()
@@ -89,14 +88,7 @@ class IndicatorsCalculator(object):
                 if self.__performance_monitor:
                     self.__performance_monitor.report_execution_time(indicator_name, time.time() - execution_start_time)
 
-                # once indicator is updated, number of results
-                all_results_count = len(implementation.all_result)
-
-                # self-check: number of results on the Indicator MUST BE the same as number of pricebars
-                # passed to this method; this is important to align all indicators with price bars
-                if all_results_count != self.__price_bars_counter:
-                    raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
-                                     % (indicator_name, self.__price_bars_counter, all_results_count, passed_data))
+            self.__assert_all_results_count(implementation.all_result, indicator_name, passed_data)
 
             indicators_snapshot.save_indicator_snapshot(timestamp, indicator_name, implementation.all_result)
 
@@ -122,7 +114,7 @@ class IndicatorsCalculator(object):
     @property
     def indicator_names(self):
         # return names of all collected indicators
-        return self.__all_indicators.keys()
+        return list(self.__all_indicators.keys())
 
     # get current value for the indicator name
     def __getitem__(self, indicator_name):
@@ -155,3 +147,22 @@ class IndicatorsCalculator(object):
     def __reset_all_implementations(self):
         for indicator_name, indicator_record in self.__all_indicators.items():
             indicator_record['implementation'].reset()
+
+    def __assert_all_results_count(self, all_results, indicator_name, passed_data):
+
+        # once indicator is updated, number of results
+        all_results_count = len(all_results)
+
+        # self-check: number of results on the Indicator MUST BE the same as number of pricebars
+        # passed to this method; this is important to align all indicators with price bars
+        if all_results_count != self.__price_bars_counter:
+            raise ValueError("Indicator: %s, expected: %d records, actual: %d, passed data: %s"
+                             % (indicator_name, self.__price_bars_counter, all_results_count, passed_data))
+
+    def __find_source_indicators(self, source_indicators_name):
+
+        if isinstance(source_indicators_name, list):
+            return list(map(lambda name: self.__all_indicators[name], source_indicators_name))
+        else:
+            return [self.__all_indicators[source_indicators_name]]
+

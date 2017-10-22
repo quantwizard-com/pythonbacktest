@@ -1,4 +1,3 @@
-from . import IndicatorsMapIndicatorRecord
 from pythonbacktest.indicator import PriceBarIndicator, StaticValue
 
 

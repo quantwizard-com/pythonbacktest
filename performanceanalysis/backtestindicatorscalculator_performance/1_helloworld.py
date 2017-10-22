@@ -6,7 +6,7 @@ from pythonbacktest.indicatorcalculator import IndicatorsMap
 import random
 
 indicators_map_definition = [
-    {'name': 'SMA', 'sources': 'open', 'implementation': SMA(window_len=50)}
+    {'sources': 'open', 'implementation': SMA(indicator_name='SMA', window_len=50)}
 ]
 
 indicators_map = IndicatorsMap(indicators_map_definition=indicators_map_definition)

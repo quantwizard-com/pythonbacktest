@@ -1,10 +1,14 @@
+from typing import List
+
+from pythonbacktest.indicator import AbstractIndicator
+from pythonbacktest.datafeed import PriceBar
 from pythonbacktest.indicator import PriceBarIndicator, StaticValue
 
 
 class IndicatorsMap(object):
 
     def __init__(self, indicators_map_definition=None):
-        self.__all_indicators = []
+        self.__all_indicators: List[AbstractIndicator] = []
         self.__name_to_indicator_map = {}
         self.__price_bar_indicator = None
 
@@ -29,7 +33,7 @@ class IndicatorsMap(object):
             self.__name_to_indicator_map[indicator_name] = indicator_implementation
             self.__all_indicators.append(indicator_implementation)
 
-    def new_price_bar(self, price_bar):
+    def new_price_bar(self, price_bar: PriceBar):
         self.__price_bar_indicator.inject_new_price_bar(price_bar)
         self.__propagate_new_price_bar_event()
 
@@ -65,7 +69,7 @@ class IndicatorsMap(object):
         return StaticValue(indicator_name=indicator_name,
                            source_indicators=[(self.__price_bar_indicator, indicator_name)])
 
-    def all_indicators(self):
+    def all_indicators(self) -> List[AbstractIndicator]:
         return self.__all_indicators
 
     def __unpack_input_map_record(self, input_record):

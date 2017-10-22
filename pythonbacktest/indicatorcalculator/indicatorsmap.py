@@ -70,12 +70,8 @@ class IndicatorsMap(object):
         return self.__all_indicators
 
     def __unpack_input_map_record(self, input_record):
-        indicator_name = input_record['name']
         source_specs = input_record['sources']
         implementation = input_record['implementation']
-
-        if indicator_name in self.__name_to_indicator_map:
-            raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
 
         if source_specs is None or implementation is None:
             raise ValueError("Either input_name or implementation is None")
@@ -83,7 +79,7 @@ class IndicatorsMap(object):
         if not source_specs:
             raise ValueError("Source specs are not set")
 
-        return indicator_name, source_specs, implementation
+        return implementation.indicator_name, source_specs, implementation
 
     def __source_specs_to_source_implementations(self, source_specs):
 

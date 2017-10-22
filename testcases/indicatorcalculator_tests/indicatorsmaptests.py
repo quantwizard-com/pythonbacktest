@@ -26,7 +26,7 @@ class IndicatorsMapTests(unittest.TestCase):
     def test_simple_map_happy_path_1(self):
 
         indicators_map_definition = [
-            {'name': 'SMA', 'sources': 'open', 'implementation': SMA(indicator_name='SMA', window_len=50)}]
+            {'sources': 'open', 'implementation': SMA(indicator_name='SMA', window_len=50)}]
 
         indicators_map = IndicatorsMap(indicators_map_definition)
 
@@ -52,13 +52,13 @@ class IndicatorsMapTests(unittest.TestCase):
         static_close = StaticValue(indicator_name=indicator_static_close_name)
 
         indicators_map_definition = [
-            {'name': indicator_static_open_from_pricebar_name, 'sources': ('pricebar', 'open'),
+            {'sources': ('pricebar', 'open'),
              'implementation': static_open_from_pricebar},
 
-            {'name': indicator_static_open_name, 'sources': 'open',
+            {'sources': 'open',
              'implementation': static_open},
 
-            {'name': indicator_static_close_name, 'sources': 'close',
+            {'sources': 'close',
              'implementation': static_close},
         ]
 

@@ -7,8 +7,10 @@ class PriceBarIndicator(AbstractIndicator):
     Root of all other indicators; the only one which gets data injected directly
     """
 
-    def __init__(self):
-        AbstractIndicator.__init__(self, source_indicators=None)
+    def __init__(self, indicator_name):
+        AbstractIndicator.__init__(self,
+                                   indicator_name=indicator_name,
+                                   source_indicators=None)
 
         self.__current_pricebar = None
 

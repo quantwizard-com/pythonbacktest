@@ -3,7 +3,12 @@ from abc import ABC, abstractmethod
 
 class AbstractIndicator(ABC):
 
-    def __init__(self, source_indicators=None):
+    def __init__(self, indicator_name, source_indicators=None):
+
+        self.__indicator_name = indicator_name
+
+        if not indicator_name:
+            raise ValueError("Indicator name has to be set.")
 
         # collection of the source indicators specs; each items can be defined in 2 forms
         # - reference to the source indicator
@@ -42,6 +47,10 @@ class AbstractIndicator(ABC):
                 self.__source_indicators_specs = source_indicators
             else:
                 self.__source_indicators_specs = [list]
+
+    @property
+    def indicator_name(self):
+        return self.__indicator_name
 
     @property
     def latest_result(self):
@@ -93,6 +102,8 @@ class AbstractIndicator(ABC):
     def get_latest_data_from_source_indicators(self):
         """
         Download latest records from the source indicators based on the __source_indicators variable
+        Return single value - if there's single source indicator spec
+        or collection - if 2 or more specs
         :return:
         """
         source_indicators_data = []
@@ -108,7 +119,10 @@ class AbstractIndicator(ABC):
 
             source_indicators_data.append(indicator_reference.get_latest_result(string_reference))
 
-        return source_indicators_data
+        if len(source_indicators_data) > 2:
+            return source_indicators_data
+        else:
+            return source_indicators_data[0]
 
     @property
     def source_indicators(self):

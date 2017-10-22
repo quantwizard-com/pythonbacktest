@@ -39,15 +39,15 @@ class IndicatorsMap(object):
             indicator.new_upstream_record()
 
     def __add_static_indicators(self):
-        price_bar_indicator = PriceBarIndicator()
+        price_bar_indicator = PriceBarIndicator(indicator_name="pricebar")
         self.__price_bar_indicator = price_bar_indicator
 
-        timestamp_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'timestamp')])
-        open_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'open')])
-        close_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'close')])
-        high_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'high')])
-        low_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'low')])
-        volume_indicator = StaticValue(source_indicators=[(price_bar_indicator, 'volume')])
+        timestamp_indicator = self.__create_static_indicator('timestamp')
+        open_indicator = self.__create_static_indicator('open')
+        close_indicator = self.__create_static_indicator('close')
+        high_indicator = self.__create_static_indicator('high')
+        low_indicator = self.__create_static_indicator('low')
+        volume_indicator = self.__create_static_indicator('volume')
 
         self.__name_to_indicator_map = {
             'pricebar': price_bar_indicator,
@@ -61,6 +61,10 @@ class IndicatorsMap(object):
 
         self.__all_indicators=[price_bar_indicator, timestamp_indicator, open_indicator,
                                close_indicator, high_indicator, low_indicator, volume_indicator]
+
+    def __create_static_indicator(self, indicator_name):
+        return StaticValue(indicator_name=indicator_name,
+                           source_indicators=[(self.__price_bar_indicator, indicator_name)])
 
     def all_indicators(self):
         return self.__all_indicators
@@ -85,8 +89,8 @@ class IndicatorsMap(object):
 
         source_implementations = []
 
-        # simple case - we have just a single string
-        if isinstance(source_specs, str):
+        # simple case - we have just a single string or a single tuple
+        if isinstance(source_specs, (str, tuple)):
             source_specs = [source_specs]
 
         for source_spec in source_specs:
@@ -107,3 +111,4 @@ class IndicatorsMap(object):
                 indicator_implementation if indicator_string_reference is None
                 else (indicator_implementation, indicator_string_reference))
 
+        return source_implementations

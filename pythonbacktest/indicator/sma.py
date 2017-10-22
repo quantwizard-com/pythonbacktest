@@ -4,8 +4,8 @@ from . import AbstractIndicator
 
 class SMA(AbstractIndicator):
 
-    def __init__(self, window_len, source_indicators):
-        if len(source_indicators) != 1:
+    def __init__(self, window_len, source_indicators=None):
+        if source_indicators is not None and len(source_indicators) != 1:
             raise ValueError("Expecting 1 source indicator only")
 
         AbstractIndicator.__init__(self, source_indicators=source_indicators)
@@ -18,11 +18,10 @@ class SMA(AbstractIndicator):
         self.__temp_data_storage = []
         self.__sum_of_elements = 0
 
-    def __process_new_upstream_record(self):
-        new_value = self.source_indicators[0].latest_result
+    def _process_new_upstream_record(self):
+        new_value = self.get_latest_data_from_source_indicators()
 
         if new_value is None:
-            self.__latest_result = None
             self.all_results.append(None)
             return
 
@@ -33,7 +32,7 @@ class SMA(AbstractIndicator):
 
             # calculate current SMA value
             current_sma = self.__sum_of_elements * 1.0 / self.__window_len
-            self.__latest_result = current_sma
+            self.all_results.append(current_sma)
 
             # reduce sum by the first element on the list
             # and remove that element from the data

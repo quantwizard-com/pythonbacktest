@@ -24,7 +24,6 @@ class BacktestIndicatorsCalculator(object):
         return self.run_computation_for_data(price_bars_per_date, indicators_calculator)
 
     def run_computation_for_data(self, data, indicators_calculator):
-
         # make sure all indicator implementations are 'clear'
         indicators_calculator.reset()
 
@@ -32,8 +31,8 @@ class BacktestIndicatorsCalculator(object):
 
         for price_bar in data:
             # calculate status of the indicators, get snapshot and save it to the history
-            indicator_snapshot = indicators_calculator.new_price_bar(price_bar)
-            indicators_history.store_snapshot(price_bar.timestamp, indicator_snapshot)
+            indicators_snapshot = indicators_calculator.new_price_bar(price_bar)
+            indicators_history.store_snapshot(price_bar.timestamp, indicators_snapshot)
 
         return indicators_history
 

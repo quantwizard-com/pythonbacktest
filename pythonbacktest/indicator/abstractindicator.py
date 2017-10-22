@@ -1,17 +1,24 @@
-import abc
+from abc import ABC, abstractmethod
 
 
-class AbstractIndicator(object):
+class AbstractIndicator(ABC):
 
-    def __init__(self, source_indicators):
-        self.__source_indicators = []
+    def __init__(self, source_indicators=None):
+
+        # collection of the source indicators specs; each items can be defined in 2 forms
+        # - reference to the source indicator
+        # - (reference, string) - some indicators can have multiple-data for each result, so additional
+        #                         string value will point on exact name of the result
+        self.__source_indicators_specs = []
+
         self.set_source_indicators(source_indicators)
 
         # these are results of the indicator calculations on the time scale
         # meaning: for each single input record there's single result record
         self.__all_indicator_results = []
 
-    @abc.abstractmethod
+        super().__init__()
+
     def reset(self):
         """
         Reset indicator to the initial value. It's called when IndicatorsCalculator
@@ -25,25 +32,54 @@ class AbstractIndicator(object):
         Set indicators (1 or more, which data will be consumed from.
         :param source_indicators: List of the source indicators
         """
-        self.__source_indicators = None
+        self.__source_indicators_specs = None
+
+        if not source_indicators:
+            return
 
         if source_indicators is not None:
             if isinstance(source_indicators, list):
-                self.__source_indicators = source_indicators
+                self.__source_indicators_specs = source_indicators
             else:
-                self.__source_indicators = [list]
+                self.__source_indicators_specs = [list]
 
     @property
     def latest_result(self):
         """
-        get LATEST indicator value (as: latest value)
+        get LATEST indicator value (as: latest value);
+        this should be called ONLY if results consist of single values;
         :return: LATEST indicator value
         """
+        return self.get_latest_result(None)
+
+    def get_latest_result(self, string_reference=None):
+        """
+        Get latest result as specified by the string reference
+        :param string_reference:
+        :return: LATEST indicator value pointed by the string reference
+        """
         indicator_results = self.__all_indicator_results
-        if indicator_results:
-            return indicator_results[-1]
-        else:
+        if not indicator_results:
             return None
+
+        indicator_result_record = indicator_results[-1]
+
+        if type(indicator_result_record) is dict:
+            if string_reference is None:
+                raise ValueError("We have complex result record, but the string_reference is not specified")
+
+            if string_reference not in indicator_result_record:
+                raise ValueError("string_reference not recognized")
+
+            # complex dict record
+            return indicator_result_record[string_reference]
+        else:
+            if string_reference is not None:
+                raise ValueError(f"string_reference is specified as '{string_reference}', "
+                                 f"but indicator has simple results only.")
+
+            # simple value record
+            return indicator_result_record
 
     @property
     def all_results(self):
@@ -54,16 +90,36 @@ class AbstractIndicator(object):
         """
         return self.__all_indicator_results
 
+    def get_latest_data_from_source_indicators(self):
+        """
+        Download latest records from the source indicators based on the __source_indicators variable
+        :return:
+        """
+        source_indicators_data = []
+
+        for source_indicator_spec in self.__source_indicators_specs:
+            string_reference = None
+            indicator_reference = None
+
+            if type(source_indicator_spec) is tuple:
+                indicator_reference, string_reference = source_indicator_spec
+            else:
+                indicator_reference = source_indicator_spec
+
+            source_indicators_data.append(indicator_reference.get_latest_result(string_reference))
+
+        return source_indicators_data
+
     @property
     def source_indicators(self):
-        return self.__source_indicators
+        return self.__source_indicators_specs
 
     def new_upstream_record(self):
         """
         We've got a new data record in the upstream source indicator
         """
         previous_results_count = len(self.__all_indicator_results)
-        self.__process_new_upstream_record()
+        self._process_new_upstream_record()
 
         # there should be exactly one new record in the result
         new_results_count = len(self.__all_indicator_results) - previous_results_count
@@ -71,8 +127,8 @@ class AbstractIndicator(object):
         if new_results_count != 1:
             raise ValueError(f"Expected 1 new result, got {new_results_count} instead.")
 
-    @abc.abstractmethod
-    def __process_new_upstream_record(self):
+    @abstractmethod
+    def _process_new_upstream_record(self):
         """
         This method should be implemented in the derived class
         """

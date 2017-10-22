@@ -1,7 +1,7 @@
 from pythonbacktest.indicatorcalculator import IndicatorsSnapshot
 from pythonbacktest.indicator.staticvalue import StaticValue
 from collections import OrderedDict
-from .indicatorrecord import IndicatorRecord
+from .indicatorsmapindicatorrecord import IndicatorsMapIndicatorRecord
 import time
 
 
@@ -27,33 +27,6 @@ class IndicatorsCalculator(object):
         for price_bar_field in self.ALL_STATIC_INDICATORS:
             self.__all_indicators[price_bar_field] = {'source': None, 'implementation': StaticValue(),
                                                       'passalldata': False}
-
-    # indicators - define collection of indicators, which should be collected during trading;
-    #   collection of dictionaries with following fields:
-    # - name - indicator name
-    # - source name - name of the indicator, which should be an input for the given indicator
-    # - implementation - implementation of the indicator
-    # - datacount - if specified, source data will be extracted from 'source name' from all_result;
-    #               it will extract 'datacount' last records
-    def define_indicators_map(self, indicator_records):
-
-        for record in indicator_records:
-
-            indicator_name = record['name']
-            source_name = record['source']
-            implementation = record['implementation']
-
-            if indicator_name in self.__all_indicators.items():
-                raise ValueError("Indicator with name '%s' is already declared" % indicator_name)
-
-            if source_name is None or implementation is None:
-                raise ValueError("Either input_name or implementation is null")
-
-            indicator_record = IndicatorRecord(indicator_name,
-                                               indicator_source=self.__all_indicators[source_name],
-                                               indicator_implementation=implementation)
-
-            self.__all_indicators[indicator_name] = indicator_record
 
     def reset(self):
         self.__reset_all_implementations()

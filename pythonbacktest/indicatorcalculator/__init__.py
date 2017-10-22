@@ -2,6 +2,7 @@ from .indicatorhistory import IndicatorHistory
 from .indicatorsnapshot import IndicatorsSnapshot
 from .indicatorscalculator import IndicatorsCalculator
 from .backtestindicatorscalculator import BacktestIndicatorsCalculator
-from .indicatorrecord import IndicatorRecord
+from .indicatorsmapindicatorrecord import IndicatorsMapIndicatorRecord
 from .indicatorscalculatoperfmonitor import IndicatorsCalculatorPerfMonitor
+from .indicatorsmap import IndicatorsMap
 from .utils import Utils

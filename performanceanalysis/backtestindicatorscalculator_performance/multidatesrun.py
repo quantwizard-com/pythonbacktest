@@ -45,8 +45,6 @@ for single_date in DATES_TO_ANALYSIS:
 
 indicators_history_per_values = []
 
-all_generated_values_count = len(generated_values)
-
 for generated_value in generated_values:
     indicators_map = [
          {'name': 'SMA_1', 'source': 'close',

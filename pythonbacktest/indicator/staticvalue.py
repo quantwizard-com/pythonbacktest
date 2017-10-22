@@ -1,27 +1,19 @@
 from .abstractindicator import AbstractIndicator
 
+
 class StaticValue(AbstractIndicator):
 
-    def __init__(self):
-        AbstractIndicator.__init__(self)
+    def __init__(self, source_indicators=None):
+        if source_indicators is not None and len(source_indicators) != 1:
+            raise ValueError("Expecting 1 source indicator only")
+
+        AbstractIndicator.__init__(self, source_indicators=source_indicators)
         self.reset()
 
     def reset(self):
-        self.__current_value = None
-        self.__all_values = []
+        AbstractIndicator.reset(self)
 
-    @property
-    def result(self):
-        return self.__current_value
+    def _process_new_upstream_record(self):
+        new_value = self.get_latest_data_from_source_indicators()
 
-    @property
-    def all_result(self):
-        return self.__all_values
-
-    def on_new_upstream_value(self, new_value):
-
-        if type(new_value) is list:
-            raise ValueError("StaticValue doesn't handle lists")
-
-        self.__current_value = new_value
-        self.all_result.append(new_value)
+        self.all_results.append(new_value)

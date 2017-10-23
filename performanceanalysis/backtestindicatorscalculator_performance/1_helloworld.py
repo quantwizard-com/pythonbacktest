@@ -12,7 +12,6 @@ from pythonbacktest.indicatorcalculator import IndicatorsMap
 
 import random
 
-
 SECURITY_SYMBOL = 'MSFT'
 
 db_data_feed = DBDataFeed()

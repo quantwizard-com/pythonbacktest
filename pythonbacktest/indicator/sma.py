@@ -5,9 +5,6 @@ from . import AbstractIndicator
 class SMA(AbstractIndicator):
 
     def __init__(self, indicator_name, window_len, source_indicators=None):
-        if source_indicators is not None and len(source_indicators) != 1:
-            raise ValueError("Expecting 1 source indicator only")
-
         AbstractIndicator.__init__(self,
                                    indicator_name=indicator_name,
                                    source_indicators=source_indicators)
@@ -30,15 +27,15 @@ class SMA(AbstractIndicator):
         self.__sum_of_elements += new_value
         self.__temp_data_storage.append(new_value)
 
+        current_sma = None
         if len(self.__temp_data_storage) == self.__window_len:
 
             # calculate current SMA value
             current_sma = self.__sum_of_elements * 1.0 / self.__window_len
-            self.all_results.append(current_sma)
 
             # reduce sum by the first element on the list
             # and remove that element from the data
             self.__sum_of_elements -= self.__temp_data_storage[0]
             del self.__temp_data_storage[0]
 
-        self.all_results.append(self.__latest_result)
+        self.all_results.append(current_sma)

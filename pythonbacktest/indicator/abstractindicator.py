@@ -46,7 +46,7 @@ class AbstractIndicator(ABC):
             if isinstance(source_indicators, list):
                 self.__source_indicators_specs = source_indicators
             else:
-                self.__source_indicators_specs = [list]
+                self.__source_indicators_specs = [source_indicators]
 
     @property
     def indicator_name(self):
@@ -139,7 +139,7 @@ class AbstractIndicator(ABC):
         new_results_count = len(self.__all_indicator_results) - previous_results_count
 
         if new_results_count != 1:
-            raise ValueError(f"Expected 1 new result, got {new_results_count} instead.")
+            raise ValueError(f"{self.indicator_name}: Expected 1 new result, got {new_results_count} instead.")
 
     @abstractmethod
     def _process_new_upstream_record(self):

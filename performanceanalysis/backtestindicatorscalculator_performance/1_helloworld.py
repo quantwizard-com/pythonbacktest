@@ -7,8 +7,8 @@ sys.path.insert(0, python_backtest_path)
 from pythonbacktest.datafeed import DBDataFeed
 from pythonbacktest.indicator import SMA
 from pythonbacktest.indicatorcalculator import IndicatorsCalculator
-
 from pythonbacktest.indicatorcalculator import IndicatorsMap
+from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot
 
 import random
 
@@ -27,7 +27,11 @@ indicators_map_definition = [
 ]
 
 indicators_map = IndicatorsMap(indicators_map_definition=indicators_map_definition)
-indicators_calculator = IndicatorsCalculator(indicators_map)
 
+indicators_history = IndicatorHistory(ReferencialSnapshot)
+
+indicators_calculator = IndicatorsCalculator(indicators_map, indicators_history=indicators_history)
 indicators_calculator.run_calculation(price_bars)
 
+
+print(indicators_history.all_history)

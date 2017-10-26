@@ -1,5 +1,5 @@
 # simple moving average calculation
-from . import AbstractIndicator
+from .base import AbstractIndicator
 
 
 class SMA(AbstractIndicator):

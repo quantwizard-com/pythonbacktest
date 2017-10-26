@@ -1,4 +1,4 @@
-from . import AbstractIndicator
+from .base import AbstractIndicator
 
 
 # this class is responsible for estimating distance to the next extremum (minimum or maximum)

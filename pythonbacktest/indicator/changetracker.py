@@ -1,4 +1,5 @@
 from . import *
+from .base import AbstractIndicator
 import queue as queue
 
 

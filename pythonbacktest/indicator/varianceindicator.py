@@ -1,5 +1,4 @@
-# moving standard deviation
-from . import AbstractIndicator
+from .base import AbstractIndicator
 from numpy import var
 
 

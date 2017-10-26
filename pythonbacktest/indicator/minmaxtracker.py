@@ -1,4 +1,4 @@
-from . import AbstractIndicator
+from .base import AbstractIndicator
 
 
 # tracker for dynamic indicators

@@ -1,4 +1,4 @@
-from . import AbstractIndicator
+from .base import AbstractIndicator
 from scipy.signal import savgol_filter
 
 

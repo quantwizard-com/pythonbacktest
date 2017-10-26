@@ -1,6 +1,6 @@
 from typing import List
 
-from pythonbacktest.indicator import AbstractIndicator
+from pythonbacktest.indicator.base import AbstractIndicator
 from pythonbacktest.datafeed import PriceBar
 from pythonbacktest.indicator import PriceBarIndicator, StaticValue
 

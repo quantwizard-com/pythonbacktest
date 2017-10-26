@@ -1,4 +1,4 @@
-from .abstractindicator import AbstractIndicator
+from .base import AbstractIndicator
 
 class DataProcessor(AbstractIndicator):
 

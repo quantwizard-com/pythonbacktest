@@ -1,4 +1,4 @@
-from pythonbacktest.indicator import AbstractIndicator
+from .base import AbstractIndicator
 from pythonbacktest.datafeed import PriceBar
 
 

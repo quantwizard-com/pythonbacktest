@@ -1,4 +1,4 @@
-from . import *
+from .base import AbstractIndicator
 
 class DataDifference(AbstractIndicator):
 

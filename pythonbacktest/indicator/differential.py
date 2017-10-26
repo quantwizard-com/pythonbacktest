@@ -1,4 +1,4 @@
-from . import AbstractIndicator
+from .base import AbstractIndicator
 
 
 class Differential(AbstractIndicator):

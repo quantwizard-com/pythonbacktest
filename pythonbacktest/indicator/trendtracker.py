@@ -1,4 +1,4 @@
-from . import AbstractIndicator
+from .base import AbstractIndicator
 import decimal
 
 class TrendTracker(AbstractIndicator):

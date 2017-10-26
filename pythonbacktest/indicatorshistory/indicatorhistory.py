@@ -21,3 +21,19 @@ class IndicatorHistory(object):
     @property
     def all_history(self):
         return self.__history_records
+
+    @property
+    def all_snapshots(self):
+        return self.all_history
+
+    @property
+    def last_snapshot(self):
+        """
+        Take last snapshot saved in the history
+        :return:
+        """
+        # lets get last record
+        last_index = next(reversed(self.__history_records.keys()))
+        last_value = self.__history_records[last_index]
+        return last_index, last_value
+

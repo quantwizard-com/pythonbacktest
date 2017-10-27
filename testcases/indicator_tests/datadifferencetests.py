@@ -9,8 +9,8 @@ class DataDifferenceTests(unittest.TestCase):
     def test_number_set_individual_numbers(self):
         source_indicator_mock = MagicMock()
 
-        input_values_1 = [1, 4, None, 2, 8, 12, 14, None, 1]
-        input_values_2 = [3, 1, None, 0, None, 3, 8, 6, 2]
+        input_values_1 = [None, None, 1, 4, None, 2, 8, 12, 14, None, 1]
+        input_values_2 = [None, None, 3, 1, None, 0, None, 3, 8, 6, 2]
 
         all_expected_results = [v2 - v1 if None not in (v1, v2) else None for (v1, v2) in zip(input_values_1, input_values_2)]
         expected_result = input_values_2[-1] - input_values_1[-1]

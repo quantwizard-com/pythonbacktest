@@ -24,13 +24,17 @@ class DataCrossIndicator(AbstractIndicator):
         p1 = self.__previous_s1
         p2 = self.__previous_s2
 
-        result = 0
-        if p1 and p2:
-            if p1 < p2 and value1 > value2 or \
-                p1 > p2 and value1 < value2:
-                    result = 1
+        result = None
+        if None not in (value1, value2, p1, p2):
+            result = 0
+            if p1 and p2:
+                if p1 < p2 and value1 > value2 or \
+                    p1 > p2 and value1 < value2:
+                        result = 1
 
-        self.__previous_s1 = value1
-        self.__previous_s2 = value2
+        # don't set previous values if current values are equal
+        if value1 != value2 or None in (p1, p2):
+            self.__previous_s1 = value1
+            self.__previous_s2 = value2
 
         self.all_results.append(result)

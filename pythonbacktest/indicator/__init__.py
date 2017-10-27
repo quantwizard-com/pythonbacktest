@@ -3,6 +3,7 @@
 """
 
 from .changetracker import ChangeTracker
+from .datacrossindicator import DataCrossIndicator
 from .datadelay import DataDelay
 from .datadifference import DataDifference
 from .dataprocessor import DataProcessor

@@ -5,7 +5,7 @@ python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
 
 from pythonbacktest.datafeed import DBDataFeed
-from pythonbacktest.indicator import SMA
+from pythonbacktest.indicator import SMA, DataCrossIndicator, DataDifference
 from pythonbacktest.indicatorcalculator import IndicatorsCalculator
 from pythonbacktest.indicatorcalculator import IndicatorsMap
 from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot
@@ -31,7 +31,10 @@ price_bars = db_data_feed.get_prices_bars_for_day_for_symbol(single_date, SECURI
 ########################################################################################################################
 # calculate indicators for the selected date
 indicators_map_definition = [
-    {'sources': 'open', 'implementation': SMA(indicator_name='SMA', window_len=50)}
+    {'sources': 'close', 'implementation': SMA(indicator_name='SMA_50', window_len=50)},
+    {'sources': 'close', 'implementation': SMA(indicator_name='SMA_200', window_len=200)},
+    {'sources': ['SMA_50', 'SMA_200'], 'implementation': DataDifference(indicator_name='DATA_DIFFERENCE')},
+    {'sources': ['SMA_50', 'SMA_200'], 'implementation': DataCrossIndicator(indicator_name='DATA_CROSS')},
 ]
 
 indicators_map = IndicatorsMap(indicators_map_definition=indicators_map_definition)

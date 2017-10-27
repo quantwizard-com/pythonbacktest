@@ -120,7 +120,7 @@ class AbstractIndicator(ABC):
             source_indicators_data.append(indicator_reference.get_latest_result(string_reference))
 
         if len(source_indicators_data) > 2:
-            return source_indicators_data
+            return tuple(source_indicators_data)
         else:
             return source_indicators_data[0]
 

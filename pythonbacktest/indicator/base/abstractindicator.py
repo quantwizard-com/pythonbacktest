@@ -75,7 +75,10 @@ class AbstractIndicator(ABC):
 
         if type(indicator_result_record) is dict:
             if string_reference is None:
-                raise ValueError("We have complex result record, but the string_reference is not specified")
+                # if there's no reference to the particular part of the indicator,
+                # then return entire dictionary
+                # it's up to requestor to handle this
+                return indicator_result_record
 
             if string_reference not in indicator_result_record:
                 raise ValueError("string_reference not recognized")

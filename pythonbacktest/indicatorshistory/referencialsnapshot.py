@@ -15,14 +15,20 @@ class ReferencialSnapshot(AbstractSnapshot):
     def __init__(self, indicators_map: IndicatorsMap):
         super().__init__(indicators_map)
 
-    def _take_snapshot(self, indicators_map: IndicatorsMap) -> Dict:
-
-        snapshot_dict = {}
+    def _take_snapshot(self, indicators_map: IndicatorsMap) -> tuple:
+        """
+        Take snapshot of the values in the IndicatorsMap
+        :param indicators_map: Map of the indicators
+        :return: tuple (all snapshot values, latest snapshot values
+        """
+        all_snapshots_values_dict = {}
+        latest_snapshots_values_dict = {}
         for single_indicator in indicators_map.all_indicators():
             indicator_name = single_indicator.indicator_name
-            snapshot_dict[indicator_name] = single_indicator.all_results
+            all_snapshots_values_dict[indicator_name] = single_indicator.all_results
+            latest_snapshots_values_dict[indicator_name] = single_indicator.latest_result
 
-        return snapshot_dict
+        return all_snapshots_values_dict, latest_snapshots_values_dict
 
 
 

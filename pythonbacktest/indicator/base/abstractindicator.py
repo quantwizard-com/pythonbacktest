@@ -108,9 +108,13 @@ class AbstractIndicator(ABC):
         """
         source_indicators_data = []
 
+        source_indicator_specs = self.__source_indicators_specs
+
+        if not source_indicator_specs:
+            raise ValueError(f'Source indicator specs not set. Indicator name: {self.indicator_name}')
+
         for source_indicator_spec in self.__source_indicators_specs:
             string_reference = None
-            indicator_reference = None
 
             if type(source_indicator_spec) is tuple:
                 indicator_reference, string_reference = source_indicator_spec
@@ -119,7 +123,7 @@ class AbstractIndicator(ABC):
 
             source_indicators_data.append(indicator_reference.get_latest_result(string_reference))
 
-        if len(source_indicators_data) > 2:
+        if len(source_indicators_data) >= 2:
             return tuple(source_indicators_data)
         else:
             return source_indicators_data[0]

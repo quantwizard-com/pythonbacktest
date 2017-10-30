@@ -34,7 +34,7 @@ class AbstractNode(ABC):
         self.__node_result = result
 
     def activate_node(self):
-        self.__activation_method()
+        self._activation_method()
 
     @abstractmethod
     def _activation_method(self):

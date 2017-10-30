@@ -6,7 +6,7 @@ class IndicatorsHistorySource(object):
 
     def __init__(self, indicators_history: IndicatorHistory):
         self.__indicators_history_iterator = IndicatorsHistoryIterator(indicators_history)
-        self.__current_timestamp, self.__snapshot = self.__indicators_history_iterator.current_snapshot()
+        self.__current_timestamp, self.__snapshot = self.__indicators_history_iterator.current_snapshot
 
     def move_to_next_timestamp(self) -> bool:
         """
@@ -14,7 +14,7 @@ class IndicatorsHistorySource(object):
         :return: False - no more timestamps
         """
         if self.__indicators_history_iterator.move_to_next_snapshot():
-            self.__current_timestamp, self.__snapshot = self.__indicators_history_iterator.current_snapshot()
+            self.__current_timestamp, self.__snapshot = self.__indicators_history_iterator.current_snapshot
             return True
 
         return False

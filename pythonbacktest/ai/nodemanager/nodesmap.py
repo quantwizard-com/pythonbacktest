@@ -41,7 +41,6 @@ class NodesMap(object):
         return self.__indicators_history_source.move_to_next_timestamp()
 
     def __unpack_node_map_definition(self, record) -> tuple:
-        node_source_specs = record['sourcenodes']
         node_implementation: AbstractNode = record['nodeimplementation']
 
         if not node_implementation:

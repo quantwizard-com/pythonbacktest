@@ -15,7 +15,7 @@ class IndicatorsHistoryIterator(object):
         return self.__current_timestamp_index < len(self.__all_snapshots)
 
     @property
-    def current_snapshot(self):
+    def current_snapshot(self) -> tuple:
         current_index = self.__current_timestamp_index
         if current_index < len(self.__all_snapshots):
             return self.__all_snapshots[current_index]

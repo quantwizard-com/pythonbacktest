@@ -1,5 +1,4 @@
-from ai.nodemanager.nodesmap import NodesMap
-from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
+from pythonbacktest.ai.nodemanager.nodesmap import NodesMap
 
 
 class NodesProcessor(object):

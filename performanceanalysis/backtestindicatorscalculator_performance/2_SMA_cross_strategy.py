@@ -1,20 +1,18 @@
-import os, sys, inspect
-# realpath() will make your script run, even if you symlink it :)
-from ai.nodemanager import NodesMap
-from ai.nodes import FunctionalNode
+import os, sys, inspect, random
 
+# realpath() will make your script run, even if you symlink it :)
 cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
 
-from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
 from pythonbacktest.datafeed import DBDataFeed
 from pythonbacktest.indicator import SMA, DataCrossIndicator, DataDifference
 from pythonbacktest.indicatorcalculator import IndicatorsCalculator
 from pythonbacktest.indicatorcalculator import IndicatorsMap
 from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot
-
-import random
+from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
+from pythonbacktest.ai.nodes import FunctionalNode
+from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
 
 SECURITY_SYMBOL = 'MSFT'
 
@@ -79,7 +77,9 @@ nodes_map_definition = [
     { 'nodeimplementation': FunctionalNode('sma_diff_node', function_to_call=sma_diff_node_func)}
 ]
 
-indicators_history_source = IndicatorsHistorySource(indicators_history=indicators_history)
 nodes_map = NodesMap(nodes_map_definition=nodes_map_definition, indicators_history=indicators_history)
+
+nodes_processor = NodesProcessor(nodes_map)
+nodes_processor.process_all_nodes_on_indicators_history()
 
 

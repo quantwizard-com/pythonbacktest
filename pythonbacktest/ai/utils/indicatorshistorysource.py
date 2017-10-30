@@ -1,7 +1,8 @@
 from pythonbacktest.indicatorshistory import IndicatorHistory
 from .indicatorshistoryiterator import IndicatorsHistoryIterator
 
-class IndicatorsSource(object):
+
+class IndicatorsHistorySource(object):
 
     def __init__(self, indicators_history: IndicatorHistory):
         self.__indicators_history_iterator = IndicatorsHistoryIterator(indicators_history)
@@ -20,3 +21,6 @@ class IndicatorsSource(object):
 
     def get_current_indicator_value(self, indicator_name):
         return self.__snapshot.get_current_indicator_value(indicator_name)
+
+    def __getitem__(self, indicator_name):
+        return self.get_current_indicator_value(indicator_name)

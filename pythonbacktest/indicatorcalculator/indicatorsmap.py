@@ -10,6 +10,8 @@ class IndicatorsMap(object):
     def __init__(self, indicators_map_definition=None):
         self.__all_indicators: List[AbstractIndicator] = []
         self.__name_to_indicator_map = {}
+
+        # Price bar indicator is considered as a root for other indicators
         self.__price_bar_indicator = None
 
         self.apply_map_definition(indicators_map_definition)

@@ -41,7 +41,7 @@ indicators_map = IndicatorsMap(indicators_map_definition=indicators_map_definiti
 #######                                         RUN CALCULATIONS                                                 #######
 ########################################################################################################################
 indicators_history = IndicatorHistory(ReferencialSnapshot)
-indicators_calculator = IndicatorsCalculator(indicators_map, indicators_history=indicators_history)
+indicators_calculator = IndicatorsCalculator(indicators_map, target_indicators_history=indicators_history)
 indicators_calculator.run_calculation(price_bars)
 
 print(indicators_history.last_snapshot)

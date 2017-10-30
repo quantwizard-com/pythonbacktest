@@ -7,13 +7,13 @@ from .indicatorsmap import IndicatorsMap
 
 class IndicatorsCalculator(object):
 
-    def __init__(self, indicators_map: IndicatorsMap,
-                    performance_monitor=None,
-                 indicators_history: IndicatorHistory=None):
+    def __init__(self, source_indicators_map: IndicatorsMap,
+                 target_performance_monitor=None,
+                 target_indicators_history: IndicatorHistory=None):
 
-        self.__indicators_map = indicators_map
-        self.__performance_monitor = performance_monitor
-        self.__indicators_history = indicators_history
+        self.__indicators_map = source_indicators_map
+        self.__performance_monitor = target_performance_monitor
+        self.__indicators_history = target_indicators_history
 
     def run_calculation(self, price_bars: List[PriceBar]):
 

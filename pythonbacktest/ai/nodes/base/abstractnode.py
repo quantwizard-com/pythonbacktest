@@ -1,11 +1,14 @@
 from abc import abstractmethod, ABC
-from pythonbacktest.ai.utils.indicatorssource import IndicatorsSource
+from typing import List
+
+from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
 
 
 class AbstractNode(ABC):
 
-    def __init__(self, indicators_source: IndicatorsSource):
-        self.__indicators_source = indicators_source
+    def __init__(self, node_name):
+        self.__node_name = node_name
+        self.__indicators_history_source = None
         self.__node_result = None
 
     #@abstractmethod
@@ -13,8 +16,15 @@ class AbstractNode(ABC):
     #    raise NotImplementedError()
 
     @property
-    def indicators_source(self) -> IndicatorsSource:
-        return self.__indicators_source
+    def node_name(self):
+        return self.__node_name
+
+    @property
+    def indicators_history_source(self) -> IndicatorsHistorySource:
+        return self.__indicators_history_source
+
+    def set_indicators_history_source(self, indicators_history_source: IndicatorsHistorySource):
+        self.__indicators_history_source = indicators_history_source
 
     @property
     def current_node_result(self):

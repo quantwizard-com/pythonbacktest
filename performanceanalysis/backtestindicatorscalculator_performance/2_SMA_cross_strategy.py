@@ -73,13 +73,28 @@ def sma_cross_node(indicators_source: IndicatorsHistorySource):
     return None
 
 
+def current_position_node(indicators_source: IndicatorsHistorySource):
+    current_position_size = indicators_source['position']
+
+    return current_position_size > 0
+
+
+
 nodes_map_definition = [
-    { 'nodeimplementation': FunctionalNode('sma_diff_node', function_to_call=sma_diff_node_func)}
+    {'nodeimplementation': FunctionalNode('sma_diff_node', function_to_call=sma_diff_node_func)},
+    {'nodeimplementation': FunctionalNode('sma_cross_node', function_to_call=sma_cross_node)},
+    {'nodeimplementation': FunctionalNode('current_position_node', function_to_call=current_position_node)},
 ]
 
 nodes_map = NodesMap(nodes_map_definition=nodes_map_definition, indicators_history=indicators_history)
 
 nodes_processor = NodesProcessor(nodes_map)
 nodes_processor.process_all_nodes_on_indicators_history()
+
+transaction_wires = {
+    "buy": ["sma_diff_node", "sma_cross_node", "!current_position_node"],
+    "sell": ["!sma_diff_node", "sma_cross_node", "current_position_node"],
+    "short": None
+}
 
 

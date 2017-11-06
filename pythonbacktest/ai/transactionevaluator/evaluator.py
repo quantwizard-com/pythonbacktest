@@ -7,21 +7,25 @@ class Evaluator(object):
     def __init__(self, evaluation_function_body_compiled):
         self.__evaluation_function_body_compiled = evaluation_function_body_compiled
 
-    def new_nodes_values(self, nodes: Dict):
+    def evaluate_new_nodes_values(self, nodes: Dict):
         """
         We have new values for the node. We have to transfer those into transactions.
         :param nodes: Nodes
         :return: BUY, SELL OR SSELL
         """
-        buy = None
-        sell = None
-        ssell = None
+        exec_namespace = {'nodes': nodes}
 
-        exec(self.__evaluation_function_body_compiled)
+        exec(self.__evaluation_function_body_compiled, exec_namespace)
+
+        buy = exec_namespace['buy']
+        sell = exec_namespace['sell']
+        ssell = exec_namespace['ssell']
+
+        b = locals()
 
         if None in [buy, sell, ssell]:
             raise ValueError(f"At least one of the flags is not set. Correct the evaluation function."
-                             f"Buy: {buy}, Sell: {sell}, SSell: {ssell}")
+                             f"buy: {buy}, sell: {sell}, ssell: {ssell}")
 
         # at this stage we have 3 variables: buy, sell and ssell
         # calculate recommendations based in that

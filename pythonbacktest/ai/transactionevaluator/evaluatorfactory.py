@@ -6,14 +6,14 @@ class EvaluatorFactory(object):
 
     ALLOWED_TRANSACTION_NAMES = ['buy', 'sell', 'ssell']
 
-    def create_evaluator(self, evaluator_map: Dict):
+    def create_evaluator(self, evaluator_map: Dict) -> Evaluator:
         """
         Create a new evaluator
         :param evaluator_map: Map of target transaction names (ALLOWED_TRANSACTION_NAMES)
         :return: A new instance of the evaluator
         """
         function_body = self.__create_evaluator_function_body(evaluator_map, "nodes")
-        compiled_function_body = self.__compile_function_body(function_body)
+        compiled_function_body = self.__compile_function_body(function_body+"\nbeta=567")
 
         return Evaluator(compiled_function_body)
 

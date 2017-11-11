@@ -1,6 +1,7 @@
 import os, sys, inspect, random
 
 # realpath() will make your script run, even if you symlink it :)
+
 cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
@@ -13,6 +14,7 @@ from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapsh
 from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
+from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 
 SECURITY_SYMBOL = 'MSFT'
 
@@ -86,15 +88,22 @@ nodes_map_definition = [
     {'nodeimplementation': FunctionalNode('current_position_node', function_to_call=current_position_node)},
 ]
 
+evaluator_map = {
+    "buy": ["sma_diff_node", "sma_cross_node", "!current_position_node"],
+    "sell": ["!sma_diff_node", "sma_cross_node", "current_position_node"],
+    "ssell": None
+}
+
+processing_factory = BacktestHistoryProcessorFactory()
+history_processor = processing_factory.create_processor_factory(indicators_history, nodes_map_definition, evaluator_map)
+
+history_processor.run_processor()
+
+
 nodes_map = NodesMap(nodes_map_definition=nodes_map_definition, indicators_history=indicators_history)
 
 nodes_processor = NodesProcessor(nodes_map)
 nodes_processor.process_all_nodes_on_indicators_history()
 
-transaction_wires = {
-    "buy": ["sma_diff_node", "sma_cross_node", "!current_position_node"],
-    "sell": ["!sma_diff_node", "sma_cross_node", "current_position_node"],
-    "short": None
-}
 
 

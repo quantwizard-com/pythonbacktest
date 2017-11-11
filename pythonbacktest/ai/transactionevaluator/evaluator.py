@@ -39,4 +39,7 @@ class Evaluator(object):
         if ssell:
             return "SSELL"
 
+        # no recommendation
+        return None
+
 

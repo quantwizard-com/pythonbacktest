@@ -1,7 +1,15 @@
+from pythonbacktest.datafeed import PriceBar
 from .abstracttradeexecutor import AbstractTradeExecutor
 
 
 class BackTestTradeExecutor(AbstractTradeExecutor):
+
+    def __init__(self):
+        self.__current_price_bar = None
+
+    def set_current_price_bar(self, price_bar: PriceBar):
+        self.__current_price_bar = price_bar
+
     def sell(self):
         pass
 

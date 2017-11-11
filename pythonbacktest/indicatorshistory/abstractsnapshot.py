@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, Text
 
 from pythonbacktest.indicatorcalculator import IndicatorsMap
 
@@ -28,4 +28,5 @@ class AbstractSnapshot(ABC):
     def get_current_indicator_value(self, indicator_name):
         return self.__latest_snapshot_values[indicator_name]
 
-
+    def __getitem__(self, indicator_name: Text):
+        return self.get_current_indicator_value(indicator_name)

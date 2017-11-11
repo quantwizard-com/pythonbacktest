@@ -1,5 +1,6 @@
-from typing import List
+from typing import List, Dict
 
+from indicatorshistory import AbstractSnapshot
 from pythonbacktest.indicatorshistory import IndicatorHistory
 from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
 from pythonbacktest.ai.nodes.base import AbstractNode
@@ -33,12 +34,18 @@ class NodesMap(object):
             self.__name_to_node_map[node_name] = node_implementation
             self.__all_nodes.append(node_implementation)
 
-    def move_to_next_indicators_snapshot_record(self) -> bool:
+    def apply_indicators_snapshot(self, indicators_snapshot: AbstractSnapshot) -> Dict:
+        """
+        :param indicators_snapshot:
+        :return: Dictionary: node name with node result
+        """
+        result = {}
+
         for single_node in self.__all_nodes:
             # indicators_source is already passed to each node, so doesn't have to pushed again
-            single_node.activate_node()
+            result[single_node.node_name] = single_node.activate_node(indicators_snapshot)
 
-        return self.__indicators_history_source.move_to_next_timestamp()
+        return result
 
     def __unpack_node_map_definition(self, record) -> tuple:
         node_implementation: AbstractNode = record['nodeimplementation']

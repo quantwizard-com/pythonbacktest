@@ -7,13 +7,13 @@ class Evaluator(object):
     def __init__(self, evaluation_function_body_compiled):
         self.__evaluation_function_body_compiled = evaluation_function_body_compiled
 
-    def evaluate_new_nodes_values(self, nodes: Dict):
+    def evaluate_new_nodes_values(self, node_results: Dict):
         """
         We have new values for the node. We have to transfer those into transactions.
-        :param nodes: Nodes
+        :param node_results: Nodes results
         :return: BUY, SELL OR SSELL
         """
-        exec_namespace = {'nodes': nodes}
+        exec_namespace = {'node_results': node_results}
 
         exec(self.__evaluation_function_body_compiled, exec_namespace)
 

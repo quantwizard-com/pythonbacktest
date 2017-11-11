@@ -12,7 +12,7 @@ class EvaluatorFactory(object):
         :param evaluator_map: Map of target transaction names (ALLOWED_TRANSACTION_NAMES)
         :return: A new instance of the evaluator
         """
-        function_body = self.__create_evaluator_function_body(evaluator_map, "nodes")
+        function_body = self.__create_evaluator_function_body(evaluator_map, "node_results")
         compiled_function_body = self.__compile_function_body(function_body+"\nbeta=567")
 
         return Evaluator(compiled_function_body)

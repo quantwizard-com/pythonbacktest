@@ -1,1 +1,2 @@
 from .abstracttradeexecutor import AbstractTradeExecutor
+from .backtesttradeexecutor import BackTestTradeExecutor

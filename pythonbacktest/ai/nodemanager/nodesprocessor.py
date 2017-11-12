@@ -1,6 +1,6 @@
 from typing import Dict
 
-from indicatorshistory import AbstractSnapshot
+from pythonbacktest.indicatorshistory import AbstractSnapshot
 from pythonbacktest.ai.nodemanager.nodesmap import NodesMap
 
 

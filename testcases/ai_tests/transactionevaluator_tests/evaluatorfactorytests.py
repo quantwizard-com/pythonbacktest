@@ -18,7 +18,7 @@ class EvaluatorFactoryTests(unittest.TestCase):
 
         function_body = evaluator_factory._EvaluatorFactory__create_evaluator_function_body(evaluator_map, nodes_dict_name)
 
-        expected_body = f"buy={nodes_dict_name}['sn_buy_1'].current_node_result\nsell=False\nssell=False"
+        expected_body = f"buy={nodes_dict_name}['sn_buy_1']\nsell=False\nssell=False"
 
         self.assertEqual(expected_body, function_body)
 
@@ -33,7 +33,7 @@ class EvaluatorFactoryTests(unittest.TestCase):
 
         evaluator_factory = EvaluatorFactory()
         function_body = evaluator_factory._EvaluatorFactory__create_evaluator_function_body(evaluator_map, nodes_dict_name)
-        expected_body = f"buy=not {nodes_dict_name}['sn_buy_1'].current_node_result\nsell=False\nssell=False"
+        expected_body = f"buy=not {nodes_dict_name}['sn_buy_1']\nsell=False\nssell=False"
 
         self.assertEqual(expected_body, function_body)
 
@@ -51,9 +51,9 @@ class EvaluatorFactoryTests(unittest.TestCase):
 
         function_body = evaluator_factory._EvaluatorFactory__create_evaluator_function_body(evaluator_map, nodes_dict_name)
 
-        expected_body = f"buy={nodes_dict_name}['sn_buy_1'].current_node_result and " \
-                        f"{nodes_dict_name}['sn_buy_2'].current_node_result\n" \
-                        f"sell={nodes_dict_name}['sn_sell_1'].current_node_result and " \
-                        f"not {nodes_dict_name}['sn_sell_2'].current_node_result\nssell=False"
+        expected_body = f"buy={nodes_dict_name}['sn_buy_1'] and " \
+                        f"{nodes_dict_name}['sn_buy_2']\n" \
+                        f"sell={nodes_dict_name}['sn_sell_1'] and " \
+                        f"not {nodes_dict_name}['sn_sell_2']\nssell=False"
 
         self.assertEqual(expected_body, function_body)

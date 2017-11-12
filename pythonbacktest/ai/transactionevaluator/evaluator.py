@@ -17,15 +17,12 @@ class Evaluator(object):
 
         exec(self.__evaluation_function_body_compiled, exec_namespace)
 
-        buy = exec_namespace['buy']
-        sell = exec_namespace['sell']
-        ssell = exec_namespace['ssell']
+        # 'coalesce' the result, i.e.: any 'None' should be transferred to 'False'
+        buy = exec_namespace['buy'] or False
+        sell = exec_namespace['sell'] or False
+        ssell = exec_namespace['ssell'] or False
 
         b = locals()
-
-        if None in [buy, sell, ssell]:
-            raise ValueError(f"At least one of the flags is not set. Correct the evaluation function."
-                             f"buy: {buy}, sell: {sell}, ssell: {ssell}")
 
         # at this stage we have 3 variables: buy, sell and ssell
         # calculate recommendations based in that

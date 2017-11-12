@@ -1,7 +1,7 @@
-from ai.indicatorshistoryprocessor.indicatorshistoryprocessor import IndicatorsHistoryProcessor
-from ai.nodemanager import NodesMap, NodesProcessor
-from ai.tradeexecutor import BackTestTradeExecutor
-from ai.transactionevaluator import EvaluatorFactory
+from pythonbacktest.ai.indicatorshistoryprocessor.indicatorshistoryprocessor import IndicatorsHistoryProcessor
+from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
+from pythonbacktest.ai.tradeexecutor import BackTestTradeExecutor
+from pythonbacktest.ai.transactionevaluator import EvaluatorFactory
 
 
 class BacktestHistoryProcessorFactory(object):

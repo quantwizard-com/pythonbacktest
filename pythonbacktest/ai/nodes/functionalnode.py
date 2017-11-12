@@ -1,4 +1,4 @@
-from indicatorshistory import AbstractSnapshot
+from pythonbacktest.indicatorshistory import AbstractSnapshot
 from pythonbacktest.ai.nodes.base.abstractnode import AbstractNode
 
 
@@ -9,5 +9,4 @@ class FunctionalNode(AbstractNode):
         self.__function_to_call = function_to_call
 
     def _activation_method(self, indicators_snapshot: AbstractSnapshot):
-        self.set_node_result(self.__function_to_call(self.indicators_history_source))
-
+        self.set_node_result(self.__function_to_call(indicators_snapshot))

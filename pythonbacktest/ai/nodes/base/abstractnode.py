@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from indicatorshistory import AbstractSnapshot
+from pythonbacktest.indicatorshistory import AbstractSnapshot
 
 
 class AbstractNode(ABC):
@@ -9,10 +9,6 @@ class AbstractNode(ABC):
         self.__node_name = node_name
         self.__indicators_history_source = None
         self.__node_result = None
-
-    #@abstractmethod
-    #def reset_node(self):
-    #    raise NotImplementedError()
 
     @property
     def node_name(self):

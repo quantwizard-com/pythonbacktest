@@ -10,10 +10,8 @@ from pythonbacktest.datafeed import DBDataFeed
 from pythonbacktest.indicator import SMA, DataCrossIndicator, DataDifference
 from pythonbacktest.indicatorcalculator import IndicatorsCalculator
 from pythonbacktest.indicatorcalculator import IndicatorsMap
-from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot
-from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
+from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot, AbstractSnapshot
 from pythonbacktest.ai.nodes import FunctionalNode
-from pythonbacktest.ai.utils.indicatorshistorysource import IndicatorsHistorySource
 from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 
 SECURITY_SYMBOL = 'MSFT'
@@ -57,7 +55,7 @@ print(indicators_history.last_snapshot)
 ########################################################################################################################
 #######                                        NODE MAP DEFINITION                                               #######
 ########################################################################################################################
-def sma_diff_node_func(indicators_source: IndicatorsHistorySource):
+def sma_diff_node_func(indicators_source: AbstractSnapshot):
     sma_difference = indicators_source['SMA_DIFFERENCE']
     if sma_difference:
         return sma_difference > 0
@@ -66,7 +64,7 @@ def sma_diff_node_func(indicators_source: IndicatorsHistorySource):
     return None
 
 
-def sma_cross_node(indicators_source: IndicatorsHistorySource):
+def sma_cross_node(indicators_source: AbstractSnapshot):
     sma_cross = indicators_source['SMA_CROSS']
     if sma_cross:
         return sma_cross == 1
@@ -75,7 +73,7 @@ def sma_cross_node(indicators_source: IndicatorsHistorySource):
     return None
 
 
-def current_position_node(indicators_source: IndicatorsHistorySource):
+def current_position_node(indicators_source: AbstractSnapshot):
     current_position_size = indicators_source['position']
 
     return current_position_size > 0
@@ -85,12 +83,11 @@ def current_position_node(indicators_source: IndicatorsHistorySource):
 nodes_map_definition = [
     {'nodeimplementation': FunctionalNode('sma_diff_node', function_to_call=sma_diff_node_func)},
     {'nodeimplementation': FunctionalNode('sma_cross_node', function_to_call=sma_cross_node)},
-    {'nodeimplementation': FunctionalNode('current_position_node', function_to_call=current_position_node)},
 ]
 
 evaluator_map = {
-    "buy": ["sma_diff_node", "sma_cross_node", "!current_position_node"],
-    "sell": ["!sma_diff_node", "sma_cross_node", "current_position_node"],
+    "buy": ["sma_diff_node", "sma_cross_node"],
+    "sell": ["!sma_diff_node", "sma_cross_node"],
     "ssell": None
 }
 
@@ -98,12 +95,6 @@ processing_factory = BacktestHistoryProcessorFactory()
 history_processor = processing_factory.create_processor_factory(indicators_history, nodes_map_definition, evaluator_map)
 
 history_processor.run_processor()
-
-
-nodes_map = NodesMap(nodes_map_definition=nodes_map_definition, indicators_history=indicators_history)
-
-nodes_processor = NodesProcessor(nodes_map)
-nodes_processor.process_all_nodes_on_indicators_history()
 
 
 

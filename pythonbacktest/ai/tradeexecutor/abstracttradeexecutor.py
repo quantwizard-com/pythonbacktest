@@ -11,6 +11,9 @@ class AbstractTradeExecutor(ABC):
         }
 
     def execute_transaction(self, transaction_name: Text):
+        if not transaction_name:
+            raise ValueError("Empty transaction_name passed to the function")
+
         transaction_name = transaction_name.lower()
         if transaction_name not in self.TRANSACTION_NAME_TO_FUNCTION:
             raise ValueError(f"Unknown transaction name: {transaction_name}")

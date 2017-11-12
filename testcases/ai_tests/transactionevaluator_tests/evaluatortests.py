@@ -7,8 +7,7 @@ from pythonbacktest.ai.transactionevaluator.evaluatorfactory import EvaluatorFac
 class EvaluatorTests(unittest.TestCase):
 
     def test_one_node_evaluation(self):
-        sample_node = MagicMock()
-        sample_node.current_node_result = True
+        sample_node = True
         node_name = 'sn1'
 
         evaluator_map = {

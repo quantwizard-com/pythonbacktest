@@ -17,4 +17,6 @@ class IndicatorsHistoryProcessor(object):
         for time_stamp, snapshot in self.__indicators_history.all_snapshots.items():
             nodes_results = self.__nodes_processor.new_indicators_snapshot(snapshot)
             recommended_transaction = self.__transaction_evaluator.evaluate_new_nodes_values(nodes_results)
-            self.__trade_executor.execute_transaction(recommended_transaction)
+
+            if recommended_transaction:
+                self.__trade_executor.execute_transaction(recommended_transaction)

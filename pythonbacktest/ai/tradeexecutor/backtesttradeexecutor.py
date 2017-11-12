@@ -5,6 +5,7 @@ from .abstracttradeexecutor import AbstractTradeExecutor
 class BackTestTradeExecutor(AbstractTradeExecutor):
 
     def __init__(self):
+        super().__init__()
         self.__current_price_bar = None
 
     def set_current_price_bar(self, price_bar: PriceBar):

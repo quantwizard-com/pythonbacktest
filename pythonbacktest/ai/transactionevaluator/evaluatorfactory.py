@@ -48,7 +48,7 @@ class EvaluatorFactory(object):
         string = "not " if node_name.startswith("!") else ""
         node_name = node_name if not node_name.startswith("!") else node_name[1:]
 
-        return string + f"{nodes_dict_name}['{node_name}'].current_node_result"
+        return string + f"{nodes_dict_name}['{node_name}']"
 
     def __assert_transaction_name(self, transaction_name):
         if transaction_name not in self.ALLOWED_TRANSACTION_NAMES:

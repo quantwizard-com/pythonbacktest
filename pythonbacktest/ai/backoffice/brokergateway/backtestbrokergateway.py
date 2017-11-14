@@ -1,10 +1,11 @@
+from pythonbacktest.ai.backoffice.portfoliomanager.abstractportfoliomanager import AbstractPortfolioManager
 from pythonbacktest.ai.backoffice.cashvault.abstractcashvault import AbstractCashVault
 from pythonbacktest.datafeed import PriceBar
 from .abstractbrokergateway import AbstractBrokerGateway
 
 class BacktestBrokerGateway(AbstractBrokerGateway):
 
-    def __init__(self, cash_vault: AbstractCashVault, ):
+    def __init__(self, cash_vault: AbstractCashVault, portfolio_manager: AbstractPortfolioManager):
         super().__init__()
 
         self.__current_price_bar:PriceBar = None

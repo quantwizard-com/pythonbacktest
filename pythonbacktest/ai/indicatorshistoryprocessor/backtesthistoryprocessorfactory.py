@@ -1,3 +1,5 @@
+from ai.backoffice.cashvault.abstractcashvault import AbstractCashVault
+from ai.backoffice.portfoliomanager.abstractportfoliomanager import AbstractPortfolioManager
 from pythonbacktest.ai.indicatorshistoryprocessor.indicatorshistoryprocessor import IndicatorsHistoryProcessor
 from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
 from pythonbacktest.ai.tradeexecutor import BackTestTradeExecutor
@@ -6,7 +8,12 @@ from pythonbacktest.ai.transactionevaluator import EvaluatorFactory
 
 class BacktestHistoryProcessorFactory(object):
 
-    def create_processor_factory(self, indicators_history, nodes_map_definition, evaluator_map):
+    def create_processor_factory(self,
+                                 indicators_history,
+                                 nodes_map_definition,
+                                 evaluator_map,
+                                 cash_vault: AbstractCashVault,
+                                 portfolio_manager: AbstractPortfolioManager):
         nodes_map = NodesMap(nodes_map_definition=nodes_map_definition)
         nodes_processor = NodesProcessor(nodes_map)
 

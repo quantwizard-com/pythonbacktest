@@ -1,3 +1,4 @@
+from pythonbacktest.ai.backoffice.brokergateway.abstractbrokergateway import AbstractBrokerGateway
 from pythonbacktest.ai.tradehistory.tradehistory import TradeHistory
 from pythonbacktest.datafeed import PriceBar
 from .abstracttradeexecutor import AbstractTradeExecutor
@@ -5,9 +6,10 @@ from .abstracttradeexecutor import AbstractTradeExecutor
 
 class BackTestTradeExecutor(AbstractTradeExecutor):
 
-    def __init__(self, trade_history: TradeHistory):
+    def __init__(self, trade_history: TradeHistory, broker_gateway: AbstractBrokerGateway):
         super().__init__(trade_history)
         self.__current_price_bar = None
+        self.__broker_gateway = broker_gateway
 
     def set_current_price_bar(self, price_bar: PriceBar):
         if not price_bar:
@@ -26,6 +28,10 @@ class BackTestTradeExecutor(AbstractTradeExecutor):
 
     def short_sell(self, position_size):
         pass
+
+    @property
+    def broker_gateway(self):
+        return self.__broker_gateway
 
     def __assert_input_values(self):
         if not self.__current_price_bar:

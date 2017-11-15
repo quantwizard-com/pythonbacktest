@@ -13,7 +13,7 @@ class BackOfficeFactory(object):
     def create_back_test_back_office(initial_budget,
                                      default_transaction_size,
                                      apply_tax=True,
-                                     apply_broker_fees=True):
+                                     apply_broker_fees=True) -> BackTestBackOffice:
         cash_vault = BacktestCashVault(initial_budget=initial_budget)
         portfolio_manager = PortfolioManager()
         tax_calculator = TaxCalculator()

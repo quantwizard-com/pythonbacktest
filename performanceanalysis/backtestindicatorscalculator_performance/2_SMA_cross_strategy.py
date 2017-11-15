@@ -95,7 +95,6 @@ back_test_back_office = BackOfficeFactory.create_back_test_back_office(
     initial_budget=10000, default_transaction_size=100,
     apply_tax=False, apply_broker_fees=False)
 
-
 history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
     indicators_history=indicators_history,
     nodes_map_definition=nodes_map_definition,
@@ -103,6 +102,8 @@ history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
     back_test_back_office=back_test_back_office)
 
 history_processor.run_processor()
+
+print(back_test_back_office.trade_history.trade_records)
 
 
 

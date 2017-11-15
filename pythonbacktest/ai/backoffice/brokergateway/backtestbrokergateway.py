@@ -64,3 +64,15 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
 
     def __get_current_price_per_share(self):
         return self.__current_price_bar.close
+
+    @property
+    def trade_history(self):
+        return self.__trade_history
+
+    @property
+    def cash_vault(self):
+        return self.__cash_vault
+
+    @property
+    def portfolio_manager(self):
+        return self.__portfolio_manager

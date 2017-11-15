@@ -46,3 +46,16 @@ class BackTestBackOffice(object):
     def set_price_bar(self, price_bar: PriceBar):
         self.__broker_gateway.set_current_price_bar(price_bar)
 
+    @property
+    def trade_history(self):
+        return self.__broker_gateway.trade_history
+
+    @property
+    def cash_vault(self):
+        return self.__broker_gateway.cash_vault
+
+    @property
+    def portfolio_manager(self):
+        return self.__broker_gateway.portfolio_manager
+
+

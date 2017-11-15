@@ -19,7 +19,7 @@ class PortfolioManager(AbstractPortfolioManager):
         self.__average_price_per_share = new_portfolio_value * 1.0 / new_portfolio_size
         self.__current_position_size = new_portfolio_size
 
-    def sell(self, order_size):
+    def sell(self, order_size, price_per_share):
         available_to_sale = self.__current_position_size
         if order_size > available_to_sale:
             raise ValueError(f"You want to sell {order_size} shares, but only {available_to_sale} are available")
@@ -28,6 +28,9 @@ class PortfolioManager(AbstractPortfolioManager):
             self.__average_price_per_share = 0
 
         self.__current_position_size -= order_size
+
+        # return profit
+        return (price_per_share - self.__average_price_per_share) * order_size
 
     @property
     def portfolio_value(self):

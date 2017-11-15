@@ -27,13 +27,33 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
         self.__apply_broker_fees = apply_broker_fees
 
     def buy(self, position_size):
-        pass
+        current_price_per_share = self.__get_current_price_per_share()
+        stock_only_price = current_price_per_share * position_size
+        transaction_price = current_price_per_share
+
+        if self.__apply_broker_fees:
+            transaction_price += self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+
+        self.__portfolio_manager.buy(position_size, current_price_per_share)
+        self.__cash_vault.modify_available_budget(-transaction_price)
 
     def sell(self, position_size):
-        pass
+        current_price_per_share = self.__get_current_price_per_share()
+        stock_only_price = current_price_per_share * position_size
+        transaction_gain = current_price_per_share
+
+        if self.__apply_broker_fees:
+            transaction_gain -= self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+
+        sell_profit = self.__portfolio_manager.sell(position_size, current_price_per_share)
+
+        if self.__apply_tax and sell_profit > 0:
+            transaction_gain -= self.__tax_calculator.calculate_tax(sell_profit)
+
+        self.__cash_vault.modify_available_budget(transaction_gain)
 
     def short_sell(self, position_size):
-        pass
+        raise NotImplementedError()
 
     def set_current_price_bar(self, price_bar: PriceBar):
         if self.__current_price_bar:
@@ -41,3 +61,6 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
                 raise ValueError("New price bar is the same as the old one...")
 
         self.__current_price_bar = price_bar
+
+    def __get_current_price_per_share(self):
+        return self.__current_price_bar.close

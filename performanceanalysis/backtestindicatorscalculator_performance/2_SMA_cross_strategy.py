@@ -1,7 +1,6 @@
 import os, sys, inspect, random
 
 # realpath() will make your script run, even if you symlink it :)
-
 cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
@@ -11,6 +10,7 @@ from pythonbacktest.indicator import SMA, DataCrossIndicator, DataDifference
 from pythonbacktest.indicatorcalculator import IndicatorsCalculator
 from pythonbacktest.indicatorcalculator import IndicatorsMap
 from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot, AbstractSnapshot
+from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import BackOfficeFactory
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 
@@ -91,12 +91,16 @@ evaluator_map = {
     "ssell": None
 }
 
+back_test_back_office = BackOfficeFactory.create_back_test_back_office(
+    initial_budget=10000, default_transaction_size=100,
+    apply_tax=False, apply_broker_fees=False)
+
+
 history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
     indicators_history=indicators_history,
     nodes_map_definition=nodes_map_definition,
     evaluator_map=evaluator_map,
-    transaction_size=100,
-    initial_budget=10000)
+    back_test_back_office=back_test_back_office)
 
 history_processor.run_processor()
 

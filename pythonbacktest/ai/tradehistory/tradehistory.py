@@ -5,9 +5,7 @@ from .traderecord import TradeRecord
 
 class TradeHistory(object):
 
-    def __init__(self, initial_budget):
-        self.__current_budget = initial_budget
-
+    def __init__(self):
         self.__trade_records: List[TradeRecord] = []
 
     @property

@@ -91,8 +91,12 @@ evaluator_map = {
     "ssell": None
 }
 
-processing_factory = BacktestHistoryProcessorFactory()
-history_processor = processing_factory.create_processor_factory(indicators_history, nodes_map_definition, evaluator_map)
+history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
+    indicators_history=indicators_history,
+    nodes_map_definition=nodes_map_definition,
+    evaluator_map=evaluator_map,
+    transaction_size=100,
+    initial_budget=10000)
 
 history_processor.run_processor()
 

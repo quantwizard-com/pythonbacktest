@@ -1,7 +1,5 @@
 from typing import Dict
 
-from pythonbacktest.ai.tradeexecutor import AbstractTradeExecutor
-
 
 class Evaluator(object):
     def __init__(self, evaluation_function_body_compiled):

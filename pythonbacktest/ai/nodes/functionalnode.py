@@ -8,5 +8,6 @@ class FunctionalNode(AbstractNode):
         super().__init__(node_name=node_name)
         self.__function_to_call = function_to_call
 
-    def _activation_method(self, indicators_snapshot: AbstractSnapshot):
-        self.set_node_result(self.__function_to_call(indicators_snapshot))
+    def _activation_method(self, indicators_snapshot: AbstractSnapshot) -> bool:
+        return self.__function_to_call(indicators_snapshot)
+

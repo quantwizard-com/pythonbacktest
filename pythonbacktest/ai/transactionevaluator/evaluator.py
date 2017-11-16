@@ -20,12 +20,10 @@ class Evaluator(object):
         sell = exec_namespace['sell'] or False
         ssell = exec_namespace['ssell'] or False
 
-        b = locals()
-
         # at this stage we have 3 variables: buy, sell and ssell
         # calculate recommendations based in that
         if buy + sell + ssell > 1:
-            raise ValueError(f"More than one of the flags are set. Correct the evaluation function")
+            raise ValueError(f"More than one of the flags are set. Correct the evaluation function.")
 
         if buy:
             return "BUY"

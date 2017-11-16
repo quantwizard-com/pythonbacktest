@@ -31,26 +31,42 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
         stock_only_price = current_price_per_share * position_size
         transaction_price = current_price_per_share
 
+        broker_fees = 0
         if self.__apply_broker_fees:
-            transaction_price += self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+        transaction_price += broker_fees
 
         self.__portfolio_manager.buy(position_size, current_price_per_share)
         self.__cash_vault.modify_available_budget(-transaction_price)
+
+        # record the transaction
+        self.__trade_history.new_transaction(self.__current_price_bar, "BUY", position_size,
+                                             current_price_per_share, self.__cash_vault.available_cash,
+                                             broker_fees, tax=0)
 
     def sell(self, position_size):
         current_price_per_share = self.__get_current_price_per_share()
         stock_only_price = current_price_per_share * position_size
         transaction_gain = current_price_per_share
 
+        broker_fees = 0
         if self.__apply_broker_fees:
-            transaction_gain -= self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+        transaction_gain -= broker_fees
 
         sell_profit = self.__portfolio_manager.sell(position_size, current_price_per_share)
 
+        tax = 0
         if self.__apply_tax and sell_profit > 0:
-            transaction_gain -= self.__tax_calculator.calculate_tax(sell_profit)
+            tax = self.__tax_calculator.calculate_tax(sell_profit)
+        transaction_gain -= tax
 
         self.__cash_vault.modify_available_budget(transaction_gain)
+
+        # record the transaction
+        self.__trade_history.new_transaction(self.__current_price_bar, "SELL", position_size,
+                                             current_price_per_share, self.__cash_vault.available_cash,
+                                             broker_fee=broker_fees, tax=tax)
 
     def short_sell(self, position_size):
         raise NotImplementedError()

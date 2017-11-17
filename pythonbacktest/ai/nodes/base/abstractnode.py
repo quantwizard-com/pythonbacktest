@@ -1,6 +1,8 @@
 from abc import abstractmethod, ABC
 
+from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.indicatorshistory import AbstractSnapshot
+
 
 class AbstractNode(ABC):
 
@@ -20,15 +22,16 @@ class AbstractNode(ABC):
     def set_node_result(self, result):
         self.__node_result = result
 
-    def activate_node(self, indicators_snapshot: AbstractSnapshot) -> bool:
+    def activate_node(self, indicators_snapshot: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot) -> bool:
         """
         Activate node and return the node result
-        :param indicators_snapshot: Indicators snapshit
+        :param indicators_snapshot: Indicators snapshot
+        :param trade_data_snapshot
         :return: Boolean result on the node - depending on the node evaluation result
         """
-        self.set_node_result(self._activation_method(indicators_snapshot))
+        self.set_node_result(self._activation_method(indicators_snapshot, trade_data_snapshot))
         return self.current_node_result
 
     @abstractmethod
-    def _activation_method(self, indicators_snapshot: AbstractSnapshot) -> bool:
+    def _activation_method(self, indicators_snapshot: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot) -> bool:
         raise NotImplementedError()

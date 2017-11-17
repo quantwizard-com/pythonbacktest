@@ -1,5 +1,6 @@
 from typing import Text
 
+from ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.ai.backoffice.brokergateway.backtestbrokergateway import BacktestBrokerGateway
 from pythonbacktest.ai.backoffice.cashvault.abstractcashvault import AbstractCashVault
 from pythonbacktest.ai.backoffice.portfoliomanager.abstractportfoliomanager import AbstractPortfolioManager
@@ -57,5 +58,13 @@ class BackTestBackOffice(object):
     @property
     def portfolio_manager(self):
         return self.__broker_gateway.portfolio_manager
+
+    @property
+    def trade_data_snapshot(self) -> TradeDataSnapshot:
+        return TradeDataSnapshot(
+            self.__portfolio_manager.current_position_size,
+            self.__cash_vault.available_cash
+        )
+
 
 

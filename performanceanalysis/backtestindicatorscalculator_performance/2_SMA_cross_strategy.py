@@ -1,6 +1,7 @@
 import os, sys, inspect, random
 
 # realpath() will make your script run, even if you symlink it :)
+
 cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
@@ -13,6 +14,7 @@ from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapsh
 from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import BackOfficeFactory
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
+from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 
 SECURITY_SYMBOL = 'MSFT'
 
@@ -55,7 +57,7 @@ print(indicators_history.last_snapshot)
 ########################################################################################################################
 #######                                        NODE MAP DEFINITION                                               #######
 ########################################################################################################################
-def sma_diff_node_func(indicators_source: AbstractSnapshot):
+def sma_diff_node_func(indicators_source: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot):
     sma_difference = indicators_source['SMA_DIFFERENCE']
     if sma_difference:
         return sma_difference > 0
@@ -64,7 +66,7 @@ def sma_diff_node_func(indicators_source: AbstractSnapshot):
     return None
 
 
-def sma_cross_node(indicators_snapshot: AbstractSnapshot):
+def sma_cross_node(indicators_snapshot: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot):
     sma_cross = indicators_snapshot['SMA_CROSS']
     if sma_cross:
         return sma_cross == 1
@@ -73,21 +75,20 @@ def sma_cross_node(indicators_snapshot: AbstractSnapshot):
     return None
 
 
-def current_position_node(indicators_snapshot: AbstractSnapshot):
-    current_position_size = indicators_snapshot['position']
-
-    return current_position_size > 0
+def current_position_node(indicators_snapshot: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot):
+    return trade_data_snapshot.current_position_size > 0
 
 
 
 nodes_map_definition = [
     {'nodeimplementation': FunctionalNode('sma_diff_node', function_to_call=sma_diff_node_func)},
     {'nodeimplementation': FunctionalNode('sma_cross_node', function_to_call=sma_cross_node)},
+    {'nodeimplementation': FunctionalNode('position_node', function_to_call=current_position_node)},
 ]
 
 evaluator_map = {
-    "buy": ["sma_diff_node", "sma_cross_node"],
-    "sell": ["!sma_diff_node", "sma_cross_node"],
+    "buy": ["sma_diff_node", "sma_cross_node", "!position_node"],
+    "sell": ["!sma_diff_node", "sma_cross_node", "position_node"],
     "ssell": None
 }
 

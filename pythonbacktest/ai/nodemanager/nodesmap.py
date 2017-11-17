@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.indicatorshistory import AbstractSnapshot
 from pythonbacktest.ai.nodes.base import AbstractNode
 
@@ -28,16 +29,18 @@ class NodesMap(object):
             self.__name_to_node_map[node_name] = node_implementation
             self.__all_nodes.append(node_implementation)
 
-    def apply_indicators_snapshot(self, indicators_snapshot: AbstractSnapshot) -> Dict:
+    def apply_data_snapshots(self, indicators_snapshot: AbstractSnapshot,
+                             trade_data_snapshot: TradeDataSnapshot) -> Dict:
         """
         :param indicators_snapshot:
+        :param trade_data_snapshot:
         :return: Dictionary: node name with node result
         """
         result = {}
 
         for single_node in self.__all_nodes:
             # indicators_source is already passed to each node, so doesn't have to pushed again
-            result[single_node.node_name] = single_node.activate_node(indicators_snapshot)
+            result[single_node.node_name] = single_node.activate_node(indicators_snapshot, trade_data_snapshot)
 
         return result
 

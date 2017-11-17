@@ -1,5 +1,5 @@
 from pythonbacktest.ai.backoffice.backtestbackoffice.backtestbackoffice import BackTestBackOffice
-from pythonbacktest.ai.tradehistory.tradehistory import TradeHistory
+from pythonbacktest.ai.backoffice.tradehistory.tradehistory import TradeHistory
 from pythonbacktest.ai.backoffice.brokergateway.backtestbrokergateway import BacktestBrokerGateway
 from pythonbacktest.ai.backoffice.cashvault.backtestcashvault import BacktestCashVault
 from pythonbacktest.ai.backoffice.feescalculators.brokerfeescalculator import BrokerFeesCalculator

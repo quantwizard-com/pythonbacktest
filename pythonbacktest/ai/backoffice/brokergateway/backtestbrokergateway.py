@@ -1,4 +1,4 @@
-from pythonbacktest.ai.tradehistory.tradehistory import TradeHistory
+from pythonbacktest.ai.backoffice.tradehistory.tradehistory import TradeHistory
 from pythonbacktest.ai.backoffice.feescalculators.brokerfeescalculator import BrokerFeesCalculator
 from pythonbacktest.ai.backoffice.feescalculators.taxcalculator import TaxCalculator
 from pythonbacktest.ai.backoffice.portfoliomanager.abstractportfoliomanager import AbstractPortfolioManager

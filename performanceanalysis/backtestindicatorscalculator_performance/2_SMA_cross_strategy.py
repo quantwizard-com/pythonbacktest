@@ -64,8 +64,8 @@ def sma_diff_node_func(indicators_source: AbstractSnapshot):
     return None
 
 
-def sma_cross_node(indicators_source: AbstractSnapshot):
-    sma_cross = indicators_source['SMA_CROSS']
+def sma_cross_node(indicators_snapshot: AbstractSnapshot):
+    sma_cross = indicators_snapshot['SMA_CROSS']
     if sma_cross:
         return sma_cross == 1
 
@@ -73,8 +73,8 @@ def sma_cross_node(indicators_source: AbstractSnapshot):
     return None
 
 
-def current_position_node(indicators_source: AbstractSnapshot):
-    current_position_size = indicators_source['position']
+def current_position_node(indicators_snapshot: AbstractSnapshot):
+    current_position_size = indicators_snapshot['position']
 
     return current_position_size > 0
 

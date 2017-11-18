@@ -27,25 +27,25 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
         self.__apply_broker_fees = apply_broker_fees
 
     def buy(self, position_size):
-        current_price_per_share = self.__get_current_price_per_share()
-        stock_only_price = current_price_per_share * position_size
-        transaction_price = current_price_per_share
+        current_cost_per_share = self.__get_current_cost_per_share()
+        stock_only_cost = current_cost_per_share * position_size
+        transaction_cost = current_cost_per_share
 
         broker_fees = 0
         if self.__apply_broker_fees:
-            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
-        transaction_price += broker_fees
+            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_cost)
+        transaction_cost += broker_fees
 
-        self.__portfolio_manager.buy(position_size, current_price_per_share)
-        self.__cash_vault.modify_available_budget(-transaction_price)
+        self.__portfolio_manager.buy(position_size, current_cost_per_share)
+        self.__cash_vault.modify_available_budget(-transaction_cost)
 
         # record the transaction
         self.__trade_history.new_transaction(self.__current_price_bar, "BUY", position_size,
-                                             current_price_per_share, self.__cash_vault.available_cash,
+                                             current_cost_per_share, self.__cash_vault.available_cash,
                                              broker_fees, tax=0)
 
     def sell(self, position_size):
-        current_price_per_share = self.__get_current_price_per_share()
+        current_price_per_share = self.__get_current_cost_per_share()
         stock_only_price = current_price_per_share * position_size
         transaction_gain = current_price_per_share
 
@@ -78,7 +78,7 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
 
         self.__current_price_bar = price_bar
 
-    def __get_current_price_per_share(self):
+    def __get_current_cost_per_share(self):
         return self.__current_price_bar.close
 
     @property

@@ -15,6 +15,7 @@ from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import Ba
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
+from pythonbacktest.ai.strategyperformance.calculators.buysellperfcalculator import BuySellPerfCalculator
 
 SECURITY_SYMBOL = 'MSFT'
 
@@ -96,13 +97,16 @@ back_test_back_office = BackOfficeFactory.create_back_test_back_office(
     initial_budget=10000, default_transaction_size=100,
     apply_tax=False, apply_broker_fees=False)
 
+performance_calculator = BuySellPerfCalculator()
+
 history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
     indicators_history=indicators_history,
     nodes_map_definition=nodes_map_definition,
     evaluator_map=evaluator_map,
-    back_test_back_office=back_test_back_office)
+    back_test_back_office=back_test_back_office,
+    performance_calculator=performance_calculator)
 
-history_processor.run_processor()
+performance_report = history_processor.run_processor()
 
 print(back_test_back_office.trade_history.trade_records)
 

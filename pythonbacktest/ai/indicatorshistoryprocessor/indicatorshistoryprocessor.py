@@ -1,21 +1,24 @@
 from datafeed import PriceBar
 from pythonbacktest.ai.backoffice.backtestbackoffice.backtestbackoffice import BackTestBackOffice
 from pythonbacktest.ai.nodemanager import NodesProcessor
+from pythonbacktest.ai.strategyperformance.calculators.abstractperfcalculator import AbstractPerfCalculator
+from pythonbacktest.ai.strategyperformance import PerformanceReport
 from pythonbacktest.ai.transactionevaluator import Evaluator
-from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.indicatorshistory import IndicatorHistory
 
 
 class IndicatorsHistoryProcessor(object):
 
     def __init__(self, indicators_history: IndicatorHistory, nodes_processor: NodesProcessor,
-                 transaction_evaluator: Evaluator, back_office: BackTestBackOffice):
+                 transaction_evaluator: Evaluator, back_office: BackTestBackOffice,
+                 performance_calculator: AbstractPerfCalculator):
         self.__indicators_history = indicators_history
         self.__nodes_processor = nodes_processor
         self.__transaction_evaluator = transaction_evaluator
         self.__back_office = back_office
+        self.__performance_calculator = performance_calculator
 
-    def run_processor(self):
+    def run_processor(self) -> PerformanceReport:
         for time_stamp, snapshot in self.__indicators_history.all_snapshots.items():
 
             # Get and propagate current price bar
@@ -30,3 +33,5 @@ class IndicatorsHistoryProcessor(object):
 
             if recommended_transaction:
                 self.__back_office.execute_transaction(recommended_transaction)
+
+        self.__performance_calculator.calculate_strategy_performance(self.__back_office.trade_history)

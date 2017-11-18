@@ -16,13 +16,13 @@ class TradeRecord(object):
 
     def __init__(self, trigger_price_bar: PriceBar, transaction_type,
                  transaction_size, price_per_share, current_budget,
-                 gross_transaciton_cost, net_transaction_cost,
+                 gross_transaction_cost, net_transaction_cost,
                  broker_fee, tax):
         self.__trigger_price_bar = trigger_price_bar
         self.__transaction_type = transaction_type
         self.__transaction_size = transaction_size
         self.__price_per_share = price_per_share
-        self.__gross_transaction_price = gross_transaciton_cost
+        self.__gross_transaction_price = gross_transaction_cost
         self.__net_transaction_price = net_transaction_cost
         self.__current_budget = current_budget
         self.__broker_fee = broker_fee

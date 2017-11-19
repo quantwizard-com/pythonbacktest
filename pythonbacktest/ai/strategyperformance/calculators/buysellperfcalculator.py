@@ -21,9 +21,9 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
 
         performance_report = PerformanceReport()
 
-        for trade_record in trade_history:
+        for trade_record in trade_history.trade_records:
 
-            transaction_type = trade_record.trandaction_type
+            transaction_type = trade_record.transaction_type
 
             if transaction_type not in self.SUPPORTED_TRANSACTION_TYPES:
                 raise ValueError(f"Unsupported transaction type: {transaction_type}")

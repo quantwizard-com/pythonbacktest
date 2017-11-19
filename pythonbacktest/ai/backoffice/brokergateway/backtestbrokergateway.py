@@ -29,32 +29,36 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
     def buy(self, position_size):
         current_cost_per_share = self.__get_current_cost_per_share()
         stock_only_cost = current_cost_per_share * position_size
-        transaction_cost = current_cost_per_share
+        net_transaction_cost = stock_only_cost
+        gross_transaction_cost = stock_only_cost
 
         broker_fees = 0
         if self.__apply_broker_fees:
             broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_cost)
-        transaction_cost += broker_fees
+        net_transaction_cost += broker_fees
 
         self.__portfolio_manager.buy(position_size, current_cost_per_share)
-        self.__cash_vault.modify_available_budget(-transaction_cost)
+        self.__cash_vault.modify_available_budget(-net_transaction_cost)
 
         # record the transaction
         self.__trade_history.new_transaction(self.__current_price_bar, "BUY", position_size,
                                              current_cost_per_share, self.__cash_vault.available_cash,
-                                             broker_fees, tax=0)
+                                             gross_transaction_cost=gross_transaction_cost,
+                                             net_transaction_cost=net_transaction_cost,
+                                             broker_fee=broker_fees, tax=0)
 
     def sell(self, position_size):
-        current_price_per_share = self.__get_current_cost_per_share()
-        stock_only_price = current_price_per_share * position_size
-        transaction_gain = current_price_per_share
+        current_cost_per_share = self.__get_current_cost_per_share()
+        stock_only_price_gain = current_cost_per_share * position_size
+        transaction_gain = stock_only_price_gain
+        gross_transaction_gain = stock_only_price_gain
 
         broker_fees = 0
         if self.__apply_broker_fees:
-            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price)
+            broker_fees = self.__fees_calculator.calculate_broker_fees(position_size, stock_only_price_gain)
         transaction_gain -= broker_fees
 
-        sell_profit = self.__portfolio_manager.sell(position_size, current_price_per_share)
+        sell_profit = self.__portfolio_manager.sell(position_size, current_cost_per_share)
 
         tax = 0
         if self.__apply_tax and sell_profit > 0:
@@ -65,7 +69,9 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
 
         # record the transaction
         self.__trade_history.new_transaction(self.__current_price_bar, "SELL", position_size,
-                                             current_price_per_share, self.__cash_vault.available_cash,
+                                             current_cost_per_share, self.__cash_vault.available_cash,
+                                             gross_transaction_cost=gross_transaction_gain,
+                                             net_transaction_cost=transaction_gain,
                                              broker_fee=broker_fees, tax=tax)
 
     def short_sell(self, position_size):

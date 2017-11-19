@@ -30,4 +30,4 @@ class BackOfficeFactory(object):
         return BackTestBackOffice(broker_gateway,
                                   cash_vault,
                                   portfolio_manager,
-                                  default_transaciton_size=default_transaction_size)
+                                  default_transaction_size=default_transaction_size)

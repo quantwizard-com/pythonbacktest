@@ -34,4 +34,8 @@ class IndicatorsHistoryProcessor(object):
             if recommended_transaction:
                 self.__back_office.execute_transaction(recommended_transaction)
 
-        self.__performance_calculator.calculate_strategy_performance(self.__back_office.trade_history)
+        # close any opened position
+        self.__back_office.close_positions()
+
+        # return strategy performance data
+        return self.__performance_calculator.calculate_strategy_performance(self.__back_office.trade_history)

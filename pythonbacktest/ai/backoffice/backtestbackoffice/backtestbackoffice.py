@@ -10,9 +10,9 @@ from pythonbacktest.datafeed import PriceBar
 class BackTestBackOffice(object):
 
     def __init__(self, broker_gateway: BacktestBrokerGateway,
-                    cash_vault: AbstractCashVault,
-                    portfolio_manager: AbstractPortfolioManager,
-                    default_transaciton_size):
+                 cash_vault: AbstractCashVault,
+                 portfolio_manager: AbstractPortfolioManager,
+                 default_transaction_size):
 
         self.TRANSACTION_NAME_TO_FUNCTION = {
             "buy": self.buy,
@@ -23,7 +23,7 @@ class BackTestBackOffice(object):
         self.__broker_gateway = broker_gateway
         self.__cash_vault = cash_vault
         self.__portfolio_manager = portfolio_manager
-        self.__default_transaction_size = default_transaciton_size
+        self.__default_transaction_size = default_transaction_size
 
     def execute_transaction(self, transaction_name: Text):
         if not transaction_name:
@@ -43,6 +43,9 @@ class BackTestBackOffice(object):
 
     def short_sell(self):
         self.__broker_gateway.short_sell(self.__default_transaction_size)
+
+    def close_positions(self):
+        self.__broker_gateway.close_all_positions()
 
     def set_price_bar(self, price_bar: PriceBar):
         self.__broker_gateway.set_current_price_bar(price_bar)

@@ -17,3 +17,7 @@ class AbstractBrokerGateway(ABC):
     @abstractmethod
     def short_sell(self, position_size):
         raise NotImplementedError()
+
+    @abstractmethod
+    def close_all_positions(self):
+        raise NotImplementedError()

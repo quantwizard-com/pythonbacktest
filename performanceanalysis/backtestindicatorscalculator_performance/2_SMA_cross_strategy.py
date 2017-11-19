@@ -109,6 +109,7 @@ history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
 performance_report = history_processor.run_processor()
 
 print(back_test_back_office.trade_history.trade_records)
+print(performance_report)
 
 
 

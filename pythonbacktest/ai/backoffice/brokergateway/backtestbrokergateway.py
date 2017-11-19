@@ -77,6 +77,11 @@ class BacktestBrokerGateway(AbstractBrokerGateway):
     def short_sell(self, position_size):
         raise NotImplementedError()
 
+    def close_all_positions(self):
+        current_position_size = self.portfolio_manager.current_position_size
+        if current_position_size > 0:
+            self.sell(current_position_size)
+
     def set_current_price_bar(self, price_bar: PriceBar):
         if self.__current_price_bar:
             if price_bar.timestamp == self.__current_price_bar.timestamp:

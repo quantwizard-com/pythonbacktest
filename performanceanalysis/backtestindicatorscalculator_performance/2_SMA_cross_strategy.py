@@ -94,7 +94,7 @@ evaluator_map = {
 }
 
 back_test_back_office = BackOfficeFactory.create_back_test_back_office(
-    initial_budget=10000, default_transaction_size=100)
+    initial_budget=10000, default_transaction_size=300)
 
 performance_calculator = BuySellPerfCalculator()
 

@@ -34,10 +34,10 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
                 performance_report.total_sell_trades += 1
 
                 performance_report.total_taxes += trade_record.tax
-                performance_report.total_broker_fees = trade_record.broker_fee
-                performance_report.total_gross_pnl = trade_record.gross_transaction_cost - \
+                performance_report.total_broker_fees += trade_record.broker_fee
+                performance_report.total_gross_pnl += trade_record.gross_transaction_cost - \
                                                      self.__opening_trade_record.gross_transaction_cost
-                performance_report.total_net_pnl = trade_record.net_transaction_cost - \
+                performance_report.total_net_pnl += trade_record.net_transaction_cost - \
                                                      self.__opening_trade_record.net_transaction_cost
 
                 is_winning_trade = performance_report.total_net_pnl > 0
@@ -53,7 +53,7 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
 
                 self.__opening_trade_record = trade_record
                 performance_report.total_buy_trades += 1
-                performance_report.total_broker_fees = trade_record.broker_fee
+                performance_report.total_broker_fees += trade_record.broker_fee
             # endof 'transaction_type == "BUY"'
 
         # endof 'for trade_record in trade_history'

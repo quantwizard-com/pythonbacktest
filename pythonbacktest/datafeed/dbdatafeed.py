@@ -14,10 +14,6 @@ class DBDataFeed(AbstractDataFeed):
 
         AbstractDataFeed.__init__(self)
 
-    def get_prices_bars_for_day(self, trading_day):
-        # this method is not implemented and shouldn't be used for the
-        raise Exception("Not implemented method!!!")
-
     def get_prices_bars_for_day_for_symbol(self, trading_day, security_symbol):
         price_bars = []
 

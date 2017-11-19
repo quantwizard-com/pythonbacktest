@@ -1,0 +1,2 @@
+from .indicatorshistoryprocessor import IndicatorsHistoryProcessor
+from .backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory

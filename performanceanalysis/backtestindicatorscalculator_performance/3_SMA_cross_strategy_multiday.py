@@ -13,7 +13,7 @@ from pythonbacktest.indicatorcalculator import IndicatorsMap
 from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot, AbstractSnapshot
 from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import BackOfficeFactory
 from pythonbacktest.ai.nodes import FunctionalNode
-from pythonbacktest.ai.indicatorshistoryprocessor.singleday.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
+from pythonbacktest.ai.indicatorshistoryprocessor.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.ai.strategyperformance.calculators.buysellperfcalculator import BuySellPerfCalculator
 

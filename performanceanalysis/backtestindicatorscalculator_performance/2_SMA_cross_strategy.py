@@ -17,7 +17,7 @@ from pythonbacktest.ai.indicatorshistoryprocessor.singleday.backtesthistoryproce
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.ai.strategyperformance.calculators.buysellperfcalculator import BuySellPerfCalculator
 
-SECURITY_SYMBOL = 'MSFT'
+SECURITY_SYMBOL = 'AMZN'
 
 ########################################################################################################################
 #######                                          DOWNLOAD DATA                                                   #######

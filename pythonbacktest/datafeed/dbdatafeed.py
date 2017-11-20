@@ -1,3 +1,6 @@
+import random
+from collections import OrderedDict
+
 import mysql.connector
 
 from .abstractdatafeed import AbstractDataFeed
@@ -5,6 +8,10 @@ from .pricebar import PriceBar
 
 
 class DBDataFeed(AbstractDataFeed):
+
+    # How many datapoints per day are considered as valid
+    # taking into consideration the maximum number of datapoints for stock shares is 4680
+    DATA_VALIDITY_NUMBER = 4670
 
     def __init__(self, dbhost="localhost", db_user_name="root", db_password="", db_database_name="SecurityPrices"):
         self.__db_host = dbhost
@@ -44,7 +51,25 @@ class DBDataFeed(AbstractDataFeed):
 
         return price_bars
 
-    def get_dates_for_symbol_min_data(self, symbol, min_data=1):
+    def get_all_valid_data_for_symbol(self, symbol):
+        result = OrderedDict()
+
+        dates_to_download_data = self.get_dates_for_symbol_min_data(symbol=symbol, min_data=self.DATA_VALIDITY_NUMBER)
+
+        for single_date in dates_to_download_data:
+            result[single_date] = self.get_prices_bars_for_day_for_symbol(single_date, symbol)
+
+        return result
+
+    def get_random_sample_of_valid_data_for_symbol(self, symbol, number_of_dates):
+        valid_dates = self.get_valid_dates_for_symbol(symbol)
+
+        random.sample(valid_dates, number_of_dates)
+
+    def get_valid_dates_for_symbol(self, symbol):
+        return self.get_dates_for_symbol_min_data(symbol, min_data=self.DATA_VALIDITY_NUMBER)
+
+    def get_dates_for_symbol_min_data(self, symbol, min_data):
         """
         Get dates for symbol where number of data points is at least min_data
         :param symbol: Symbol of the security

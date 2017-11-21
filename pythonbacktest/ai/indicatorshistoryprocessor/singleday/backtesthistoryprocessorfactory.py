@@ -1,6 +1,6 @@
 from pythonbacktest.ai.indicatorshistoryprocessor.singleday.indicatorshistoryprocessor import IndicatorsHistoryProcessor
 from pythonbacktest.ai.nodemanager import NodesMap, NodesProcessor
-from pythonbacktest.ai.strategyperformance.calculators.abstractperfcalculator import AbstractPerfCalculator
+from pythonbacktest.ai.strategyperformance.singleday.calculators.abstractperfcalculator import AbstractPerfCalculator
 from pythonbacktest.ai.transactionevaluator import EvaluatorFactory
 
 

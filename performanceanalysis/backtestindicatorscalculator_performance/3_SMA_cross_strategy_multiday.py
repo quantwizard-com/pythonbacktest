@@ -14,7 +14,7 @@ from pythonbacktest.indicator import SMA, DataCrossIndicator, DataDifference
 from pythonbacktest.indicatorshistory import AbstractSnapshot
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
-from pythonbacktest.ai.strategyperformance.calculators.buysellperfcalculator import BuySellPerfCalculator
+from pythonbacktest.ai.strategyperformance.singleday.calculators.buysellperfcalculator import BuySellPerfCalculator
 
 SECURITY_SYMBOL = 'MSFT'
 

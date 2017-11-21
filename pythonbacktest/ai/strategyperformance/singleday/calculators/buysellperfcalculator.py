@@ -1,6 +1,6 @@
 from .abstractperfcalculator import AbstractPerfCalculator
 from pythonbacktest.ai.backoffice.tradehistory import TradeHistory, TradeRecord
-from pythonbacktest.ai.strategyperformance import PerformanceReport
+from pythonbacktest.ai.strategyperformance.singleday import SingleDayPerformanceReport
 
 
 class BuySellPerfCalculator(AbstractPerfCalculator):
@@ -17,9 +17,9 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
     - 'sell' is considered as a closing transaction
     """
 
-    def calculate_strategy_performance(self, trade_history: TradeHistory) -> PerformanceReport:
+    def calculate_strategy_performance(self, trade_history: TradeHistory) -> SingleDayPerformanceReport:
 
-        performance_report = PerformanceReport()
+        performance_report = SingleDayPerformanceReport()
 
         for trade_record in trade_history.trade_records:
 

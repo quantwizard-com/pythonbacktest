@@ -1,8 +1,8 @@
 from datafeed import PriceBar
 from pythonbacktest.ai.backoffice.backtestbackoffice.backtestbackoffice import BackTestBackOffice
 from pythonbacktest.ai.nodemanager import NodesProcessor
-from pythonbacktest.ai.strategyperformance.calculators.abstractperfcalculator import AbstractPerfCalculator
-from pythonbacktest.ai.strategyperformance import PerformanceReport
+from pythonbacktest.ai.strategyperformance.singleday.calculators.abstractperfcalculator import AbstractPerfCalculator
+from pythonbacktest.ai.strategyperformance.singleday import SingleDayPerformanceReport
 from pythonbacktest.ai.transactionevaluator import Evaluator
 from pythonbacktest.indicatorshistory import IndicatorHistory
 
@@ -18,7 +18,7 @@ class IndicatorsHistoryProcessor(object):
         self.__back_office = back_office
         self.__performance_calculator = performance_calculator
 
-    def run_processor(self) -> PerformanceReport:
+    def run_processor(self) -> SingleDayPerformanceReport:
         for time_stamp, snapshot in self.__indicators_history.all_snapshots.items():
 
             # Get and propagate current price bar

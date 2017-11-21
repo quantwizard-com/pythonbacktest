@@ -3,7 +3,7 @@ from typing import Dict
 
 from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import BackOfficeFactory
 from pythonbacktest.ai.indicatorshistoryprocessor.singleday import BacktestHistoryProcessorFactory
-from pythonbacktest.ai.strategyperformance.calculators.abstractperfcalculator import AbstractPerfCalculator
+from pythonbacktest.ai.strategyperformance.singleday.calculators.abstractperfcalculator import AbstractPerfCalculator
 from pythonbacktest.indicatorcalculator import IndicatorsMap, IndicatorsCalculator
 from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapshot
 

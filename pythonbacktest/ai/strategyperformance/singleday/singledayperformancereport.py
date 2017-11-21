@@ -1,4 +1,4 @@
-class PerformanceReport(object):
+class SingleDayPerformanceReport(object):
 
     # total profit / loss
     total_gross_pnl = 0

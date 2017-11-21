@@ -61,10 +61,22 @@ class DBDataFeed(AbstractDataFeed):
 
         return result
 
-    def get_random_sample_of_valid_data_for_symbol(self, symbol, number_of_dates):
-        valid_dates = self.get_valid_dates_for_symbol(symbol)
+    def get_random_sample_of_valid_data_for_symbol(self, security_symbol, number_of_dates_to_extract) -> OrderedDict:
+        valid_dates = self.get_valid_dates_for_symbol(security_symbol)
+        valid_dates_count = len(valid_dates)
 
-        random.sample(valid_dates, number_of_dates)
+        if valid_dates_count < number_of_dates_to_extract:
+            raise ValueError(f"There not enough data to choose from. "
+                             f"Valid_dates: {valid_dates_count}, number_of_dates: {number_of_dates_to_extract}")
+
+        random_dates = random.sample(valid_dates, number_of_dates_to_extract)
+
+        result = OrderedDict()
+
+        for date in random_dates:
+            result[date] = self.get_prices_bars_for_day_for_symbol(date, security_symbol)
+
+        return result
 
     def get_valid_dates_for_symbol(self, symbol):
         return self.get_dates_for_symbol_min_data(symbol, min_data=self.DATA_VALIDITY_NUMBER)

@@ -1,6 +1,5 @@
 from typing import List
 
-from pythonbacktest.indicatorshistory import IndicatorHistory
 from pythonbacktest.datafeed import PriceBar
 from .indicatorsmap import IndicatorsMap
 
@@ -9,7 +8,7 @@ class IndicatorsCalculator(object):
 
     def __init__(self, source_indicators_map: IndicatorsMap,
                  target_performance_monitor=None,
-                 target_indicators_history: IndicatorHistory=None):
+                 target_indicators_history=None):
 
         self.__indicators_map = source_indicators_map
         self.__performance_monitor = target_performance_monitor

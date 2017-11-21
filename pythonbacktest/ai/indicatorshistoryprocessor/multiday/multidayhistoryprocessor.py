@@ -22,28 +22,32 @@ class MultidayHistoryProcessor(object):
         self.__initial_budget = initial_budget
         self.__default_transaction_size = default_transaction_size
 
-    def run_processor(self):
+    def run_processor(self) -> OrderedDict:
         multiday_performance_report = OrderedDict()
 
         for date, price_bars in self.__multiday_data.items():
 
             # calculate indicators history
-            indicators_history = self.__calculate_history(indicators_history)
+            indicators_history = self.__calculate_history(price_bars=price_bars)
 
             # get the performance report for the single day
             multiday_performance_report[date] = self.__run_back_office_get_performance_report(indicators_history)
+
+        return multiday_performance_report
 
     def __calculate_history(self, price_bars):
         indicators_map = IndicatorsMap(indicators_map_definition=self.__indicators_map_definition)
         indicators_history = IndicatorHistory(ReferencialSnapshot)
         indicators_calculator = IndicatorsCalculator(indicators_map, target_indicators_history=indicators_history)
-        return indicators_calculator.run_calculation(price_bars=price_bars)
+        indicators_calculator.run_calculation(price_bars=price_bars)
+
+        return indicators_history
 
     def __run_back_office_get_performance_report(self, indicators_history):
         back_test_back_office = BackOfficeFactory.create_back_test_back_office(
             initial_budget=self.__initial_budget, default_transaction_size=self.__default_transaction_size)
 
-        history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
+        history_processor = BacktestHistoryProcessorFactory.create_indicators_history_processor(
             indicators_history=indicators_history,
             nodes_map_definition=self.__nodes_map_definition,
             evaluator_map=self.__evaluator_map,

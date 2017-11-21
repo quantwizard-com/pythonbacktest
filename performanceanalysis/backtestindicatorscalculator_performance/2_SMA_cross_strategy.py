@@ -95,7 +95,7 @@ back_test_back_office = BackOfficeFactory.create_back_test_back_office(
 
 performance_calculator = BuySellPerfCalculator()
 
-history_processor = BacktestHistoryProcessorFactory.create_processor_factory(
+history_processor = BacktestHistoryProcessorFactory.create_indicators_history_processor(
     indicators_history=indicators_history,
     nodes_map_definition=nodes_map_definition,
     evaluator_map=evaluator_map,

@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from pythonbacktest.indicatorcalculator import IndicatorsMap
+from pythonbacktest.indicatorcalculator.indicatorsmap import IndicatorsMap
 
 
 class IndicatorHistory(object):

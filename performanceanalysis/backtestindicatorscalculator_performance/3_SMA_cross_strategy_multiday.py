@@ -60,7 +60,7 @@ evaluator_map = {
 db_data_feed = DBDataFeed()
 
 # get data for the random date
-price_bars_per_date = db_data_feed.get_random_sample_of_valid_data_for_symbol(SECURITY_SYMBOL, 5)
+price_bars_per_date = db_data_feed.get_random_sample_of_valid_data_for_symbol(SECURITY_SYMBOL, 50)
 
 performance_calculator = BuySellPerfCalculator()
 
@@ -75,6 +75,4 @@ multiday_history_processor = MultidayHistoryProcessor(
 
 multiday_performance_report = multiday_history_processor.run_processor()
 
-for date, report in multiday_performance_report.items():
-    print(str(report))
-    print("--------")
+print(str(multiday_performance_report))

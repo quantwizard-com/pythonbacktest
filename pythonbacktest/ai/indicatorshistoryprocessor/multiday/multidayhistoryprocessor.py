@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from typing import Dict
 
+from pythonbacktest.ai.strategyperformance.multiday import MultidayPerformanceCalculator
 from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import BackOfficeFactory
 from pythonbacktest.ai.indicatorshistoryprocessor.singleday import BacktestHistoryProcessorFactory
 from pythonbacktest.ai.strategyperformance.singleday.calculators.abstractperfcalculator import AbstractPerfCalculator
@@ -33,7 +34,7 @@ class MultidayHistoryProcessor(object):
             # get the performance report for the single day
             multiday_performance_report[date] = self.__run_back_office_get_performance_report(indicators_history)
 
-        return multiday_performance_report
+        return MultidayPerformanceCalculator.calculate_multiday_performance_report(multiday_performance_report)
 
     def __calculate_history(self, price_bars):
         indicators_map = IndicatorsMap(indicators_map_definition=self.__indicators_map_definition)

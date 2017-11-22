@@ -11,11 +11,10 @@ from pythonbacktest.indicatorshistory import IndicatorHistory, ReferencialSnapsh
 
 class MultidayHistoryProcessor(object):
 
-    def __init__(self, multiday_data: OrderedDict, indicators_map_definition: Dict,
+    def __init__(self, indicators_map_definition: Dict,
                  nodes_map_definition, evaluator_map, performance_calculator: AbstractPerfCalculator,
                  initial_budget, default_transaction_size):
 
-        self.__multiday_data = multiday_data
         self.__indicators_map_definition = indicators_map_definition
         self.__nodes_map_definition = nodes_map_definition
         self.__evaluator_map = evaluator_map
@@ -23,10 +22,10 @@ class MultidayHistoryProcessor(object):
         self.__initial_budget = initial_budget
         self.__default_transaction_size = default_transaction_size
 
-    def run_processor(self) -> OrderedDict:
+    def run_processor(self, multiday_data: OrderedDict) -> OrderedDict:
         multiday_performance_report = OrderedDict()
 
-        for date, price_bars in self.__multiday_data.items():
+        for date, price_bars in multiday_data.items():
 
             # calculate indicators history
             indicators_history = self.__calculate_history(price_bars=price_bars)

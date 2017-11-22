@@ -65,7 +65,6 @@ price_bars_per_date = db_data_feed.get_random_sample_of_valid_data_for_symbol(SE
 performance_calculator = BuySellPerfCalculator()
 
 multiday_history_processor = MultidayHistoryProcessor(
-    multiday_data=price_bars_per_date,
     indicators_map_definition=indicators_map_definition,
     nodes_map_definition=nodes_map_definition,
     evaluator_map=evaluator_map,
@@ -73,6 +72,6 @@ multiday_history_processor = MultidayHistoryProcessor(
     initial_budget=10000,
     default_transaction_size=300)
 
-multiday_performance_report = multiday_history_processor.run_processor()
+multiday_performance_report = multiday_history_processor.run_processor(multiday_data=price_bars_per_date)
 
 print(str(multiday_performance_report))

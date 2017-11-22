@@ -33,12 +33,15 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
                     raise ValueError("Problem with the trade history. Sell but no Buy")
                 performance_report.total_sell_trades += 1
 
+                current_net_pnl = trade_record.net_transaction_cost - \
+                                  self.__opening_trade_record.net_transaction_cost
+
                 performance_report.total_taxes += trade_record.tax
                 performance_report.total_broker_fees += trade_record.broker_fee
                 performance_report.total_gross_pnl += trade_record.gross_transaction_cost - \
                                                      self.__opening_trade_record.gross_transaction_cost
-                performance_report.total_net_pnl += trade_record.net_transaction_cost - \
-                                                     self.__opening_trade_record.net_transaction_cost
+                performance_report.total_net_pnl += current_net_pnl
+                performance_report.all_net_pnls.append(current_net_pnl)
 
                 is_winning_trade = performance_report.total_net_pnl > 0
                 performance_report.total_winning_trades += is_winning_trade

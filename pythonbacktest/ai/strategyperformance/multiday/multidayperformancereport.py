@@ -1,3 +1,5 @@
+import numpy
+
 class MultidayPerformanceReport(object):
 
     total_gross_pnl = 0
@@ -10,6 +12,8 @@ class MultidayPerformanceReport(object):
     total_winning_days = 0
     total_losing_days = 0
 
+    all_net_pnls = []
+
     def __str__(self):
         return f"Gross PNL:         {self.total_gross_pnl}\n" \
                f"Net PNL:           {self.total_net_pnl}\n" \
@@ -17,5 +21,20 @@ class MultidayPerformanceReport(object):
                f"Total fees:        {self.total_broker_fees}\n" \
                f"Winning trades:    {self.total_winning_trades}\n" \
                f"Losing trades:     {self.total_losing_trades}\n" \
+               f"Min net PnL:       {self.minimum_net_pnl}\n" \
+               f"Max net PnL:       {self.maximum_net_pnl}\n" \
+               f"STD net PnL:       {self.std_net_pnl}\n" \
                f"Total wining days: {self.total_winning_days}\n" \
                f"Total losing days: {self.total_losing_days}"
+
+    @property
+    def minimum_net_pnl(self):
+        return min(self.all_net_pnls)
+
+    @property
+    def maximum_net_pnl(self):
+        return max(self.all_net_pnls)
+
+    @property
+    def std_net_pnl(self):
+        return numpy.std(self.all_net_pnls)

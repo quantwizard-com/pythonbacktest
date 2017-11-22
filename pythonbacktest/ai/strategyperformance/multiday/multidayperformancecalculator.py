@@ -13,6 +13,7 @@ class MultidayPerformanceCalculator(object):
         for single_date, single_day_report in single_day_performance_reports.items():
             performance_report.total_gross_pnl += single_day_report.total_gross_pnl
             performance_report.total_net_pnl += single_day_report.total_net_pnl
+            performance_report.all_net_pnls.extend(single_day_report.all_net_pnls)
             performance_report.total_taxes += single_day_report.total_taxes
             performance_report.total_broker_fees += single_day_report.total_broker_fees
             performance_report.total_winning_trades += single_day_report.total_winning_trades

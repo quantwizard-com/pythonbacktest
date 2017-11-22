@@ -11,6 +11,8 @@ class SingleDayPerformanceReport(object):
     total_sell_trades = 0
     total_short_sell_trades = 0
 
+    all_net_pnls = []
+
     def total_trades(self):
         return self.total_buy_trades + self.total_sell_trades + self.total_short_sell_trades
 
@@ -36,3 +38,11 @@ class SingleDayPerformanceReport(object):
     @property
     def winning_rate(self):
         return self.total_winning_trades * 1.0 / self.total_sell_trades
+
+    @property
+    def minimum_pnl(self):
+        return min(self.all_net_pnls)
+
+    @property
+    def maximum_pnl(self):
+        return max(self.all_net_pnls)

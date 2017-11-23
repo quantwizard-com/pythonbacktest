@@ -15,7 +15,7 @@ from pythonbacktest.ai.backoffice.backtestbackoffice.backofficefactory import Ba
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.indicatorshistoryprocessor.singleday.backtesthistoryprocessorfactory import BacktestHistoryProcessorFactory
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
-from pythonbacktest.ai.strategyperformance.calculators.buysellperfcalculator import BuySellPerfCalculator
+from pythonbacktest.ai.strategyperformance.singleday.calculators.buysellperfcalculator import BuySellPerfCalculator
 
 SECURITY_SYMBOL = 'AMZN'
 

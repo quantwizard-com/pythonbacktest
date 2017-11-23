@@ -67,7 +67,7 @@ class AbstractIndicator(ABC):
         :param string_reference:
         :return: LATEST indicator value pointed by the string reference
         """
-        indicator_results = self.__all_indicator_results
+        indicator_results = self.all_results
         if not indicator_results:
             return None
 
@@ -139,7 +139,9 @@ class AbstractIndicator(ABC):
         """
         We've got a new data record in the upstream source indicator
         """
-        previous_results_count = len(self.__all_indicator_results)
+        previous_results_count = len(self.all_results)
+
+        # process new record
         self._process_new_upstream_record()
 
         # there should be exactly one new record in the result

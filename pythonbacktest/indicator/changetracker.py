@@ -11,8 +11,8 @@ class ChangeTracker(AbstractIndicator):
     As such this is combination of DataDelay and DataDifference indicators chained together
     """
 
-    def __init__(self, delay_size):
-        AbstractIndicator.__init__(self)
+    def __init__(self, indicator_name, delay_size, source_indicators=None):
+        AbstractIndicator.__init__(self, indicator_name, source_indicators)
 
         self.__delay_size = delay_size
         self.reset()
@@ -28,12 +28,10 @@ class ChangeTracker(AbstractIndicator):
     def all_result(self):
         return self.__all_results
 
-    def on_new_upstream_value(self, new_value):
+    def _process_new_upstream_record(self):
+        new_value = self.get_latest_data_from_source_indicators()
 
-        if type(new_value) is list:
-            raise ValueError("Lists are not supported as an input value")
-        else:
-            self.__add_number_to_queue(new_value)
+        self.__add_number_to_queue(new_value)
 
     def __add_number_to_queue(self, number):
 

@@ -1,31 +1,25 @@
 from .base import AbstractIndicator
-import decimal
+
 
 class TrendTrackerExtremesOnly(AbstractIndicator):
-    def __init__(self, level=1):
+
+    def __init__(self, indicator_name, level=1, source_indicators=None):
+        AbstractIndicator.__init__(self,
+                                   indicator_name=indicator_name,
+                                   source_indicators=source_indicators)
+
         self.__level = level
         self.reset()
 
     def reset(self):
-        self.__all_results = []
+        AbstractIndicator.reset()
         self.__all_input_data = []
 
-    def on_new_upstream_value(self, new_value):
-        if type(new_value) is list:
-            del self.__all_input_data[:len(new_value)]
-            self.__all_input_data.extend(new_value)
-        else:
-            self.__all_input_data.append(new_value)
+    def _process_new_upstream_record(self):
+        new_value = self.get_latest_data_from_source_indicators()
 
+        self.__all_input_data.append(new_value)
         self.__recalculate_all_result()
-
-    @property
-    def result(self):
-        pass
-
-    @property
-    def all_result(self):
-        return self.__all_results
 
     def __recalculate_all_result(self):
 
@@ -39,7 +33,7 @@ class TrendTrackerExtremesOnly(AbstractIndicator):
 
             current_level -= 1
 
-        self.__all_results = self.__flat_to_extremes_only(support_data, resistance_data)
+        self.all_results = self.__flat_to_extremes_only(support_data, resistance_data)
 
     def __flat_to_extremes_only(self, support_data, resistance_data):
         data_to_process = zip(support_data, resistance_data)

@@ -4,7 +4,10 @@ from scipy.signal import savgol_filter
 
 class SavitzkyGolay(AbstractIndicator):
 
-    def __init__(self, window_size, polyorder, level=1, calculate_buffer_size=-1, keep_last_results_only=False):
+    def __init__(self, indicator_name, window_size, polyorder,
+                 level=1, calculate_buffer_size=-1,
+                 keep_last_results_only=True,
+                 source_indicators=None):
         """
         Constructor
         :param window_size: Windows size
@@ -17,7 +20,7 @@ class SavitzkyGolay(AbstractIndicator):
                 WARNING: this will work only when this indicator consumes
                 only the latest result from the upstream indicator
         """
-        AbstractIndicator.__init__(self)
+        AbstractIndicator.__init__(self, indicator_name, source_indicators)
 
         self.__window_size = window_size
         self.__polyorder = polyorder
@@ -37,7 +40,7 @@ class SavitzkyGolay(AbstractIndicator):
         self.__last_results = []
 
     @property
-    def all_result(self):
+    def all_results(self):
         if self.__keep_last_results_only:
             return self.__last_results
         else:
@@ -47,23 +50,15 @@ class SavitzkyGolay(AbstractIndicator):
     def result(self):
         return self.__all_results[-1]
 
-    def on_new_upstream_value(self, new_value):
+    def _process_new_upstream_record(self):
+        new_value = self.get_latest_data_from_source_indicators()
 
-        # we expect None or array of numbers, which has exactly 'window_size' elements
         if new_value is None:
-            self.__data_storage.append(None)
-        else:
-            if type(new_value) is not list:
-                new_value = [new_value]
+            self.all_results.append(None)
+            return
 
-            # the assumption is we have only one additional value
-            # all the others is overwriting old (n-1) values
-            if len(new_value) > 1:
-                del self.__data_storage[:(len(new_value) - 1)]
-
-            self.__data_storage.extend(new_value)
-
-            self.__calculate_results()
+        self.__data_storage.append(new_value)
+        self.__calculate_results()
 
     def __calculate_results(self):
 

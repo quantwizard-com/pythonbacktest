@@ -13,14 +13,14 @@ class ReferencialSnapshot(AbstractSnapshot):
     """
 
     def __init__(self, indicators_map: IndicatorsMap):
-        super().__init__(indicators_map)
-
         # because this is just referencial snapshot, we need to know how much data should be returned
         # when called asks about all results;
         self.__snapshot_length = -1
 
         self.__all_snapshots_values_dict = {}
         self.__latest_snapshots_values_dict = {}
+
+        super().__init__(indicators_map)
 
     def _take_snapshot(self, indicators_map: IndicatorsMap) -> tuple:
         """
@@ -52,7 +52,13 @@ class ReferencialSnapshot(AbstractSnapshot):
 
     @property
     def all_snapshot_values(self) -> Dict:
-        return self.__all_snapshots_values_dict[:self.__snapshot_length]
+        snapshot_values_result = {}
+
+        # we need a copy of the snapshot with data cut to the maximum length
+        for indicator_name, indicator_data in self.__all_snapshots_values_dict.items():
+            snapshot_values_result[indicator_name] = indicator_data[:self.__snapshot_length]
+
+        return snapshot_values_result
 
 
 

@@ -22,14 +22,15 @@ class AbstractSnapshot(ABC):
     def all_snapshot_values(self) -> Dict:
         raise NotImplementedError()
 
+    def get_indicator_values_per_snapshot(self, indicator_name):
+        return self.all_snapshot_values[indicator_name]
+
     @property
     def latest_snapshot_values(self) -> Dict:
         raise NotImplementedError()
 
-    @property
     def get_current_indicator_value(self, indicator_name):
         return self.latest_snapshot_values[indicator_name]
 
-    @property
     def __getitem__(self, indicator_name: Text):
         return self.get_current_indicator_value(indicator_name)

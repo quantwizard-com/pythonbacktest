@@ -11,29 +11,25 @@ class IndicatorHistory(object):
         # snapshots history records:
         # - key - timestamp
         # - value - indicators snapshot
-        self.__history_records = OrderedDict()
+        self.__indicator_snapshot_records = OrderedDict()
 
     def take_map_snapshot(self, timestamp, indicators_map: IndicatorsMap):
         snapshot_object = self.__snapshot_type(indicators_map)
 
-        self.__history_records[timestamp] = snapshot_object
+        self.__indicator_snapshot_records[timestamp] = snapshot_object
 
     @property
-    def all_history(self):
-        return self.__history_records
+    def all_snapshots_per_indicator_names(self):
+        return self.__indicator_snapshot_records
 
     @property
-    def all_snapshots(self):
-        return self.all_history
-
-    @property
-    def last_snapshot(self):
+    def last_snapshot_per_indicator_names_per_day(self):
         """
         Take last snapshot saved in the history
-        :return:
+        :return: Tuple: (timestamp, snapshot data)
         """
-        # lets get last record
-        last_index = next(reversed(self.__history_records.keys()))
-        last_value = self.__history_records[last_index]
-        return last_index, last_value
+        # lets get last record per dat (index = timestamp)
+        last_timestamp = next(reversed(self.__indicator_snapshot_records.keys()))
+        last_snapshot_data_per_day = self.__indicator_snapshot_records[last_timestamp]
+        return last_timestamp, last_snapshot_data_per_day
 

@@ -13,10 +13,10 @@ class DeepCopySnapshot(AbstractSnapshot):
     """
 
     def __init__(self, indicators_map: IndicatorsMap):
-        super().__init__(indicators_map)
-
         self.__all_snapshots_values_dict = {}
         self.__latest_snapshots_values_dict = {}
+
+        super().__init__(indicators_map)
 
     def _take_snapshot(self, indicators_map: IndicatorsMap) -> Dict:
 

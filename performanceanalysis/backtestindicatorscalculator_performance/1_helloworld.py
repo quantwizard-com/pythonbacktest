@@ -44,4 +44,4 @@ indicators_history = IndicatorHistory(ReferencialSnapshot)
 indicators_calculator = IndicatorsCalculator(indicators_map, target_indicators_history=indicators_history)
 indicators_calculator.run_calculation(price_bars)
 
-print(indicators_history.last_snapshot)
+print(indicators_history.last_snapshot_per_indicator_names_per_day)

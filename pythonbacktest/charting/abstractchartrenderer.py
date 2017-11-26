@@ -11,10 +11,6 @@ class AbstractChartRenderer(AbstractDataVisualization):
         self.__chart_width = width
         self.__chart_height = height
 
-    @abc.abstractmethod
-    def render_charts(self):
-        raise NotImplementedError()
-
     @property
     def chart_width(self):
         return self.__chart_width

@@ -1,9 +1,10 @@
+from indicatorshistory import IndicatorHistory
 from . import *
 import numpy
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
 from bokeh.models.tools import BoxZoomTool, BoxSelectTool, CrosshairTool, \
-    ResizeTool, ResetTool, HoverTool, PanTool, WheelZoomTool, SaveTool
+    ResetTool, HoverTool, PanTool, WheelZoomTool, SaveTool
 
 
 class BokehChartRenderer(AbstractChartRenderer):
@@ -16,7 +17,18 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_charts(self, sigma_data=None):
+    def render_charts(self, indicators_history, indicators_to_display):
+        pass
+
+    def __indicators_to_display_into_per_chart_data(self, indicators_history: IndicatorHistory, indicators_to_display):
+        per_chart_data = []
+        last_data_snapshot = indicators_history.last_snapshot
+
+        for indicator_per_chart_collection in indicators_to_display:
+            for series_indicator_name, color in indicator_per_chart_collection:
+                data_per_series = last_data_snapshot[series_indicator_name]
+
+    def render_charts_old(self, sigma_data=None):
         all_charts = []
         first_chart = None
 
@@ -34,7 +46,7 @@ class BokehChartRenderer(AbstractChartRenderer):
             set_markers_at_average = True
 
             # get last data snapshot for the given day
-            indicators_snapshot = self.indicators_history.get_last_indicators_snapshot()
+            snapshot_index, indicators_snapshot = self.indicators_history.last_snapshot
 
             min_per_chart = []
             max_per_chart = []
@@ -45,20 +57,25 @@ class BokehChartRenderer(AbstractChartRenderer):
                     self.__add_sigma_data(new_chart, sigma_data[indicator_name], len(indicator_data))
 
             for indicator_name, color in name_collection:
-                indicator_data = indicators_snapshot.snapshot_data[indicator_name]
-                self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2, 'legend': indicator_name })
 
-                average_data, min_data, max_data = self.__average_indicator_data(indicator_data)
-                min_per_chart.append(min_data)
-                max_per_chart.append(max_data)
+                try:
+                    indicator_data = indicators_snapshot.get_current_indicator_value(indicator_name)
+                    self.__add_data_to_chart(new_chart, indicator_data, {'color': color, 'line_width': 2, 'legend': indicator_name })
 
-                if average_value is None:
-                    average_value = average_data
-                else:
-                    average_value = (average_data + average_value) / 2
+                    average_data, min_data, max_data = self.__average_indicator_data(indicator_data)
+                    min_per_chart.append(min_data)
+                    max_per_chart.append(max_data)
 
-                if indicator_name == 'close':
-                    set_markers_at_average = False
+                    if average_value is None:
+                        average_value = average_data
+                    else:
+                        average_value = (average_data + average_value) / 2
+
+                    if indicator_name == 'close':
+                        set_markers_at_average = False
+                except:
+                    print(f"Exception. Indicator name: {indicator_name}, indicator color: {color}")
+                    raise
 
             self.__add_trade_log_to_chart(new_chart, average_value, set_markers_at_average)
 

@@ -36,25 +36,18 @@ class SavitzkyGolay(AbstractIndicator):
 
     def reset(self):
         self.__data_storage = []
-        self.__all_results = []
+        self.__temp_all_results = []
         self.__last_results = []
 
     @property
-    def all_results(self):
-        if self.__keep_last_results_only:
-            return self.__last_results
-        else:
-            return self.__all_results
-
-    @property
     def result(self):
-        return self.__all_results[-1]
+        return self.__temp_all_results[-1]
 
     def _process_new_upstream_record(self):
         new_value = self.get_latest_data_from_source_indicators()
 
         if new_value is None:
-            self.all_results.append(None)
+            self.add_new_result(None)
             return
 
         self.__data_storage.append(new_value)
@@ -63,15 +56,14 @@ class SavitzkyGolay(AbstractIndicator):
     def __calculate_results(self):
 
         none_count = 0
-        self.__all_results = []
+        self.__temp_all_results = []
 
         # count leading Nones and add them to the result
         for element in self.__data_storage:
-            if element is None:
-                none_count += 1
-                self.__all_results.append(None)
-            else:
+            if element is not None:
                 break
+            none_count += 1
+            self.__temp_all_results.append(None)
 
         # set temp_storage to non-none elements only
         temp_storage = self.__data_storage[none_count:]
@@ -89,12 +81,15 @@ class SavitzkyGolay(AbstractIndicator):
             for level_count in range(0, self.__level):
                 temp_storage = savgol_filter(temp_storage, window_size, self.__polyorder).tolist()
 
-            self.__all_results.extend(passive_data)
-            self.__all_results.extend(temp_storage)
+            self.__temp_all_results.extend(passive_data)
+            self.__temp_all_results.extend(temp_storage)
         else:
-            self.__all_results.extend([None] * len(temp_storage))
+            self.__temp_all_results.extend([None] * len(temp_storage))
 
         # lets store the latest result
-        self.__last_results.append(self.__all_results[-1])
+        if self.__keep_last_results_only:
+            self.add_new_result(self.__temp_all_results[-1])
+        else:
+            self.set_all_results(self.__temp_all_results)
 
 

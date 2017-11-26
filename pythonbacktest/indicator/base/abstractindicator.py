@@ -102,6 +102,19 @@ class AbstractIndicator(ABC):
         """
         return self.__all_indicator_results
 
+    def add_new_result(self, new_result):
+        """
+        Add new single result to the collection
+        """
+        self.__all_indicator_results.append(new_result)
+
+    def set_all_results(self, results):
+        """
+        Force setting of all results
+        :param results: Results to be set
+        """
+        self.__all_indicator_results = results
+
     def get_latest_data_from_source_indicators(self):
         """
         Download latest records from the source indicators based on the __source_indicators variable

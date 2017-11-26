@@ -15,21 +15,44 @@ class ReferencialSnapshot(AbstractSnapshot):
     def __init__(self, indicators_map: IndicatorsMap):
         super().__init__(indicators_map)
 
+        # because this is just referencial snapshot, we need to know how much data should be returned
+        # when called asks about all results;
+        self.__snapshot_length = -1
+
+        self.__all_snapshots_values_dict = {}
+        self.__latest_snapshots_values_dict = {}
+
     def _take_snapshot(self, indicators_map: IndicatorsMap) -> tuple:
         """
         Take snapshot of the values in the IndicatorsMap
         :param indicators_map: Map of the indicators
-        :return: tuple (all snapshot values, latest snapshot values
         """
-        all_snapshots_values_dict = {}
-        latest_snapshots_values_dict = {}
         for single_indicator in indicators_map.all_indicators():
             indicator_name = single_indicator.indicator_name
-            all_snapshots_values_dict[indicator_name] = single_indicator.all_results
-            latest_snapshots_values_dict[indicator_name] = single_indicator.latest_result
 
-        return all_snapshots_values_dict, latest_snapshots_values_dict
+            indicator_all_results = single_indicator.all_results
+            indicator_latest_result = single_indicator.latest_result
 
+            if not indicator_all_results:
+                raise ValueError(f"Indicator {indicator_name} returned null or empty all results.")
+
+            self.__all_snapshots_values_dict[indicator_name] = indicator_all_results
+            self.__latest_snapshots_values_dict[indicator_name] = indicator_latest_result
+
+            current_len = len(indicator_all_results)
+            snapshot_length = self.__snapshot_length
+            if snapshot_length == -1:
+                self.__snapshot_length = current_len
+            elif snapshot_length != current_len:
+                raise ValueError(f"Expected len={snapshot_length}, got {current_len}")
+
+    @property
+    def latest_snapshot_values(self) -> Dict:
+        return self.__latest_snapshots_values_dict
+
+    @property
+    def all_snapshot_values(self) -> Dict:
+        return self.__all_snapshots_values_dict[:self.__snapshot_length]
 
 
 

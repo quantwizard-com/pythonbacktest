@@ -38,4 +38,4 @@ class SMA(AbstractIndicator):
             self.__sum_of_elements -= self.__temp_data_storage[0]
             del self.__temp_data_storage[0]
 
-        self.all_results.append(current_sma)
+        self.add_new_result(current_sma)

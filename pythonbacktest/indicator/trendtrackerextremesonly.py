@@ -12,7 +12,7 @@ class TrendTrackerExtremesOnly(AbstractIndicator):
         self.reset()
 
     def reset(self):
-        AbstractIndicator.reset()
+        AbstractIndicator.reset(self)
         self.__all_input_data = []
 
     def _process_new_upstream_record(self):
@@ -33,7 +33,7 @@ class TrendTrackerExtremesOnly(AbstractIndicator):
 
             current_level -= 1
 
-        self.all_results = self.__flat_to_extremes_only(support_data, resistance_data)
+        AbstractIndicator.set_all_results(self, self.__flat_to_extremes_only(support_data, resistance_data))
 
     def __flat_to_extremes_only(self, support_data, resistance_data):
         data_to_process = zip(support_data, resistance_data)

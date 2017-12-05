@@ -21,20 +21,22 @@ class DBDataFeed(AbstractDataFeed):
 
         AbstractDataFeed.__init__(self)
 
-    def get_prices_bars_for_day_for_symbol(self, trading_day, security_symbol):
+    def get_prices_bars_for_day_for_symbol(self, trading_day, security_symbol, base_currency_symbol='USD'):
         price_bars = []
 
         connection = self.__create_connection()
 
         query = "select pb.Date, pb.Open, pb.Close, pb.High, pb.Low, pb.Volume " \
-                "from PriceBars pb, SecurityContracts sc " \
+                "from PriceBars pb, SecurityContracts sc, CurrencySymbols cs  " \
                 "where pb.SecurityContractID = sc.ID " \
                 "and sc.ContractTickerSymbol = %s " \
                 "and Date(pb.Date) = %s " \
+                "and sc.ContractCurrencyID = cs.ID " \
+                "and cs.CurrencySymbol = %s " \
                 "order by pb.Date asc"
 
         cursor = connection.cursor()
-        cursor.execute(query, (security_symbol, trading_day))
+        cursor.execute(query, (security_symbol, trading_day, base_currency_symbol))
 
         for (data_date, data_open, data_close, data_high, data_low, data_volume) in cursor:
             price_bar = PriceBar()

@@ -15,6 +15,7 @@ from .sma import SMA
 from .staticvalue import StaticValue
 from .stdindicator import STD
 from .savitzkygolay import SavitzkyGolay
+from .stepprogressindicator import StepProgressIndicator
 from .trendtracker import TrendTracker
 from .trendtrackerextremesonly import TrendTrackerExtremesOnly
 from .varianceindicator import VAR

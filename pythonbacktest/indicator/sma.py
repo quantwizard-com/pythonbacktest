@@ -13,7 +13,7 @@ class SMA(AbstractIndicator):
         self.reset()
 
     def reset(self):
-        AbstractIndicator.reset(self)
+        super().reset()
         self.__temp_data_storage = []
         self.__sum_of_elements = 0
 

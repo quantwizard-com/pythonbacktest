@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import numpy as np
 
 
 class AbstractIndicator(ABC):
@@ -21,7 +20,7 @@ class AbstractIndicator(ABC):
 
         # these are results of the indicator calculations on the time scale
         # meaning: for each single input record there's single result record
-        self.__all_indicator_results = np.array()
+        self.__all_indicator_results = []
 
         super().__init__()
 
@@ -31,7 +30,7 @@ class AbstractIndicator(ABC):
         starts calculation for single date
         :return: None
         """
-        self.__all_indicator_results = np.array()
+        self.__all_indicator_results = []
 
     def set_source_indicators(self, source_indicators):
         """

@@ -19,7 +19,7 @@ class IndicatorsHistoryProcessor(object):
         self.__performance_calculator = performance_calculator
 
     def run_processor(self) -> SingleDayPerformanceReport:
-        for time_stamp, snapshot in self.__indicators_history.all_snapshots.items():
+        for time_stamp, snapshot in self.__indicators_history.all_snapshots_per_indicator_names.items():
 
             # Get and propagate current price bar
             current_price_bar = PriceBar(snapshot['pricebar'])

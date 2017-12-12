@@ -1,4 +1,4 @@
-from datafeed import PriceBar
+from pythonbacktest.datafeed import PriceBar
 from pythonbacktest.ai.backoffice.backtestbackoffice.backtestbackoffice import BackTestBackOffice
 from pythonbacktest.ai.nodemanager import NodesProcessor
 from pythonbacktest.ai.strategyperformance.singleday.calculators.abstractperfcalculator import AbstractPerfCalculator

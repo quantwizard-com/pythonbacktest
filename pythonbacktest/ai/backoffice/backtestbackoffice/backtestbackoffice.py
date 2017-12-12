@@ -1,6 +1,6 @@
 from typing import Text
 
-from ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
+from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.ai.backoffice.brokergateway.backtestbrokergateway import BacktestBrokerGateway
 from pythonbacktest.ai.backoffice.cashvault.abstractcashvault import AbstractCashVault
 from pythonbacktest.ai.backoffice.portfoliomanager.abstractportfoliomanager import AbstractPortfolioManager

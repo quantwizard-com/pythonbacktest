@@ -1,6 +1,6 @@
 from typing import Text, List
 
-from datafeed import PriceBar
+from pythonbacktest.datafeed import PriceBar
 from .traderecord import TradeRecord
 
 

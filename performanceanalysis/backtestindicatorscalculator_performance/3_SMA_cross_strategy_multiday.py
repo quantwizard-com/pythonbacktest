@@ -3,8 +3,6 @@ import os
 import sys
 
 # realpath() will make your script run, even if you symlink it :)
-from ai.indicatorshistoryprocessor.multiday.multidayhistoryprocessor import MultidayHistoryProcessor
-
 cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
 python_backtest_path = os.path.abspath(cmd_folder + '/../../')
 sys.path.insert(0, python_backtest_path)
@@ -15,6 +13,7 @@ from pythonbacktest.indicatorshistory import AbstractSnapshot
 from pythonbacktest.ai.nodes import FunctionalNode
 from pythonbacktest.ai.backoffice.tradehistory.tradedatasnapshot import TradeDataSnapshot
 from pythonbacktest.ai.strategyperformance.singleday.calculators.buysellperfcalculator import BuySellPerfCalculator
+from pythonbacktest.ai.indicatorshistoryprocessor.multiday.multidayhistoryprocessor import MultidayHistoryProcessor
 
 SECURITY_SYMBOL = 'MSFT'
 

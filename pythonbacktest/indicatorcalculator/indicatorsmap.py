@@ -2,7 +2,7 @@ from typing import List
 
 from pythonbacktest.indicator.base import AbstractIndicator
 from pythonbacktest.datafeed import PriceBar
-from pythonbacktest.indicator import PriceBarIndicator, StaticValue
+from pythonbacktest.indicator import PriceBarIndicator, AggregatedPriceBar, StaticValue
 
 
 class IndicatorsMap(object):
@@ -47,6 +47,7 @@ class IndicatorsMap(object):
         price_bar_indicator = PriceBarIndicator(indicator_name="pricebar")
         self.__price_bar_indicator = price_bar_indicator
 
+        aggregated_price_bar_indicator = AggregatedPriceBar('aggregated_price_bar', source_indicators=price_bar_indicator)
         timestamp_indicator = self.__create_static_indicator('timestamp')
         open_indicator = self.__create_static_indicator('open')
         close_indicator = self.__create_static_indicator('close')
@@ -56,6 +57,7 @@ class IndicatorsMap(object):
 
         self.__name_to_indicator_map = {
             'pricebar': price_bar_indicator,
+            'aggregated_price_bar': aggregated_price_bar_indicator,
             'timestamp': timestamp_indicator,
             'open': open_indicator,
             'close': close_indicator,
@@ -64,7 +66,7 @@ class IndicatorsMap(object):
             'volume': volume_indicator
         }
 
-        self.__all_indicators=[price_bar_indicator, timestamp_indicator, open_indicator,
+        self.__all_indicators=[price_bar_indicator, aggregated_price_bar_indicator, timestamp_indicator, open_indicator,
                                close_indicator, high_indicator, low_indicator, volume_indicator]
 
     def __create_static_indicator(self, indicator_name):

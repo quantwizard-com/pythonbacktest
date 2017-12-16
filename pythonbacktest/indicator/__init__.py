@@ -11,6 +11,8 @@ from .differential import Differential
 from .extremumfinder import ExtremumFinder
 from .minmaxtracker import MinMaxTracker
 from .pricebarindicator import PriceBarIndicator
+# AggregatedPriceBar MUST be after PriceBarIndicator
+from .aggregatedpricebar import AggregatedPriceBar
 from .sma import SMA
 from .staticvalue import StaticValue
 from .stdindicator import STD

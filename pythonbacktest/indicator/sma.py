@@ -5,9 +5,7 @@ from .base import AbstractIndicator
 class SMA(AbstractIndicator):
 
     def __init__(self, indicator_name, window_len, source_indicators=None):
-        AbstractIndicator.__init__(self,
-                                   indicator_name=indicator_name,
-                                   source_indicators=source_indicators)
+        super().__init__(indicator_name=indicator_name, source_indicators=source_indicators)
 
         self.__window_len = window_len
         self.reset()

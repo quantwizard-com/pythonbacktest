@@ -29,12 +29,12 @@ class MultidayPerformanceReport(object):
 
     @property
     def minimum_net_pnl(self):
-        return min(self.all_net_pnls)
+        return min(self.all_net_pnls if self.all_net_pnls else [0])
 
     @property
     def maximum_net_pnl(self):
-        return max(self.all_net_pnls)
+        return max(self.all_net_pnls if self.all_net_pnls else [0])
 
     @property
     def std_net_pnl(self):
-        return numpy.std(self.all_net_pnls)
+        return numpy.std(self.all_net_pnls if self.all_net_pnls else [0])

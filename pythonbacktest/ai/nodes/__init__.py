@@ -1,1 +1,2 @@
 from .functionalnode import FunctionalNode
+from .functionalnodewithstore import FunctionalNodeWithStore

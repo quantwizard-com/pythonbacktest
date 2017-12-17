@@ -1,7 +1,7 @@
 import numpy
 from bokeh.models import Title
 
-from indicatorshistory import IndicatorHistory
+from pythonbacktest.indicatorshistory import IndicatorHistory
 from .abstractchartrenderer import AbstractChartRenderer
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show

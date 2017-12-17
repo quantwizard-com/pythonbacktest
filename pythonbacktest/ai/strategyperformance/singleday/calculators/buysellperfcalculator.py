@@ -1,3 +1,4 @@
+from pythonbacktest.indicatorshistory import IndicatorHistory
 from .abstractperfcalculator import AbstractPerfCalculator
 from pythonbacktest.ai.backoffice.tradehistory import TradeHistory, TradeRecord
 from pythonbacktest.ai.strategyperformance.singleday import SingleDayPerformanceReport
@@ -17,11 +18,16 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
     - 'sell' is considered as a closing transaction
     """
 
-    def calculate_strategy_performance(self, trade_history: TradeHistory) -> SingleDayPerformanceReport:
+    def calculate_strategy_performance(self, indicators_history: IndicatorHistory,
+                                       trade_history: TradeHistory) -> SingleDayPerformanceReport:
 
         performance_report = SingleDayPerformanceReport()
+        performance_report.indicators_history = indicators_history
 
         for trade_record in trade_history.trade_records:
+
+            # add the trade record to the performance report
+            performance_report.all_trade_records.append(trade_record)
 
             transaction_type = trade_record.transaction_type
 
@@ -50,7 +56,7 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
                 self.__opening_trade_record = None
             # endof 'if transaction_type == "SELL"'
 
-            if transaction_type == "BUY":
+            elif transaction_type == "BUY":
                 if self.__opening_trade_record:
                     raise ValueError("Problem with the trade history. Buy but there's already position open")
 

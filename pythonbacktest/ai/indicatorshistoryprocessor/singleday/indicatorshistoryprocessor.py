@@ -38,4 +38,9 @@ class IndicatorsHistoryProcessor(object):
         self.__back_office.close_positions()
 
         # return strategy performance data
-        return self.__performance_calculator.calculate_strategy_performance(self.__back_office.trade_history)
+        single_day_performance_report = \
+            self.__performance_calculator.calculate_strategy_performance(
+                self.__indicators_history,
+                self.__back_office.trade_history)
+
+        return single_day_performance_report

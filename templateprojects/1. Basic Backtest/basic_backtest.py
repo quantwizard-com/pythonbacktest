@@ -8,7 +8,7 @@ from pythonbacktest.backtestengine import BasicBackTestEngine
 from pythonbacktest.strategy import import_strategy
 from pythonbacktest.broker import BackTestBroker
 from pythonbacktest.tradelog import MemoryTradeLog
-from pythonbacktest.indicator import IndicatorHistory
+from pythonbacktest.indicatorshistory import IndicatorHistory
 from pythonbacktest.animation import IndicatorsHistoryAnimation
 
 from datetime import date

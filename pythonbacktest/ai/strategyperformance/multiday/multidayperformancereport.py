@@ -2,17 +2,21 @@ import numpy
 
 class MultidayPerformanceReport(object):
 
-    total_gross_pnl = 0
-    total_net_pnl = 0
-    total_taxes = 0
-    total_broker_fees = 0
-    total_winning_trades = 0
-    total_losing_trades = 0
+    def __init__(self):
+        self.total_gross_pnl = 0
+        self.total_net_pnl = 0
+        self.total_taxes = 0
+        self.total_broker_fees = 0
+        self.total_winning_trades = 0
+        self.total_losing_trades = 0
 
-    total_winning_days = 0
-    total_losing_days = 0
+        self.total_winning_days = 0
+        self.total_losing_days = 0
 
-    all_net_pnls = []
+        self.all_net_pnls = []
+        self.all_trade_records = []
+
+        self.performance_record_per_date = None
 
     def __str__(self):
         return f"Gross PNL:         {self.total_gross_pnl}\n" \

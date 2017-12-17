@@ -2,13 +2,6 @@ from typing import Dict
 
 
 class PriceBar(object):
-    timestamp = None
-    open = None
-    close = None
-    high = None
-    low = None
-    volume = None
-
     def __init__(self, dict_fields: Dict = None):
 
         if dict_fields:

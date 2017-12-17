@@ -36,5 +36,15 @@ class MultidayPerformanceReport(object):
         return max(self.all_net_pnls if self.all_net_pnls else [0])
 
     @property
+    def accruing_net_pnl(self):
+        result = [0]
+        current_accrued_pnl = 0
+        for single_pnl in self.all_net_pnls:
+            current_accrued_pnl += single_pnl
+            result.append(current_accrued_pnl)
+
+        return result
+
+    @property
     def std_net_pnl(self):
         return numpy.std(self.all_net_pnls if self.all_net_pnls else [0])

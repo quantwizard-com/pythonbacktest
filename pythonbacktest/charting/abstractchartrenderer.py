@@ -40,7 +40,7 @@ class AbstractChartRenderer(AbstractDataVisualization):
         return per_chart_data
 
     def __get_trade_data_per_chart(self, trade_history: TradeHistory):
-        return [(100, "BUY"), (200, "SELL")]
+        return [(100, "BUY"), (1000, "SELL")]
 
     @abc.abstractmethod
     def _create_and_show_charts_with_data(self, indicator_data_per_all_charts, trade_data):

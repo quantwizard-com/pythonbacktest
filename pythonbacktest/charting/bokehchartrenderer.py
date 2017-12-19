@@ -12,6 +12,7 @@ class BokehChartRenderer(AbstractChartRenderer):
 
     CHART_TOOLBAR_LOCATION = 'left'
     CHART_MARKER_SIZE = 10
+    TRADE_TYPE_TO_COLOR = {'buy': 'green', 'sell': 'red', 'sshort': 'purple'}
 
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
@@ -47,9 +48,18 @@ class BokehChartRenderer(AbstractChartRenderer):
         title_text = ",".join([data[0] for data in indicator_data_per_chart])
         target_chart.title = Title(text=title_text)
 
-    def __render_trade_data(self, target_chart, indicator_data_per_chart, trader_data):
-        pass
+    def __render_trade_data(self, target_chart, indicator_data_per_chart, trade_data):
+        # find max and min of all indicator data per chart
+        max_value = max([max(data[1]) for data in indicator_data_per_chart])
+        min_value = min([min(data[1]) for data in indicator_data_per_chart])
 
+        for index, trade_type in trade_data:
+            trade_type_lower = trade_type.lower()
+            if trade_type_lower not in self.TRADE_TYPE_TO_COLOR:
+                raise ValueError("Can't find trade type: " + trade_type)
+
+            trade_color = self.TRADE_TYPE_TO_COLOR[trade_type_lower]
+            target_chart.line([index, index], [min_value, max_value], **{'color': trade_color, 'line_width': 1})
 
     @staticmethod
     def __create_chart_tools():

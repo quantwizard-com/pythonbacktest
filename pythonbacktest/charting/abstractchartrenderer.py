@@ -1,5 +1,6 @@
 import abc
 
+from pythonbacktest.ai.backoffice.tradehistory import TradeHistory
 from pythonbacktest.visualization import AbstractDataVisualization
 from pythonbacktest.indicatorshistory import IndicatorHistory
 
@@ -14,7 +15,13 @@ class AbstractChartRenderer(AbstractDataVisualization):
 
     def render_charts(self, indicators_history, *indicators_to_display):
         per_chart_data = self.__get_indicators_data_per_chart(indicators_history, indicators_to_display)
-        self._create_and_show_charts_with_data(per_chart_data)
+        self._create_and_show_charts_with_data(per_chart_data, trade_data=None)
+
+    def render_charts_with_trades(self, indicators_history, trade_history, *indicators_to_display):
+        per_chart_data = self.__get_indicators_data_per_chart(indicators_history, indicators_to_display)
+        per_chart_trade_data = None if trade_history is None else self.__get_trade_data_per_chart(trade_history)
+
+        self._create_and_show_charts_with_data(per_chart_data, per_chart_trade_data)
 
     def __get_indicators_data_per_chart(self, indicators_history: IndicatorHistory, indicators_to_display):
         per_chart_data = []
@@ -32,8 +39,11 @@ class AbstractChartRenderer(AbstractDataVisualization):
 
         return per_chart_data
 
+    def __get_trade_data_per_chart(self, trade_history: TradeHistory):
+        return [(100, "BUY"), (200, "SELL")]
+
     @abc.abstractmethod
-    def _create_and_show_charts_with_data(self, indicator_data_per_all_charts):
+    def _create_and_show_charts_with_data(self, indicator_data_per_all_charts, trade_data):
         raise NotImplementedError("_create_and_show_charts_with_data")
 
     @property

@@ -16,7 +16,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def _create_and_show_charts_with_data(self, indicator_data_per_all_charts):
+    def _create_and_show_charts_with_data(self, indicator_data_per_all_charts, trade_data):
         all_charts = []
         for indicator_data_per_chart in indicator_data_per_all_charts:
             newchart = figure(width=self.chart_width, height=self.chart_height,
@@ -25,25 +25,31 @@ class BokehChartRenderer(AbstractChartRenderer):
                               x_range=all_charts[0].x_range if all_charts else None
                               )
             newchart.grid.grid_line_dash = [4, 2]
-
             all_charts.append(newchart)
 
-            indicator_names_per_chart = []
-            for indicator_name, data_per_serie, color_per_serie in indicator_data_per_chart:
-                x_data, y_data = self.__pack_data_with_index(data_per_serie)
+            self.__render_chart_title(newchart, indicator_data_per_chart)
+            self.__render_chart_data(newchart, indicator_data_per_chart)
 
-                newchart.line(x_data, y_data, **{'color': color_per_serie, 'line_width': 2, 'legend': indicator_name})
-
-                indicator_names_per_chart.append(indicator_name)
-
-            # set chart title, remove duplicate indicator names
-            # (may happen if there's multiple data series for single indicator)
-            newchart.title = Title(text=','.join(list(set(indicator_names_per_chart))))
+            if trade_data is not None:
+                self.__render_trade_data(newchart, indicator_data_per_chart, trade_data)
 
         if len(all_charts) == 1:
             show(all_charts[0])
         else:
             show(Column(*all_charts))
+
+    def __render_chart_data(self, target_chart, indicator_data_per_chart):
+        for indicator_name, data_per_serie, color_per_serie in indicator_data_per_chart:
+            x_data, y_data = self.__pack_data_with_index(data_per_serie)
+            target_chart.line(x_data, y_data, **{'color': color_per_serie, 'line_width': 2, 'legend': indicator_name})
+
+    def __render_chart_title(self, target_chart, indicator_data_per_chart):
+        title_text = ",".join([data[0] for data in indicator_data_per_chart])
+        target_chart.title = Title(text=title_text)
+
+    def __render_trade_data(self, target_chart, indicator_data_per_chart, trader_data):
+        pass
+
 
     @staticmethod
     def __create_chart_tools():

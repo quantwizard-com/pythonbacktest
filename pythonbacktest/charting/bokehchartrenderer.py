@@ -1,7 +1,6 @@
 import numpy
 from bokeh.models import Title
 
-from pythonbacktest.indicatorshistory import IndicatorHistory
 from .abstractchartrenderer import AbstractChartRenderer
 from bokeh.models.layouts import Column
 from bokeh.plotting import figure, show
@@ -17,27 +16,7 @@ class BokehChartRenderer(AbstractChartRenderer):
     def __init__(self, width=900, height=500):
         AbstractChartRenderer.__init__(self, width, height)
 
-    def render_charts(self, indicators_history, *indicators_to_display):
-        per_chart_data = self.__indicators_to_display_into_per_chart_data(indicators_history, indicators_to_display)
-        self.__create_and_show_charts_with_data(per_chart_data)
-
-    def __indicators_to_display_into_per_chart_data(self, indicators_history: IndicatorHistory, indicators_to_display):
-        per_chart_data = []
-        timestamp, last_data_snapshot_object = indicators_history.last_snapshot_per_indicator_names_per_day
-        for indicator_per_chart_collection in indicators_to_display:
-
-            all_data_series_with_color_per_chart = []
-            for series_indicator_name, color in indicator_per_chart_collection:
-                data_per_series = last_data_snapshot_object.get_indicator_values_per_snapshot(series_indicator_name)
-
-                # each data record will consists of: series (indicator) name, data per that indicator and its color
-                all_data_series_with_color_per_chart.append((series_indicator_name, data_per_series, color))
-
-            per_chart_data.append(all_data_series_with_color_per_chart)
-
-        return per_chart_data
-
-    def __create_and_show_charts_with_data(self, indicator_data_per_all_charts):
+    def _create_and_show_charts_with_data(self, indicator_data_per_all_charts):
         all_charts = []
         for indicator_data_per_chart in indicator_data_per_all_charts:
             newchart = figure(width=self.chart_width, height=self.chart_height,

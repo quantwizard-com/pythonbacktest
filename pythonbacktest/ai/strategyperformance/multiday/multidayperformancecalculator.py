@@ -15,7 +15,7 @@ class MultidayPerformanceCalculator(object):
             performance_report.total_gross_pnl += single_day_report.total_gross_pnl
             performance_report.total_net_pnl += single_day_report.total_net_pnl
             performance_report.all_net_pnls.extend(single_day_report.all_net_pnls)
-            performance_report.all_trade_records.extend(single_day_report.all_trade_records)
+            performance_report.all_trade_records.extend(single_day_report.trade_history.trade_records)
             performance_report.total_taxes += single_day_report.total_taxes
             performance_report.total_broker_fees += single_day_report.total_broker_fees
             performance_report.total_winning_trades += single_day_report.total_winning_trades

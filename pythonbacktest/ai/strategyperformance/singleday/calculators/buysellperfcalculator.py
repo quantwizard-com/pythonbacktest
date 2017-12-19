@@ -23,11 +23,9 @@ class BuySellPerfCalculator(AbstractPerfCalculator):
 
         performance_report = SingleDayPerformanceReport()
         performance_report.indicators_history = indicators_history
+        performance_report.trade_history = trade_history
 
         for trade_record in trade_history.trade_records:
-
-            # add the trade record to the performance report
-            performance_report.all_trade_records.append(trade_record)
 
             transaction_type = trade_record.transaction_type
 

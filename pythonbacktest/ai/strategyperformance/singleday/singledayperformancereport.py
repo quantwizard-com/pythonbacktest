@@ -14,8 +14,7 @@ class SingleDayPerformanceReport(object):
         self.total_short_sell_trades = 0
 
         self.all_net_pnls = []
-        self.all_trade_records = []
-
+        self.trade_history = None
         self.indicators_history = None
 
     def total_trades(self):

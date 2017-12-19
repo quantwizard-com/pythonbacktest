@@ -52,3 +52,6 @@ class MultidayPerformanceReport(object):
     @property
     def std_net_pnl(self):
         return numpy.std(self.all_net_pnls if self.all_net_pnls else [0])
+
+    def __getitem__(self, date):
+        return self.performance_record_per_date[date]

@@ -63,6 +63,14 @@ class DBDataFeed(AbstractDataFeed):
 
         return result
 
+    def get_prices_bars_for_multiple_days_for_symbol(self, security_symbol, *dates) -> OrderedDict:
+        result = OrderedDict()
+
+        for date in dates:
+            result[date] = self.get_prices_bars_for_day_for_symbol(date, security_symbol)
+
+        return result
+
     def get_random_sample_of_valid_data_for_symbol(self, security_symbol, number_of_dates_to_extract) -> OrderedDict:
         valid_dates = self.get_valid_dates_for_symbol(security_symbol)
         valid_dates_count = len(valid_dates)

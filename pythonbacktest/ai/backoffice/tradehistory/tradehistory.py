@@ -3,6 +3,8 @@ from typing import Text, List
 from pythonbacktest.datafeed import PriceBar
 from .traderecord import TradeRecord
 
+from pandas import DataFrame
+
 
 class TradeHistory(object):
 
@@ -33,4 +35,7 @@ class TradeHistory(object):
         self.__trade_records.append(trade_record)
         self.__trade_records_timestamps.append(trade_timestamp)
 
+    @property
+    def as_dataframe(self):
+        return DataFrame([trade_record.as_dict for trade_record in self.trade_records])
 

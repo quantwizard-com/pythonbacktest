@@ -1,5 +1,7 @@
 from typing import Text
 
+from collections import OrderedDict
+
 from pythonbacktest.datafeed import PriceBar
 
 
@@ -68,3 +70,15 @@ class TradeRecord(object):
     def tax(self):
         return self.__tax
 
+    @property
+    def as_dict(self):
+        return OrderedDict({
+                'Price bar': self.trigger_price_bar.as_dict,
+                'Type': self.transaction_type,
+                'Size': self.transaction_size,
+                'Price': self.price_per_share,
+                'Gross Cost': self.gross_transaction_cost,
+                'Net Cost': self.net_transaction_cost,
+                'Broker Fee': self.broker_fee,
+                'Tax': self.tax
+            })

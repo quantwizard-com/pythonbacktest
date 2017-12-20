@@ -1,5 +1,6 @@
 import numpy
 import pandas as pd
+import datetime
 
 class MultidayPerformanceReport(object):
 
@@ -55,8 +56,12 @@ class MultidayPerformanceReport(object):
     def std_net_pnl(self):
         return numpy.std(self.all_net_pnls if self.all_net_pnls else [0])
 
-    def __getitem__(self, date):
-        return self.performance_record_per_date[date]
+    def __getitem__(self, date_to_extract):
+        if isinstance(date_to_extract, str):
+            # convert string to date
+            date_to_extract = datetime.datetime.strptime(date_to_extract, "%Y-%m-%d").date()
+
+        return self.performance_record_per_date[date_to_extract]
 
     @property
     def as_dataframe(self):

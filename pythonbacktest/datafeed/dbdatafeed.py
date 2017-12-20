@@ -1,4 +1,5 @@
 import random
+import datetime
 from collections import OrderedDict
 
 import mysql.connector
@@ -66,8 +67,12 @@ class DBDataFeed(AbstractDataFeed):
     def get_prices_bars_for_multiple_days_for_symbol(self, security_symbol, *dates) -> OrderedDict:
         result = OrderedDict()
 
-        for date in dates:
-            result[date] = self.get_prices_bars_for_day_for_symbol(date, security_symbol)
+        for single_date in dates:
+            if isinstance(single_date, str):
+                # convert string to date
+                single_date = datetime.datetime.strptime(single_date, "%Y-%m-%d").date()
+
+            result[single_date] = self.get_prices_bars_for_day_for_symbol(single_date, security_symbol)
 
         return result
 

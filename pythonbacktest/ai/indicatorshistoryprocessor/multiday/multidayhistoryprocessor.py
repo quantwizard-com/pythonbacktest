@@ -23,7 +23,7 @@ class MultidayHistoryProcessor(object):
         self.__default_transaction_size = default_transaction_size
 
     def run_processor(self, multiday_data: OrderedDict) -> OrderedDict:
-        multiday_performance_report = OrderedDict()
+        performance_report_per_day = OrderedDict()
 
         for date, price_bars in multiday_data.items():
 
@@ -31,9 +31,9 @@ class MultidayHistoryProcessor(object):
             indicators_history = self.__calculate_history(price_bars=price_bars)
 
             # get the performance report for the single day
-            multiday_performance_report[date] = self.__run_back_office_get_performance_report(indicators_history)
+            performance_report_per_day[date] = self.__run_back_office_get_performance_report(indicators_history)
 
-        return MultidayPerformanceCalculator.calculate_multiday_performance_report(multiday_performance_report)
+        return MultidayPerformanceCalculator.calculate_multiday_performance_report(performance_report_per_day)
 
     def __calculate_history(self, price_bars):
         indicators_map = IndicatorsMap(indicators_map_definition=self.__indicators_map_definition)

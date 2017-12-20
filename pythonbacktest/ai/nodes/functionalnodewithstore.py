@@ -14,3 +14,6 @@ class FunctionalNodeWithStore(AbstractNode):
                            trade_data_snapshot: TradeDataSnapshot) -> bool:
         return self.__function_to_call(indicators_snapshot, trade_data_snapshot, self.__node_store)
 
+    def reset_node(self):
+        self.__node_store = {}
+

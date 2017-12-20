@@ -22,6 +22,10 @@ class AbstractNode(ABC):
     def set_node_result(self, result):
         self.__node_result = result
 
+    @abstractmethod
+    def reset_node(self):
+        raise NotImplementedError("reset_node")
+
     def activate_node(self, indicators_snapshot: AbstractSnapshot, trade_data_snapshot: TradeDataSnapshot) -> bool:
         """
         Activate node and return the node result

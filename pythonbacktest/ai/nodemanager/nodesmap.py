@@ -29,6 +29,9 @@ class NodesMap(object):
             self.__name_to_node_map[node_name] = node_implementation
             self.__all_nodes.append(node_implementation)
 
+            # make sure the node is reset
+            node_implementation.reset_node()
+
     def apply_data_snapshots(self, indicators_snapshot: AbstractSnapshot,
                              trade_data_snapshot: TradeDataSnapshot) -> Dict:
         """

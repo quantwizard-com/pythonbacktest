@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from collections import OrderedDict
+
 from pythonbacktest.ai.strategyperformance.singleday import SingleDayPerformanceReport
 from .multidayperformancereport import MultidayPerformanceReport
 
@@ -24,4 +26,15 @@ class MultidayPerformanceCalculator(object):
             performance_report.total_winning_days += single_day_report.total_net_pnl > 0
             performance_report.total_losing_days += single_day_report.total_net_pnl <= 0
 
+            # add record to the collection of all records
+            performance_report.all_daily_performance_records.append(
+                MultidayPerformanceCalculator.__new_single_day_report_as_dict(single_date, single_day_report))
+
         return performance_report
+
+    @staticmethod
+    def __new_single_day_report_as_dict(date, single_day_performance_report):
+        result = OrderedDict(single_day_performance_report.as_dict)
+        result['date'] = date
+        result.move_to_end('date', last=False)
+        return result

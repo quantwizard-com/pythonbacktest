@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class SingleDayPerformanceReport(object):
 
     def __init__(self):
@@ -50,3 +53,19 @@ class SingleDayPerformanceReport(object):
     @property
     def maximum_pnl(self):
         return max(self.all_net_pnls)
+
+    @property
+    def as_dict(self):
+        return OrderedDict({
+            'Gross PNL': self.total_gross_pnl,
+            'Net PNL': self.total_net_pnl,
+            'Taxes': self.total_taxes,
+            'Broker fees': self.total_broker_fees,
+            'Buy trades': self.total_buy_trades,
+            'Sell trades': self.total_sell_trades,
+            'Short trades': self.total_short_sell_trades,
+            'Winning trades': self.total_winning_trades,
+            'Losing trades': self.total_losing_trades,
+            'Winning rate': f"{self.winning_rate * 100} %",
+            'All trades': self.all_trades
+        })

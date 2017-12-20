@@ -1,4 +1,5 @@
 import numpy
+import pandas as pd
 
 class MultidayPerformanceReport(object):
 
@@ -15,6 +16,7 @@ class MultidayPerformanceReport(object):
 
         self.all_net_pnls = []
         self.all_trade_records = []
+        self.all_daily_performance_records = []
 
         self.performance_record_per_date = None
 
@@ -55,3 +57,7 @@ class MultidayPerformanceReport(object):
 
     def __getitem__(self, date):
         return self.performance_record_per_date[date]
+
+    @property
+    def as_dataframe(self):
+        return pd.DataFrame(self.all_daily_performance_records)

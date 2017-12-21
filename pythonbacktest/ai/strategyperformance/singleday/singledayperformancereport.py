@@ -44,7 +44,7 @@ class SingleDayPerformanceReport(object):
 
     @property
     def winning_rate(self):
-        return self.total_winning_trades * 1.0 / self.total_sell_trades
+        return self.total_winning_trades * 1.0 / self.total_sell_trades if self.total_sell_trades != 0 else 0
 
     @property
     def minimum_pnl(self):

@@ -54,13 +54,58 @@ class DBDataFeed(AbstractDataFeed):
 
         return price_bars
 
-    def get_all_valid_data_for_symbol(self, symbol):
+    def get_all_valid_data_for_symbol(self, ticker, base_currency_symbol='USD'):
+        """
+        Get all data for the given ticket and base currency assuming that total number of records for the single
+        date can't be lower than DATA_VALIDITY_NUMBER (by default: 4670, which is 10 less than maximum number of bars)
+        :param ticker: security symbol
+        :param base_currency_symbol: base currency (USD by default)
+        :return: Ordered dictionary: (key=date, value=list of pricebars per that date)
+        """
         result = OrderedDict()
 
-        dates_to_download_data = self.get_dates_for_symbol_min_data(symbol=symbol, min_data=self.DATA_VALIDITY_NUMBER)
+        connection = self.__create_connection()
 
-        for single_date in dates_to_download_data:
-            result[single_date] = self.get_prices_bars_for_day_for_symbol(single_date, symbol)
+        query = "select date(pb.Date) as 'date', pb.Date as 'timestamp', pb.Open as 'open', pb.Close as 'close', " \
+                "       pb.High as 'high', pb.Low as 'low', pb.Volume as 'volume' " \
+                "from PriceBars pb, SecurityContracts sc, CurrencySymbols cs " \
+                "where pb.SecurityContractID = sc.ID " \
+                "and sc.ContractTickerSymbol = %s " \
+                "and Date(pb.Date) in " \
+                "(" \
+                "   select date(pb1.Date) as single_date " \
+                "   from PriceBars pb1, SecurityContracts sc1 " \
+                "   where pb1.SecurityContractID = sc1.ID " \
+                "   and sc1.ContractTickerSymbol = %s " \
+                "   group by single_date " \
+                "   having count(pb1.ID) >= %s " \
+                ")" \
+                "and sc.ContractCurrencyID = cs.ID " \
+                "and cs.CurrencySymbol = %s " \
+                "order by pb.Date asc;"
+
+        cursor = connection.cursor()
+        cursor.execute(query, (ticker, ticker, str(self.DATA_VALIDITY_NUMBER), base_currency_symbol))
+
+        current_date = None
+        price_bars_list = []
+
+        for (date, timestamp, data_open, data_close, data_high, data_low, data_volume) in cursor:
+            if current_date is None or current_date != date:
+                current_date = date
+                price_bars_list = []
+                result[date] = price_bars_list
+
+            price_bar = PriceBar()
+            price_bar.timestamp = timestamp
+            price_bar.open = data_open
+            price_bar.close = data_close
+            price_bar.high = data_high
+            price_bar.low = data_low
+            price_bar.volume = data_volume
+
+            price_bars_list.append(price_bar)
+        connection.close()
 
         return result
 

@@ -1,6 +1,7 @@
 import random
 import datetime
 from collections import OrderedDict
+import pandas as pd
 
 import mysql.connector
 
@@ -54,7 +55,7 @@ class DBDataFeed(AbstractDataFeed):
 
         return price_bars
 
-    def get_all_valid_data_for_symbol(self, ticker, base_currency_symbol='USD'):
+    def get_all_valid_data_for_symbol(self, ticker, base_currency_symbol='USD', as_dataframe=False):
         """
         Get all data for the given ticket and base currency assuming that total number of records for the single
         date can't be lower than DATA_VALIDITY_NUMBER (by default: 4670, which is 10 less than maximum number of bars)
@@ -62,8 +63,6 @@ class DBDataFeed(AbstractDataFeed):
         :param base_currency_symbol: base currency (USD by default)
         :return: Ordered dictionary: (key=date, value=list of pricebars per that date)
         """
-        result = OrderedDict()
-
         connection = self.__create_connection()
 
         query = "select date(pb.Date) as 'date', pb.Date as 'timestamp', pb.Open as 'open', pb.Close as 'close', " \
@@ -87,8 +86,31 @@ class DBDataFeed(AbstractDataFeed):
         cursor = connection.cursor()
         cursor.execute(query, (ticker, ticker, str(self.DATA_VALIDITY_NUMBER), base_currency_symbol))
 
+        result = self.__result_as_dataframe(cursor) if as_dataframe else self.__result_as_dict(cursor)
+
+        connection.close()
+        return result
+
+    def __result_as_dataframe(self, cursor):
+        result = []
+
+        for (date, timestamp, data_open, data_close, data_high, data_low, data_volume) in cursor:
+            result.append(OrderedDict({
+                'date': date,
+                'timestamp': timestamp,
+                'open': data_open,
+                'close': data_close,
+                'high': data_high,
+                'low': data_low,
+                'volume': data_volume
+            }))
+
+        return pd.DataFrame(result)
+
+    def __result_as_dict(self, cursor):
         current_date = None
         price_bars_list = []
+        result = OrderedDict()
 
         for (date, timestamp, data_open, data_close, data_high, data_low, data_volume) in cursor:
             if current_date is None or current_date != date:
@@ -105,7 +127,6 @@ class DBDataFeed(AbstractDataFeed):
             price_bar.volume = data_volume
 
             price_bars_list.append(price_bar)
-        connection.close()
 
         return result
 

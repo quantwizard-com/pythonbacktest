@@ -91,6 +91,39 @@ class DBDataFeed(AbstractDataFeed):
         connection.close()
         return result
 
+    def get_all_close_prices_for_symbol_raw(self, ticker, base_currency_symbol='USD'):
+        connection = self.__create_connection()
+
+        query = "select date(pb.Date) as 'date', pb.Close as 'close' " \
+                "from PriceBars pb, SecurityContracts sc, CurrencySymbols cs " \
+                "where pb.SecurityContractID = sc.ID " \
+                "and sc.ContractTickerSymbol = %s " \
+                "and sc.ContractCurrencyID = cs.ID " \
+                "and cs.CurrencySymbol = %s " \
+                "order by pb.Date asc;"
+
+        cursor = connection.cursor()
+        cursor.execute(query, (ticker, base_currency_symbol))
+
+        current_date = None
+        current_list_per_date = []
+        close_prices_per_date = {}
+
+        for date, close_price in cursor:
+            if current_date != date:
+                if len(current_list_per_date) >= self.DATA_VALIDITY_NUMBER and current_date:
+                    close_prices_per_date[current_date] = current_list_per_date
+
+                current_date = date
+                current_list_per_date = [close_price]
+            else:
+                current_list_per_date.append(close_price)
+
+        if len(current_list_per_date) >= self.DATA_VALIDITY_NUMBER and current_date:
+            close_prices_per_date[current_date] = current_list_per_date
+
+        return close_prices_per_date
+
     def __result_as_dataframe(self, cursor):
         result = []
 

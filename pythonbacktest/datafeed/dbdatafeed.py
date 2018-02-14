@@ -15,6 +15,8 @@ class DBDataFeed(AbstractDataFeed):
     # taking into consideration the maximum number of datapoints for stock shares is 4680
     DATA_VALIDITY_NUMBER = 4670
 
+    DATA_VALIDITY_START_DATE = '2015-09-01'
+
     def __init__(self, dbhost="localhost", db_user_name="root", db_password="", db_database_name="SecurityPrices"):
         self.__db_host = dbhost
         self.__db_user_name = db_user_name
@@ -81,10 +83,12 @@ class DBDataFeed(AbstractDataFeed):
                 ")" \
                 "and sc.ContractCurrencyID = cs.ID " \
                 "and cs.CurrencySymbol = %s " \
+                "and date(pb.Date) >= %s " \
                 "order by pb.Date asc;"
 
         cursor = connection.cursor()
-        cursor.execute(query, (ticker, ticker, str(self.DATA_VALIDITY_NUMBER), base_currency_symbol))
+        cursor.execute(query, (ticker, ticker, str(self.DATA_VALIDITY_NUMBER),
+                               base_currency_symbol, self.DATA_VALIDITY_START_DATE))
 
         result = self.__result_as_dataframe(cursor) if as_dataframe else self.__result_as_dict(cursor)
 
@@ -100,10 +104,11 @@ class DBDataFeed(AbstractDataFeed):
                 "and sc.ContractTickerSymbol = %s " \
                 "and sc.ContractCurrencyID = cs.ID " \
                 "and cs.CurrencySymbol = %s " \
+                "and date(pb.Date) >= %s " \
                 "order by pb.Date asc;"
 
         cursor = connection.cursor()
-        cursor.execute(query, (ticker, base_currency_symbol))
+        cursor.execute(query, (ticker, base_currency_symbol, self.DATA_VALIDITY_START_DATE))
 
         current_date = None
         current_list_per_date = []
